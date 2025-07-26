@@ -38,8 +38,9 @@ STOCK {
 
 %%좋아요
 PRODUCT_LIKE {
- BIGINT member_id PK,FK "계정 아이디"
- BIGINT product_id PK,FK "상품아이디"
+ BIGINT id PK "좋아요 아이디"   
+ BIGINT member_id FK "계정 아이디"
+ BIGINT product_id FK "상품아이디"
  
  TIMESTAMP created_at "생성 시간"
  TIMESTAMP updated_at "수정 시간"
