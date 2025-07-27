@@ -5,96 +5,160 @@ classDiagram
 
 
 %% 계정        
-
 class User {
-   - id: UserId
-   - email: Email
-   - birthDay: Birthday
-   - gender: String
-   - createdAt: LocalDateTime
-   - updatedAt: LocalDateTime
-   - deletedAt: LocalDateTime
+   - UserId id
+   - Email email
+   - Birthday birthDay
+   - String gender
+   - LocalDateTime createdAt
+   - LocalDateTime updatedAt
+   - LocalDateTime deletedAt
 }
+
+class UserId {
+    <<Embedded>>
+ - String userId
+}
+
+class Email {
+  <<Embedded>>
+   - String email
+}
+
+class Birthday {
+    <<Embedded>>
+    - String birthDay
+}
+
+
+User --> UserId : Vo
+User --> Email : Vo
+User --> Birthday : Vo
 
 
 %% 좋아요
 class Like {
-    - user: User
-    - product: Product
-    - createdAt: LocalDateTime
-    - updatedAt: LocalDateTime
+    - Long id
+    - User user
+    - Product product
+    - LocalDateTime createdAt
+    - LocalDateTime updatedAt
 }
 
 
 %% 브랜드
 class Brand {
-    - id: Long
-    - name: BrandName
-    - products: List<Product>
-    - createdAt: LocalDateTime
-    - updatedAt: LocalDateTime
-    - deletedAt: LocalDateTime
+    - Long id
+    - BrandName name
+    - List<Product> products
+    - LocalDateTime createdAt
+    - LocalDateTime updatedAt
+    - LocalDateTime deletedAt
   
     + add(productId: Long, name: ProductName): void 
 }
 
+class BrandName {
+    <<Embedded>>
+    - String brandName
+}
+
+Brand --> BrandName : Vo
+
 
 %% 상품
 class Product {
-    - id: Long
-    - name: ProductName
-    - price: ProductPrice
-    - description: String
-    - createdAt: LocalDateTime
-    - updatedAt: LocalDateTime
-    - deletedAt: LocalDateTime
+    - Long id
+    - ProductName name
+    - ProductPrice price
+    - String description
+    - LocalDateTime createdAt
+    - LocalDateTime updatedAt
+    - LocalDateTime deletedAt
 }
 
+class ProductName {
+    <<Embedded>>
+    - String productName
+}
+
+Product --> ProductName : Vo
 
 %% 재고
 class Stock { 
- - id: Long
- - product: Product
- - stock: ProductStock
- - createdAt: LocalDateTime
- - updatedAt: LocalDateTime
- - deletedAt: LocalDateTime
+ - Long id
+ - Product product
+ - ProductStock stock
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
  
- + decrease(prductId: Long, prductStock: int): int
 }
 
+class ProductStock {
+    <<Embedded>>
+    - Long stock
+    + decrease(Product prduct, ProductStock prductStock): long
+}
+
+Stock --> ProductStock : Vo
 
 %% 주문
 class Order {
-  - id: Long
-  - orderNumber: String
-  - address: String
-  - status: OrderStatus
-  - orderItem: List<OrderItem>
-  - user: User
-  - memo: String
-  - totalPrice: BigInt
-  - createdAt: LocalDateTime
-  - updatedAt: LocalDateTime
-  - deletedAt: LocalDateTime
-  
+  - Long id
+  - OrderNumber orderNumber
+  - String address
+  - OrderStatus status
+  - OrderItems orderItems
+  - User user
+  - String memo
+  - TotalPrice totalPrice
+  - LocalDateTime createdAt
+  - LocalDateTime updatedAt
+  - LocalDateTime deletedAt
 }
 
 
+class OrderItems {
+    <<Embedded>>
+    - List<OrderItem> orderItems
+    + addPrice(List<OrderItem> orderItem) : BigInteger
+}
+
+class TotalPrice {
+    <<Embedded>>
+    - BigInteger price
+}
+
+class OrderNumber {
+    <<Embedded>>
+    - String number
+}
+
+class OrderStatus {
+    <<enumeration>>
+    ORDER, PAYMENT, DODE
+}
+
+Order --> OrderNumber : Vo
+Order --> OrderStatus : enum
+Order --> OrderItems : Vo
+Order --> TotalPrice : Vo
+
 %% 주문 내역
 class OrderHistory { 
-  - id: Long
-  - orderNumber: String
-  - address: String
-  - productName: String
-  - status: OrderStatus
-  - orderItem: List<OrderItem>
-  - totalPrice: BigInt
-  - userId: String
-  - memo: String
+  - Long id
+  - String orderNumber
+  - String address
+  - String productName
+  - OrderStatus status
+  - List<OrderItem> orderItem
+  - BigInteger totalPrice
+  - String userId
+  - String memo
   
-  - createdAt: LocalDateTime
-  - updatedAt: LocalDateTime  
+  - LocalDateTime createdAt
+  - LocalDateTime updatedAt
 }
 
 
@@ -103,36 +167,56 @@ class OrderItem {
   - id: Long
   - product: Product
 
-  - quantity: int
-  - unitPrice: BigInt
-  - createdAt: LocalDateTime
-  - updatedAt: LocalDateTime
-  - deletedAt: LocalDateTime
+  - Quantity quantity
+  - BigInteger unitPrice
+  - LocalDateTime createdAt
+  - LocalDateTime updatedAt
+  - LocalDateTime deletedAt
 }
 
+class Quantity {
+    <<Embedded>>
+    - BigInteger quantity
+}
+
+OrderItem --> Quantity : Vo
 
 %% 결제
 class Payment { 
-  - id: Long
-  - user: User
-  - orderNumber: String
-  - paymentAmout: BigInt
-  - description: String
-  - createdAt: LocalDateTime
-  - updatedAt: LocalDateTime
-  - deletedAt: LocalDateTime
+  - Long id
+  - User user
+  - String orderNumber
+  - PaymentAmount paymentAmout
+  - String description
+  - LocalDateTime createdAt
+  - LocalDateTime updatedAt
+  - LocalDateTime deletedAt
 }
 
+class PaymentAmount {
+   <<Embedded>>
+   - BigInteger amount
+}
 
+Payment --> PaymentAmount :Vo
 %% 포인트
 class Point { 
-  - id: Long
-  - userId: String
-  - amount: PointAmount
-  - createdAt: LocalDateTime
-  - updatedAt: LocalDateTime
-  - deletedAt: LocalDateTime  
+  - Long id
+  - User user
+  - PointAmount amount
+  - LocalDateTime createdAt
+  - LocalDateTime updatedAt
+  - LocalDateTime deletedAt
+  + use(User user, Product product) : BigInteger
+  + charge(User user) : void
 }
+
+class PointAmount {
+    <<Embedded>>
+  - BigInteger amount
+}
+
+Point --> PointAmount : Vo
 
 Brand "1" --> "N" Product : 소유
 Like --> Product : 참조    
