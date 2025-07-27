@@ -5,11 +5,15 @@
 ```mermaid
 sequenceDiagram
     actor U as Client
+    participant BF as BrandFacade
     participant BS as BrandService
     participant BP as BrandRepository
     participant PS as ProductService
     
-    U -->> BS: 브랜드 조회
+    activate U
+    U -->> BF: 브랜드 조회 요청
+    activate BF
+    BF -->> BS: 브랜드 조회  
     activate BS
     BS -->> BP: 브랜드 정보 조회
     activate BP
@@ -18,19 +22,24 @@ sequenceDiagram
 
     else 브랜드가 존재함
     BP -->> BS: 브랜드 정보 반환
+    BS -->> BF: 브랜드 정보 리턴
     deactivate BP
     deactivate BS
+    deactivate BF
     end
-    BS -->> PS: 상품 목록 조회
-    activate BS
+    BF -->> PS: 상품 목록 조회
+    activate BF
     activate PS
     alt 상품이 존재하지 않는 경우
-        PS -->> BS: 빈 배열 리턴
+        PS -->> BF: 빈 배열 리턴
     else 상품이 존재하는 경우
-        PS -->> BS: 상품 목록 응답
+        PS -->> BF: 상품 목록 응답
     end
-    deactivate BS
+    
+    BF -->> U: 브랜드 정보 반환
+    deactivate BF
     deactivate PS
+    deactivate U
     
 ```
 ## 상품
@@ -81,54 +90,70 @@ sequenceDiagram
 sequenceDiagram 
 actor  C as client
 participant LC AS LikeController
+participant LF AS LikeFacade
 participant LS AS LikeService
 participant PS AS ProductService
 participant LR AS LikeRepository
 
 C -->> LC: 좋아요 등록/해제 요청
+activate C
 activate LC
-LC -->> LS: 인증요청
-activate LS
+LC -->> LF: 인증요청
+activate LF
 alt 인증이 실패하는 경우 
-LS -->> LC: 401 Unauthorized
+LF -->> LC: 401 Unauthorized
 deactivate LC
 else
 %% 상품이 존재하는지 조사
-LS -->> PS: 좋아요 등록/해제 할 수 있는 상품 확인
+LF -->> PS: 좋아요 등록/해제 할 수 있는 상품 확인
 end
 
 activate PS
 alt 상품이 존재하지 않는 경우 
-PS -->> LS: 404 NotFoundException
+PS -->> LF: 404 NotFoundException
 else
-PS -->> LS: 상품 정보 리턴    
+PS -->> LF: 상품 정보 리턴    
 end
-deactivate LS
+deactivate LF
 deactivate PS
 
 %% 좋아요 등록
-LS -->> LR: 좋아요 등록 여부 확인
+LF -->> LS: 좋아요 등록 여부 확인
+activate LF
+LS -->> LR: 좋아요 데이터 확인
+
 activate LS
 activate LR
 alt 이미 등록이 되어 있는 경우
 LR -->> LS: 좋아요 데이터 리턴
+LS -->> LF: 200 Ok
 else
 LR -->> LS: 좋아요 데이터 save()   
+LS -->> LF: 201 created
 end
 deactivate LR
 deactivate LS
+deactivate LF
 
 %% 좋아요 등록 해제
-LS -->> LR: 좋아요 해제 여부 확인
+LF -->> LS: 좋아요 해제 여부 확인
+activate LF
+LS -->> LR: 좋아요 데이터 확인
 activate LS
 activate LR
 alt 좋아요가 등록이 되어있지 않는 경우
 LR -->> LS: Optional.empty()
+LS -->> LF: 204 no content
 else
 LR -->> LS: 좋아요 데이터 삭제 delete()
+LS -->> LF: 200 OK
 end
 deactivate LR
 deactivate LS
+deactivate LF
+
+LF -->> C: 좋아요 등록/해제 반영
+deactivate C
 ```
 
 ## 주문/결제
@@ -137,62 +162,79 @@ deactivate LS
 sequenceDiagram
 actor C as Client
 participant OC as OrderController
+participant OF as OrderFacade
 participant OS as OrderService
+participant PAF as PaymentFacade
 participant PS as ProductService
-participant PAS as PaymentService
 participant POS as PointService
 
 C -->> OC: 주문 요청
+activate C
 activate OC
-OC -->> OS: 인증요청
-    activate OS
+OC -->> OF: 인증요청
+    activate OF
 alt 인증이 실패하는 경우
 OS -->> OC: 401 Unauthorized
   deactivate OC
 else
-OS -->> PS: 해당하는 상품이 있는지 확인
+OF -->> PS: 해당하는 상품이 있는지 확인
   activate PS
 end
 
 alt 상품이 존재하지 않는 경우
-PS -->> OS: 404 NotFound Exception
+PS -->> OF: 404 NotFound Exception
 else
-PS -->> OS: 상품 정보 리턴
+PS -->> OF: 상품 정보 리턴
   deactivate PS
 end
 
-    OS -->> OS: 상태값: 주문중 변경  
-  deactivate OS
+deactivate OF
+OS -->> OS: 상태값: 주문중 변경  
 
-OS -->> PS: 상품의 재고가 있는지 확인
-  activate OS
+OF -->> PS: 상품의 재고가 있는지 확인
+  activate OF
   activate PS
 alt 재고가 존재하지 않는 경우 (재고가 0이하)
-  PS -->> OS: 409 Conflict
+  PS -->> OF: 409 Conflict
 else
-  PS -->> OS: 상품 재고 리턴
-  deactivate PS
-  OS -->> PAS: 결재 요청 (로그인 계정만)
-  deactivate OS
-  activate PAS
+  PS -->> OF: 상품 재고 리턴
+deactivate PS
+deactivate OF
+OF -->> C: 주문 성공/실패 여부 반환
+
+%% 결제
+deactivate C  
+C -->> PAF: 결재 요청 (로그인 계정만)
+
+activate C
+
+activate PAF
 end
 
-PAS -->> POS: 포인트 확인
+PAF -->> POS: 포인트 확인
 activate POS
 
 alt 소지 포인트 보다 상품 가격이 높은 경우 
-POS -->> PAS: 400 Bad Request
+POS -->> PAF: 400 Bad Request
 else
-POS -->> PAS: 포인트 차감 (소지 포인트 - 상품가격)    
+POS -->> PAF: 포인트 차감 (소지 포인트 - 상품가격)    
 end
 deactivate POS
+deactivate PAF
 
-PAS -->> OS: 결제 완료 상태값 변경 요청
-activate OS
-deactivate PAS
+PAF -->> OF: 결제 완료 상태값 변경 요청
+activate PAF
+
+
+activate OF
+deactivate OF
+
 PS -->> PS: 상품 갯수 차감 (상품 재고-)
 OS -->> OS: 상태값: 결재 완료 변경 
-deactivate OS
+
+PAF -->> C: 결제 완료
+deactivate PAF
+deactivate C
 ```
 ### 주문 취소
 
@@ -204,11 +246,12 @@ participant OS as OrderService
 participant OR as OrderRepository 
 C -->> OC: 주문 취소 요청
 activate OC
+activate C
 OC -->> OS: 인증요청
 activate OS
 alt 인증이 실패하는 경우
     OS -->> OC: 401 Unauthorized
-    deactivate OC
+    
 else
     OS -->> OR: 주문 데이터 확인
     activate OR
@@ -219,6 +262,12 @@ alt 주문데이터가 없는 경우
 else
     OR -->> OS: 상태값: 주문 취소 변경
 end
+
+OS -->> OC: 200 Ok
 deactivate OS
+
+OC -->> C: 주문 취소 결과 반영
+deactivate OC
 deactivate OR    
+deactivate C
 ```
