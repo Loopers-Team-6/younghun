@@ -62,7 +62,7 @@ MEMBER {
 POINT {
  BIGINT id PK "포인트아이디"
  BIGINT member_id FK "계정아이디"
- INT amount "포인트"
+ BIGINT amount "포인트"
 
  TIMESTAMP created_at "생성 시간"
  TIMESTAMP updated_at "수정 시간"
