@@ -3,6 +3,7 @@ package com.loopers.domain.brand.embeded;
 import com.loopers.domain.product.Product;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
@@ -17,6 +18,10 @@ public class Products {
 
   private Products(List<Product> products) {
     this.products = products;
+  }
+
+  public static Products of() {
+    return new Products(new ArrayList<>());
   }
 
   public static Products of(List<Product> products) {
