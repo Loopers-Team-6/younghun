@@ -76,6 +76,7 @@ class Product {
     - Long id
     - ProductName name
     - ProductPrice price
+    - Stock stock
     - String description
     - LocalDateTime createdAt
     - LocalDateTime updatedAt
@@ -94,11 +95,13 @@ class ProductPrice {
 
 Product --> ProductName : Vo
 Product --> ProductPrice : Vo
+Product --> Stock : 소유
 
 %% 재고
 class Stock { 
  - Long id
- - Product product
+ - Long productId
+ - Long stock
  - ProductStock stock
  - LocalDateTime createdAt
  - LocalDateTime updatedAt
@@ -109,7 +112,7 @@ class Stock {
 class ProductStock {
     <<Embedded>>
     - Long stock
-    + decrease(Product prduct, ProductStock prductStock): long
+    + decrease(Long stock): long
 }
 
 Stock --> ProductStock : Vo
