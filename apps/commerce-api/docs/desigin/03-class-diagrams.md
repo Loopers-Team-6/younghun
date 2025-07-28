@@ -50,17 +50,22 @@ class Like {
 class Brand {
     - Long id
     - BrandName name
-    - List<Product> products
+    - Products products
     - LocalDateTime createdAt
     - LocalDateTime updatedAt
     - LocalDateTime deletedAt
-  
-    + add(productId: Long, name: ProductName): void 
 }
 
 class BrandName {
     <<Embedded>>
     - String brandName
+}
+
+class Products {
+    <<Embedded>>
+    - List<Product> products
+    
+    + add(Product:prdocut): void
 }
 
 Brand --> BrandName : Vo
@@ -82,7 +87,13 @@ class ProductName {
     - String productName
 }
 
+class ProductPrice {
+    <<Embedded>>
+    - BigInteger price
+}
+
 Product --> ProductName : Vo
+Product --> ProductPrice : Vo
 
 %% 재고
 class Stock { 
