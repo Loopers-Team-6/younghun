@@ -9,13 +9,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
 @Table(name = "product")
 public class Product extends BaseEntity {
@@ -26,4 +24,11 @@ public class Product extends BaseEntity {
   private ProductPrice price;
   @Column(columnDefinition = "TEXT")
   private String description;
+
+  public Product(Long brandId, String name, BigInteger price, String description) {
+    this.brandId = brandId;
+    this.name = ProductName.of(name);
+    this.price = ProductPrice.of(price);
+    this.description = description;
+  }
 }

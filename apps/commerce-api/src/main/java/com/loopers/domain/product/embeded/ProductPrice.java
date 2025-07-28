@@ -1,22 +1,22 @@
 package com.loopers.domain.product.embeded;
 
 import jakarta.persistence.Embeddable;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import lombok.Getter;
 
 @Embeddable
 @Getter
 public class ProductPrice {
-  private BigDecimal price;
+  private BigInteger price;
 
   public ProductPrice() {
   }
 
-  private ProductPrice(BigDecimal price) {
+  private ProductPrice(BigInteger price) {
     this.price = price;
   }
 
-  public ProductPrice of(BigDecimal price) {
+  public static ProductPrice of(BigInteger price) {
     return new ProductPrice(price);
   }
 }
