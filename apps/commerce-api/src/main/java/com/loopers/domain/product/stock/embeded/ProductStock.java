@@ -25,6 +25,9 @@ public class ProductStock {
   }
 
   public ProductStock decrease(long stock) {
+    if(stock < 0) {
+      throw new CoreException(ErrorType.BAD_REQUEST, "음수로 재고 차감은 불가합니다.");
+    }
     return new ProductStock(this.stock - stock);
   }
 
