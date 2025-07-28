@@ -195,4 +195,53 @@ class LikeV1ApiE2ETest {
     }
   }
 
+
+  @DisplayName("GET /api/v1/like/products")
+  @Nested
+  class Get {
+    String ENDPOINT = "/api/v1/like/products";
+
+    @DisplayName("계정 아이디가 존재하지 않는 다면, `401 Unauthorized`를 반환한다.")
+    @Test
+    void throw401UnauthorizedException_whenNotExitsUserId() {
+      //given
+      //when
+      ParameterizedTypeReference<ApiResponse<LikeV1Dto.Register.Response>> responseType = new ParameterizedTypeReference<>() {
+      };
+
+      ResponseEntity<ApiResponse<LikeV1Dto.Register.Response>> response =
+          testRestTemplate.exchange(ENDPOINT, HttpMethod.GET, new HttpEntity<>(null), responseType);
+
+      //then
+      assertAll(
+          () -> assertThat(response.getStatusCode().is4xxClientError()).isTrue(),
+          () -> assertThat(response.getBody().meta().result()).isEqualTo(FAIL)
+
+      );
+    }
+
+    @DisplayName("특정 계정 아이디로 조회하는 경우, 좋아요를 누른 상품 목록이 조회가 됩니다.")
+    @Test
+    void returnProductList_whenSearchUserId() {
+      //given
+      HttpHeaders headers = new HttpHeaders();
+      headers.add("X-User-Id", "userId");
+      //when
+      ParameterizedTypeReference<ApiResponse<LikeV1Dto.Get.Response>> responseType = new ParameterizedTypeReference<>() {
+      };
+
+
+      ResponseEntity<ApiResponse<LikeV1Dto.Get.Response>> response =
+          testRestTemplate.exchange(ENDPOINT, HttpMethod.GET, new HttpEntity<>(null, headers), responseType);
+
+      //then
+      assertAll(
+          () -> assertThat(response.getStatusCode().is2xxSuccessful()).isTrue(),
+          () -> assertThat(response.getBody().meta().result()).isEqualTo(SUCCESS),
+          () -> assertThat(response.getBody().data().contents()).isNotEmpty()
+
+      );
+    }
+  }
+
 }
