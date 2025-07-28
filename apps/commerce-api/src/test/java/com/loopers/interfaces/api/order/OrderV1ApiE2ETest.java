@@ -10,6 +10,7 @@ import com.loopers.interfaces.api.order.OrderV1Dto.Create.OrderItemRequest;
 import com.loopers.interfaces.api.order.OrderV1Dto.Create.Request;
 import com.loopers.utils.DatabaseCleanUp;
 import java.util.List;
+import java.util.function.Function;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -140,6 +141,86 @@ class OrderV1ApiE2ETest {
       assertAll(
           () -> assertThat(response.getStatusCode().is2xxSuccessful()).isTrue(),
           () -> assertThat(response.getBody().meta().result()).isEqualTo(SUCCESS)
+
+      );
+    }
+  }
+
+  @Nested
+  @DisplayName("GET /api/v1/orders/{orderId}")
+  class Get {
+    Function<Long, String> ENDPOINT = id -> "/api/v1/orders/" + id;
+
+
+    @DisplayName("계정 아이디가 존재하지 않는다면, `401 Unauthorized`를 반환한다.")
+    @Test
+    void throw401UnauthorizedException_whenNotExitsUserId() {
+      //given
+      Long orderId = 1L;
+      //when
+      ParameterizedTypeReference<ApiResponse<OrderV1Dto.Get.Response>> responseType = new ParameterizedTypeReference<>() {
+      };
+
+      String endPoint = ENDPOINT.apply(orderId);
+
+      ResponseEntity<ApiResponse<OrderV1Dto.Get.Response>> response =
+          testRestTemplate.exchange(endPoint, HttpMethod.GET, new HttpEntity<>(null), responseType);
+
+      //then
+      assertAll(
+          () -> assertThat(response.getStatusCode().is4xxClientError()).isTrue(),
+          () -> assertThat(response.getBody().meta().result()).isEqualTo(FAIL)
+
+      );
+    }
+
+    @DisplayName("주문 아이디가 존재하지 않는다면, `404 NotFound`를 반환한다.")
+    @Test
+    void throw404NotFoundException_whenNotExitsOrderId() {
+      //given
+      Long orderId = null;
+      String userId = "test";
+      HttpHeaders headers = new HttpHeaders();
+      headers.add("X-USER-ID", userId);
+      //when
+      ParameterizedTypeReference<ApiResponse<OrderV1Dto.Get.Response>> responseType = new ParameterizedTypeReference<>() {
+      };
+
+      String endPoint = ENDPOINT.apply(orderId);
+
+      ResponseEntity<ApiResponse<OrderV1Dto.Get.Response>> response =
+          testRestTemplate.exchange(endPoint, HttpMethod.GET, new HttpEntity<>(headers), responseType);
+
+      //then
+      assertAll(
+          () -> assertThat(response.getStatusCode().is4xxClientError()).isTrue(),
+          () -> assertThat(response.getBody().meta().result()).isEqualTo(FAIL)
+
+      );
+    }
+
+    @DisplayName("주문를 상세 조회하는 경우, 주문 정보를 리턴한다.")
+    @Test
+    void returnOrderInfo_whenSearchOrderDetail() {
+      //given
+      Long orderId = 1L;
+      String userId = "test";
+      HttpHeaders headers = new HttpHeaders();
+      headers.add("X-USER-ID", userId);
+      //when
+      ParameterizedTypeReference<ApiResponse<OrderV1Dto.Get.Response>> responseType = new ParameterizedTypeReference<>() {
+      };
+
+      String endPoint = ENDPOINT.apply(orderId);
+
+      ResponseEntity<ApiResponse<OrderV1Dto.Get.Response>> response =
+          testRestTemplate.exchange(endPoint, HttpMethod.GET, new HttpEntity<>(headers), responseType);
+
+      //then
+      assertAll(
+          () -> assertThat(response.getStatusCode().is2xxSuccessful()).isTrue(),
+          () -> assertThat(response.getBody().meta().result()).isEqualTo(SUCCESS),
+          () -> assertThat(response.getBody().data().orderId()).isEqualTo(orderId)
 
       );
     }

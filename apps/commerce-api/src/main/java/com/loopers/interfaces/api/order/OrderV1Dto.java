@@ -16,12 +16,6 @@ public class OrderV1Dto {
     }
 
 
-    record OrderItemResponse(
-        Long productId, String productName, Integer quantity
-    ) {
-    }
-
-
     record Request(
         List<OrderItemRequest> items
     ) {
@@ -40,7 +34,18 @@ public class OrderV1Dto {
                     int totalPages) {
     }
 
-    record Contents(Long OrderId, String orderNumber) {}
+    record Contents(Long OrderId, String orderNumber) {
+    }
 
+  }
+
+  class Get {
+    record Response(Long orderId, String orderNumber, List<OrderItemResponse> items) {
+    }
+  }
+
+  record OrderItemResponse(
+      Long productId, String productName, Integer quantity
+  ) {
   }
 }
