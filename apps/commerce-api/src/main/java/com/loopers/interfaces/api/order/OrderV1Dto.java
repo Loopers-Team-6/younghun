@@ -1,0 +1,35 @@
+package com.loopers.interfaces.api.order;
+
+import java.math.BigInteger;
+import java.util.List;
+
+public class OrderV1Dto {
+  class Create {
+    record Response(
+        String userId,
+        Long orderId,
+        String orderNumber,
+        BigInteger totalPrice,
+        List<OrderItemResponse> items
+    ) {
+
+    }
+
+
+    record OrderItemResponse(
+        Long productId, String productName, Integer quantity
+    ) {
+    }
+
+
+    record Request(
+        List<OrderItemRequest> items
+    ) {
+    }
+
+    record OrderItemRequest(
+        Long productId, Integer quantity
+    ) {
+    }
+  }
+}
