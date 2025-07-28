@@ -1,15 +1,13 @@
-package com.loopers.domain.brand;
+package com.loopers.domain.product;
 
 import com.loopers.domain.BaseEntity;
-import com.loopers.domain.brand.embeded.BrandName;
-import com.loopers.domain.brand.embeded.Products;
-import com.loopers.domain.product.Product;
+import com.loopers.domain.product.embeded.ProductName;
+import com.loopers.domain.product.embeded.ProductPrice;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.List;
+import java.math.BigInteger;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,16 +17,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-@Table(name = "brand")
-public class Brand extends BaseEntity {
-
-  private String memberId;
-
+@Table(name = "product")
+public class Product extends BaseEntity {
+  private Long brandId;
   @Embedded
-  private Products products;
-
+  private ProductName name;
   @Embedded
-  private BrandName name;
-
+  private ProductPrice price;
+  @Column(columnDefinition = "TEXT")
+  private String description;
 }
-
