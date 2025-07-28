@@ -112,7 +112,7 @@ class Stock {
 class ProductStock {
     <<Embedded>>
     - Long stock
-    + decrease(Long stock): long
+    + decrease(Long stock): ProductStock
 }
 
 Stock --> ProductStock : Vo
