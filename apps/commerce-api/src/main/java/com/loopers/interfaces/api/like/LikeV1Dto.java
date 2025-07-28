@@ -1,5 +1,6 @@
 package com.loopers.interfaces.api.like;
 
+
 import java.util.List;
 
 public class LikeV1Dto {
@@ -10,6 +11,7 @@ public class LikeV1Dto {
   class Unregister {
     record Response(String userId, Long productId, boolean status) {}
   }
+
 
   class Get {
     record Response(List<Contents> contents,

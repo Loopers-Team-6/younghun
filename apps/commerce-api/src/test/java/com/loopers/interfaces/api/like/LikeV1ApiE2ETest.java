@@ -195,6 +195,7 @@ class LikeV1ApiE2ETest {
     }
   }
 
+
   @DisplayName("GET /api/v1/like/products")
   @Nested
   class Get {
