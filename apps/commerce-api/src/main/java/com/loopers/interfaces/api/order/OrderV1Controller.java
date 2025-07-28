@@ -2,9 +2,11 @@ package com.loopers.interfaces.api.order;
 
 import com.loopers.interfaces.api.ApiResponse;
 import com.loopers.interfaces.api.order.OrderV1Dto.Create.OrderItemResponse;
+import com.loopers.interfaces.api.order.OrderV1Dto.Search;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,17 @@ public class OrderV1Controller {
             new OrderItemResponse(1L, "상품1", 2),
             new OrderItemResponse(2L, "상품2", 5)
         )
+    ));
+  }
+
+  @GetMapping
+  public ApiResponse<OrderV1Dto.Search.Response> search(@RequestHeader("X-USER-ID") String userId
+  ) {
+
+    return ApiResponse.success(new OrderV1Dto.Search.Response(
+        List.of(new Search.Contents(1L,"주문번호1"),
+                new Search.Contents(2L,"주문번호2")),
+        1,1,1,1
     ));
   }
 }

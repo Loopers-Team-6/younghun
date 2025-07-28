@@ -22,6 +22,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.N;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrderV1ApiE2ETest {
@@ -93,6 +94,52 @@ class OrderV1ApiE2ETest {
           () -> assertThat(response.getStatusCode().is2xxSuccessful()).isTrue(),
           () -> assertThat(response.getBody().meta().result()).isEqualTo(SUCCESS),
           () -> assertThat(response.getBody().data().userId()).isEqualTo(userId)
+
+      );
+    }
+
+  }
+
+  @DisplayName("GET /api/v1/orders")
+  @Nested
+  class Search {
+    @DisplayName("계정 아이디가 존재하지 않는다면, `401 Unauthorized`를 반환한다.")
+    @Test
+    void throw401UnauthorizedException_whenNotExitsUserId() {
+      //given
+      //when
+      ParameterizedTypeReference<ApiResponse<OrderV1Dto.Create.Response>> responseType = new ParameterizedTypeReference<>() {
+      };
+
+      ResponseEntity<ApiResponse<OrderV1Dto.Create.Response>> response =
+          testRestTemplate.exchange(ENDPOINT, HttpMethod.GET, new HttpEntity<>(null), responseType);
+
+      //then
+      assertAll(
+          () -> assertThat(response.getStatusCode().is4xxClientError()).isTrue(),
+          () -> assertThat(response.getBody().meta().result()).isEqualTo(FAIL)
+
+      );
+    }
+
+    @DisplayName("계정 아이디가 존재한다면, 그 계정이 주문한 주문 목록을 리턴합니다.")
+    @Test
+    void returnOrderList_whenExitsUserId() {
+      //given
+      String userId = "test";
+      HttpHeaders headers = new HttpHeaders();
+      headers.add("X-USER-ID", userId);
+      //when
+      ParameterizedTypeReference<ApiResponse<OrderV1Dto.Create.Response>> responseType = new ParameterizedTypeReference<>() {
+      };
+
+      ResponseEntity<ApiResponse<OrderV1Dto.Create.Response>> response =
+          testRestTemplate.exchange(ENDPOINT, HttpMethod.GET, new HttpEntity<>(null, headers), responseType);
+
+      //then
+      assertAll(
+          () -> assertThat(response.getStatusCode().is2xxSuccessful()).isTrue(),
+          () -> assertThat(response.getBody().meta().result()).isEqualTo(SUCCESS)
 
       );
     }

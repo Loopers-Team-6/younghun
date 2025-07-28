@@ -32,4 +32,15 @@ public class OrderV1Dto {
     ) {
     }
   }
+
+  class Search {
+    record Response(List<Contents> contents, int page,
+                    int size,
+                    int totalElements,
+                    int totalPages) {
+    }
+
+    record Contents(Long OrderId, String orderNumber) {}
+
+  }
 }
