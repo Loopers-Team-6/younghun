@@ -137,13 +137,13 @@ class Order {
 class OrderItems {
  <<Embedded>>
  - List<OrderItem> orderItems
- + addPrice(List<OrderItem> orderItem) : BigInteger
+ + add(OrderItem orderItem) : void
+ + addAll(List<OrderItem> orderItem) void
+ + sum() : BigInteger
+ + remove(Long productId) : void
+ + removeAll(List<Long> productIds) : void
 }
 
-class TotalPrice {
- <<Embedded>>
- - BigInteger price
-}
 
 class OrderNumber {
  <<Embedded>>
