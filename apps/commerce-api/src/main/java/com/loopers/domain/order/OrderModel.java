@@ -1,7 +1,9 @@
 package com.loopers.domain.order;
 
 import com.loopers.domain.BaseEntity;
+import com.loopers.domain.order.embeded.OrderNumber;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,8 +21,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class OrderModel extends BaseEntity {
 
-  @Column(length = 25, unique = true)
-  private String orderNumber;
+  @Embedded
+  private OrderNumber orderNumber;
 
   private Long memberId;
 
