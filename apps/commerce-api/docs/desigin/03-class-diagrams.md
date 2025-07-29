@@ -38,34 +38,34 @@ User --> Birthday : Vo
 
 %% 좋아요
 class Like {
-    - Long id
-    - User user
-    - Product product
-    - LocalDateTime createdAt
-    - LocalDateTime updatedAt
+ - Long id
+ - User user
+ - Product product
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
 }
 
 
 %% 브랜드
 class Brand {
-    - Long id
-    - BrandName name
-    - Products products
-    - LocalDateTime createdAt
-    - LocalDateTime updatedAt
-    - LocalDateTime deletedAt
+ - Long id
+ - BrandName name
+ - Products products
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
 }
 
 class BrandName {
-    <<Embedded>>
-    - String brandName
+ <<Embedded>>
+ - String brandName
 }
 
 class Products {
-    <<Embedded>>
-    - List<Product> products
+ <<Embedded>>
+ - List<Product> products
     
-    + add(Product:prdocut): void
+ + add(Product:prdocut): void
 }
 
 Brand --> BrandName : Vo
@@ -73,24 +73,24 @@ Brand --> BrandName : Vo
 
 %% 상품
 class Product {
-    - Long id
-    - ProductName name
-    - ProductPrice price
-    - Stock stock
-    - String description
-    - LocalDateTime createdAt
-    - LocalDateTime updatedAt
-    - LocalDateTime deletedAt
+ - Long id
+ - ProductName name
+ - ProductPrice price
+ - Stock stock
+ - String description
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
 }
 
 class ProductName {
-    <<Embedded>>
-    - String productName
+ <<Embedded>>
+ - String productName
 }
 
 class ProductPrice {
-    <<Embedded>>
-    - BigInteger price
+ <<Embedded>>
+ - BigInteger price
 }
 
 Product --> ProductName : Vo
@@ -110,48 +110,50 @@ class Stock {
 }
 
 class ProductStock {
-    <<Embedded>>
-    - Long stock
-    + decrease(Long stock): ProductStock
+ <<Embedded>>
+ - Long stock
+ + decrease(Long stock): ProductStock
 }
 
 Stock --> ProductStock : Vo
 
 %% 주문
 class Order {
-  - Long id
-  - OrderNumber orderNumber
-  - String address
-  - OrderStatus status
-  - OrderItems orderItems
-  - User user
-  - String memo
-  - TotalPrice totalPrice
-  - LocalDateTime createdAt
-  - LocalDateTime updatedAt
-  - LocalDateTime deletedAt
+ - Long id
+ - OrderNumber orderNumber
+ - String address
+ - OrderStatus status
+ - OrderItems orderItems
+ - User user
+ - String memo
+ - TotalPrice totalPrice
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
 }
 
 
 class OrderItems {
-    <<Embedded>>
-    - List<OrderItem> orderItems
-    + addPrice(List<OrderItem> orderItem) : BigInteger
+ <<Embedded>>
+ - List<OrderItem> orderItems
+ + addPrice(List<OrderItem> orderItem) : BigInteger
 }
 
 class TotalPrice {
-    <<Embedded>>
-    - BigInteger price
+ <<Embedded>>
+ - BigInteger price
 }
 
 class OrderNumber {
-    <<Embedded>>
-    - String number
+ <<Embedded>>
+ - String number
+    
+ + generate() : String
 }
 
 class OrderStatus {
-    <<enumeration>>
-    ORDER, PAYMENT, DODE
+ <<enumeration>>
+ ORDER, CANCEL,  DODE
 }
 
 Order --> OrderNumber : Vo
