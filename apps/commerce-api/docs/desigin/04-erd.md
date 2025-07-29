@@ -44,6 +44,7 @@ PRODUCT_LIKE {
  
  TIMESTAMP created_at "생성 시간"
  TIMESTAMP updated_at "수정 시간"
+ TIMESTAMP deleted_at "삭제 시간"
 }
 
 %% 계정

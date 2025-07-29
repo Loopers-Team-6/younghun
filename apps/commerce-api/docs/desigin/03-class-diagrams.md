@@ -43,6 +43,7 @@ class Like {
  - Product product
  - LocalDateTime createdAt
  - LocalDateTime updatedAt
+ - LocalDateTime deletedAt 
 }
 
 
