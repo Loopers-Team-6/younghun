@@ -2,6 +2,8 @@ package com.loopers.domain.order.history;
 
 
 import com.loopers.domain.BaseEntity;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -33,9 +35,31 @@ public class OrderHistoryModel extends BaseEntity {
   @Column(columnDefinition = "TEXT")
   private String memo;
 
-  @Builder
+  @Builder(builderMethodName = "create")
   public OrderHistoryModel(Long orderId, String orderNumber, String memberId, String status, String address,
                            String memo) {
+
+    if(orderId == null) {
+      throw new CoreException(ErrorType.NOT_FOUND, "주문 내역에는 주문아이디기 필수입니다.");
+    }
+
+    if(orderNumber == null) {
+      throw new CoreException(ErrorType.NOT_FOUND, "주문 내역에는 주문번호가 필수입니다.");
+    }
+
+    if(memberId == null) {
+      throw new CoreException(ErrorType.NOT_FOUND, "주문 내역에는 계정아이디가 필수입니다.");
+    }
+    if(status == null) {
+      throw new CoreException(ErrorType.NOT_FOUND, "주문 내역에는 계정 상태가 필수입니다.");
+    }
+    if(address == null) {
+      throw new CoreException(ErrorType.NOT_FOUND, "주문 내역에는 주소가 필수입니다.");
+    }
+
+
+
+
     this.orderId = orderId;
     this.orderNumber = orderNumber;
     this.memberId = memberId;
