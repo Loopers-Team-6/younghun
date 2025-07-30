@@ -2,13 +2,9 @@ package com.loopers.domain.like;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

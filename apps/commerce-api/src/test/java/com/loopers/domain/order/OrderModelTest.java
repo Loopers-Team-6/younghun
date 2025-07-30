@@ -36,7 +36,7 @@ class OrderModelTest {
         () -> assertThat(orderNumber.getNumber()).startsWith(today + "-"),
         () -> assertThat(uuidPart).matches("[0-9a-fA-F]{8}"),
         () -> assertThat(orderNumber.getNumber().length()).isEqualTo(today.length() + 1 + 8));
-    ;
+
   }
 
   @DisplayName("주문 상품을,")
