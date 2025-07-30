@@ -142,6 +142,8 @@ class OrderItems {
  + sum() : BigInteger
  + remove(Long productId) : void
  + removeAll(List<Long> productIds) : void
+ + size() : int
+ + findQunantity(long productId) : long
 }
 
 
@@ -189,6 +191,7 @@ class OrderItem {
   - LocalDateTime createdAt
   - LocalDateTime updatedAt
   - LocalDateTime deletedAt
+  + plusQuantity(long qauntity) : void
 }
 
 class Quantity {
