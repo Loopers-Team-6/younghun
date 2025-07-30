@@ -18,7 +18,7 @@ class OrderHistoryModelTest {
     //given
     Long orderId = null;
     String orderNumber = "12345";
-    String memberId = "12345";
+    String userId = "12345";
     String status = "done";
     String address = "서울시";
     String memo = "메모";
@@ -26,7 +26,7 @@ class OrderHistoryModelTest {
     CoreException result = assertThrows(CoreException.class, () -> OrderHistoryModel.create()
         .orderId(orderId)
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .status(status)
         .address(address)
         .memo(memo)
@@ -41,7 +41,7 @@ class OrderHistoryModelTest {
     //given
     Long orderId = 1L;
     String orderNumber = null;
-    String memberId = "12345";
+    String userId = "12345";
     String status = "done";
     String address = "서울시";
     String memo = "메모";
@@ -49,7 +49,7 @@ class OrderHistoryModelTest {
     CoreException result = assertThrows(CoreException.class, () -> OrderHistoryModel.create()
         .orderId(orderId)
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .status(status)
         .address(address)
         .memo(memo)
@@ -60,11 +60,11 @@ class OrderHistoryModelTest {
 
   @Test
   @DisplayName("주문자(계정 아이디)가 존재하지 않는 경우, 404BadRequest를 반환합니다.")
-  void throws404NotFoundException_whenNotExitsMemberId() {
+  void throws404NotFoundException_whenNotExitsUserId() {
     //given
     Long orderId = 1L;
     String orderNumber = "12345";
-    String memberId = null;
+    String userId = null;
     String status = "done";
     String address = "서울시";
     String memo = "메모";
@@ -72,7 +72,7 @@ class OrderHistoryModelTest {
     CoreException result = assertThrows(CoreException.class, () -> OrderHistoryModel.create()
         .orderId(orderId)
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .status(status)
         .address(address)
         .memo(memo)
@@ -87,7 +87,7 @@ class OrderHistoryModelTest {
     //given
     Long orderId = 1L;
     String orderNumber = "12345";
-    String memberId = "12345";
+    String userId = "12345";
     String status = null;
     String address = "서울시";
     String memo = "메모";
@@ -95,7 +95,7 @@ class OrderHistoryModelTest {
     CoreException result = assertThrows(CoreException.class, () -> OrderHistoryModel.create()
         .orderId(orderId)
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .status(status)
         .address(address)
         .memo(memo)
@@ -110,7 +110,7 @@ class OrderHistoryModelTest {
     //given
     Long orderId = 1L;
     String orderNumber = "12345";
-    String memberId = "12345";
+    String userId = "12345";
     String status = "done";
     String address = null;
     String memo = "메모";
@@ -118,7 +118,7 @@ class OrderHistoryModelTest {
     CoreException result = assertThrows(CoreException.class, () -> OrderHistoryModel.create()
         .orderId(orderId)
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .status(status)
         .address(address)
         .memo(memo)
@@ -133,7 +133,7 @@ class OrderHistoryModelTest {
     //given
     Long orderId = 1L;
     String orderNumber = "12345";
-    String memberId = "12345";
+    String userId = "12345";
     String status = "done";
     String address = "서울시";
     String memo = "메모";
@@ -141,7 +141,7 @@ class OrderHistoryModelTest {
     OrderHistoryModel historyModel = OrderHistoryModel.create()
         .orderId(orderId)
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .status(status)
         .address(address)
         .memo(memo)

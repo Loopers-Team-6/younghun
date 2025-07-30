@@ -30,7 +30,7 @@ public class OrderModel extends BaseEntity {
   @Embedded
   private OrderNumber orderNumber;
 
-  private String memberId;
+  private String userId;
 
   private BigInteger totalPrice;
 
@@ -48,10 +48,10 @@ public class OrderModel extends BaseEntity {
 
 
   @Builder(builderMethodName = "create")
-  public OrderModel(String memberId, List<OrderItemModel> orderItems, String address,
+  public OrderModel(String userId, List<OrderItemModel> orderItems, String address,
                     String memo) {
 
-    if (memberId == null) {
+    if (userId == null) {
       throw new CoreException(ErrorType.NOT_FOUND, "주문자가 존재하지 않는 경우, 주문서를 작성할 수 없습니다.");
     }
 
@@ -60,7 +60,7 @@ public class OrderModel extends BaseEntity {
     }
 
     this.orderNumber = new OrderNumber();
-    this.memberId = memberId;
+    this.userId = userId;
     this.orderItems = new OrderItems();
     this.orderItems.addAll(orderItems);
     this.totalPrice = getTotalPrice();

@@ -320,7 +320,7 @@ class OrderModelTest {
 
     @DisplayName("주문자가 존재하지 않는 경우, `404 Not Found`를 리턴한다.")
     @Test
-    void throws404NotFound_whenNotExitsOrder_asMemberId() {
+    void throws404NotFound_whenNotExitsOrder_asUserId() {
       //given
       Long productId = 1L;
       Long productId2 = 2L;
@@ -353,7 +353,7 @@ class OrderModelTest {
 
       //when
       CoreException result = assertThrows(CoreException.class, () -> OrderModel.create()
-          .memberId(null)
+          .userId(null)
           .orderItems(orderItems)
           .address(address)
           .memo(memo)
@@ -392,13 +392,13 @@ class OrderModelTest {
 
       List<OrderItemModel> orderItems = List.of(orderItem1, orderItem2, orderItem3);
 
-      String memberId = "memberId";
+      String userId = "userId";
       String address = null;
       String memo = "문앞에 두세요";
 
       //when
       CoreException result = assertThrows(CoreException.class, () -> OrderModel.create()
-          .memberId(memberId)
+          .userId(userId)
           .orderItems(orderItems)
           .address(address)
           .memo(memo)
@@ -437,20 +437,20 @@ class OrderModelTest {
 
       List<OrderItemModel> orderItems = List.of(orderItem1, orderItem2, orderItem3);
 
-      String memberId = "memberId";
+      String userId = "userId";
       String address = "서울시 송파구";
       String memo = "문앞에 두세요";
 
       //when
       OrderModel orderModel = OrderModel.create()
-          .memberId(memberId)
+          .userId(userId)
           .orderItems(orderItems)
           .address(address)
           .memo(memo)
           .build();
 
       //then
-      assertAll(() -> assertThat(orderModel.getMemberId()).isEqualTo(memberId),
+      assertAll(() -> assertThat(orderModel.getUserId()).isEqualTo(userId),
           () -> assertThat(orderModel.getTotalPrice()).isEqualTo(9000),
           () -> assertThat(orderModel.getStatus()).isEqualTo(OrderStatus.ORDER),
           () -> assertThat(orderModel.getAddress()).isEqualTo(address),
@@ -464,7 +464,7 @@ class OrderModelTest {
   @Test
   void changeOrderStatus_whenCancelOrder() {
     // given
-    OrderModel orderModel = OrderModel.create().memberId("memberId")
+    OrderModel orderModel = OrderModel.create().userId("userId")
         .address("주소")
         .memo("메모").build();
 
@@ -479,7 +479,7 @@ class OrderModelTest {
   @Test
   void changeOrderStatus_whenDoneOrder() {
     // given
-    OrderModel orderModel = OrderModel.create().memberId("memberId")
+    OrderModel orderModel = OrderModel.create().userId("userId")
         .address("주소")
         .memo("메모").build();
 

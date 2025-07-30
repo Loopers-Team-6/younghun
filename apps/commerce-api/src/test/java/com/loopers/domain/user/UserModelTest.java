@@ -60,21 +60,21 @@ public class UserModelTest {
 
     @DisplayName("모든 데이터(아이디,이메일,생년월일)이 존재한다면, 계정 데이터를 리턴합니다.")
     @Test
-    void returnMemberInfo_whenAllDataExits() {
+    void returnUserInfo_whenAllDataExits() {
       //given
-      String memberId = "memberId";
+      String userId = "userId";
       String email = "email@test.com";
       String birth = "2020-11-30";
 
       // when
       UserModel userModel = UserModel.create()
-          .userId(memberId)
+          .userId(userId)
           .email(email)
           .birthday(birth)
           .build();
 
       // then
-      assertAll(() -> assertThat(userModel.getUserId()).isEqualTo(memberId),
+      assertAll(() -> assertThat(userModel.getUserId()).isEqualTo(userId),
           () -> assertThat(userModel.getEmail()).isEqualTo(email),
           () -> assertThat(userModel.getBirthday()).isEqualTo(birth));
     }

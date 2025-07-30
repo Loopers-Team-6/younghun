@@ -14,25 +14,25 @@ import lombok.ToString;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "like")
+@Table(name = "product_like")
 public class LikeModel extends BaseEntity {
 
-  private String memberId;
+  private String userId;
   private Long productId;
 
-  public static LikeModel register(String memberId, Long productId) {
-    return new LikeModel(memberId, productId);
+  public static LikeModel register(String userId, Long productId) {
+    return new LikeModel(userId, productId);
   }
 
-  private LikeModel(String memberId, Long productId) {
-    if (memberId == null) {
+  private LikeModel(String userId, Long productId) {
+    if (userId == null) {
       throw new CoreException(ErrorType.BAD_REQUEST, "계정 아이디는 필수입니다.");
     }
     if (productId == null) {
       throw new CoreException(ErrorType.BAD_REQUEST, "상품 아이디는 필수입니다.");
     }
 
-    this.memberId = memberId;
+    this.userId = userId;
     this.productId = productId;
   }
 

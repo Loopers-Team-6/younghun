@@ -56,7 +56,7 @@ public class PointModelTest {
     @Test
     void returnPointIsZero_whenSavingExitsUserId() {
       // given
-      String userId = "memberId";
+      String userId = "userId";
       // when
       PointModel pointModel = new PointModel(userId);
       // then

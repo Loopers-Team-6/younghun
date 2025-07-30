@@ -18,13 +18,13 @@ class PaymentModelTest {
   void throws404NotFoundException_WhenNotExitsOrderNumber() {
     //given
     String orderNumber = null;
-    String memberId = "memberId";
+    String userId = "userId";
     BigInteger paymentAmount = BigInteger.valueOf(2000);
     String description = "description";
     //when
     CoreException result = assertThrows(CoreException.class, () -> PaymentModel.create()
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .paymentAmount(paymentAmount)
         .description(description)
         .build());
@@ -34,16 +34,16 @@ class PaymentModelTest {
 
   @DisplayName("계정 아이디가 존재하지 않는 다면, 404 NotFoundException을 발생시킨다.")
   @Test
-  void throws404NotFoundException_WhenNotExitsMemberId() {
+  void throws404NotFoundException_WhenNotExitsUserId() {
     //given
     String orderNumber = "12354";
-    String memberId = null;
+    String userId = null;
     BigInteger paymentAmount = BigInteger.valueOf(2000);
     String description = "description";
     //when
     CoreException result = assertThrows(CoreException.class, () -> PaymentModel.create()
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .paymentAmount(paymentAmount)
         .description(description)
         .build());
@@ -56,13 +56,13 @@ class PaymentModelTest {
   void returnZero_whenNotExitsPaymentAmount() {
     //given
     String orderNumber = "12354";
-    String memberId = "memberId";
+    String userId = "userId";
     BigInteger paymentAmount = null;
     String description = "description";
     //when
     PaymentModel paymentModel = PaymentModel.create()
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .paymentAmount(paymentAmount)
         .description(description)
         .build();
@@ -75,20 +75,20 @@ class PaymentModelTest {
   void returnPaymentInfo_whenAllExits() {
     //given
     String orderNumber = "12354";
-    String memberId = "memberId";
+    String userId = "userId";
     BigInteger paymentAmount = BigInteger.valueOf(2000);
     String description = "description";
     //when
     PaymentModel paymentModel = PaymentModel.create()
         .orderNumber(orderNumber)
-        .memberId(memberId)
+        .userId(userId)
         .paymentAmount(paymentAmount)
         .description(description)
         .build();
     //then
     assertAll(
         () -> assertThat(paymentModel.getOrderNumber()).isEqualTo(orderNumber),
-        () -> assertThat(paymentModel.getMemberId()).isEqualTo(memberId),
+        () -> assertThat(paymentModel.getUserId()).isEqualTo(userId),
         () -> assertThat(paymentModel.getPaymentAmount()).isEqualTo(paymentAmount),
         () -> assertThat(paymentModel.getDescription()).isEqualTo(description)
     );

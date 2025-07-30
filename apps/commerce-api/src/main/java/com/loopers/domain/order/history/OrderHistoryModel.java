@@ -23,7 +23,7 @@ public class OrderHistoryModel extends BaseEntity {
   private String orderNumber;
 
   @Column(nullable = false)
-  private String memberId;
+  private String userId;
 
   @Column(nullable = false, length = 25)
   private String status;
@@ -35,7 +35,7 @@ public class OrderHistoryModel extends BaseEntity {
   private String memo;
 
   @Builder(builderMethodName = "create")
-  public OrderHistoryModel(Long orderId, String orderNumber, String memberId, String status, String address,
+  public OrderHistoryModel(Long orderId, String orderNumber, String userId, String status, String address,
                            String memo) {
 
     if(orderId == null) {
@@ -46,7 +46,7 @@ public class OrderHistoryModel extends BaseEntity {
       throw new CoreException(ErrorType.NOT_FOUND, "주문 내역에는 주문번호가 필수입니다.");
     }
 
-    if(memberId == null) {
+    if(userId == null) {
       throw new CoreException(ErrorType.NOT_FOUND, "주문 내역에는 계정아이디가 필수입니다.");
     }
     if(status == null) {
@@ -61,7 +61,7 @@ public class OrderHistoryModel extends BaseEntity {
 
     this.orderId = orderId;
     this.orderNumber = orderNumber;
-    this.memberId = memberId;
+    this.userId = userId;
     this.status = status;
     this.address = address;
     this.memo = memo;

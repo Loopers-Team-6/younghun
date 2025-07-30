@@ -22,7 +22,7 @@ public class PaymentModel extends BaseEntity {
   private String orderNumber;
 
   @Column(nullable = false, length = 25)
-  private String memberId;
+  private String userId;
 
   @Column(nullable = false)
   private BigInteger paymentAmount;
@@ -31,17 +31,17 @@ public class PaymentModel extends BaseEntity {
   private String description;
 
   @Builder(builderMethodName = "create")
-  public PaymentModel(String orderNumber, String memberId, BigInteger paymentAmount, String description) {
+  public PaymentModel(String orderNumber, String userId, BigInteger paymentAmount, String description) {
     if(orderNumber == null) {
       throw new CoreException(ErrorType.NOT_FOUND,"결제 정보에는 주문 번호가 존재해야합니다.");
     }
 
-    if(memberId == null) {
+    if(userId == null) {
       throw new CoreException(ErrorType.NOT_FOUND,"결제 정보에는 결제가 존재해야합니다.");
     }
 
     this.orderNumber = orderNumber;
-    this.memberId = memberId;
+    this.userId = userId;
     this.paymentAmount = paymentAmount;
     this.description = description;
 
