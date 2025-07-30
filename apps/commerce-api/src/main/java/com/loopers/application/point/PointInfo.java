@@ -6,7 +6,7 @@ public record PointInfo(String userId, int point) {
 
   public static PointInfo from(PointModel point) {
     return new PointInfo(
-        point.getUserId(),
+        point.getMemberId(),
         point.getPoint()
     );
   }

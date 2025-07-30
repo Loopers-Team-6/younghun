@@ -3,18 +3,21 @@ package com.loopers.domain.user;
 import com.loopers.domain.BaseEntity;
 import com.loopers.domain.user.embeded.BirthDay;
 import com.loopers.domain.user.embeded.Email;
-import com.loopers.domain.user.embeded.UserId;
+import com.loopers.domain.user.embeded.MemberId;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import lombok.Builder;
+import lombok.Getter;
 
 @Entity
-@Table(name = "user")
+@Table(name = "member")
+@Getter
 public class UserModel extends BaseEntity {
 
   @Embedded
-  private UserId userId;
+  private MemberId memberId;
 
   @Embedded
   private Email email;
@@ -27,16 +30,17 @@ public class UserModel extends BaseEntity {
   public UserModel() {
   }
 
-  public UserModel(String userId, String email, String birthday, String gender) {
-    this.userId = new UserId(userId);
+  @Builder(builderMethodName = "create")
+  public UserModel(String memberId, String email, String birthday, String gender) {
+    this.memberId = new MemberId(memberId);
     this.email = new Email(email);
     this.birthday = new BirthDay(birthday);
     this.gender = gender;
   }
 
 
-  public String getUserId() {
-    return userId.getUserId();
+  public String getMemberId() {
+    return memberId.getMemberId();
   }
 
   public String getEmail() {
@@ -45,11 +49,6 @@ public class UserModel extends BaseEntity {
 
   public LocalDate getBirthday() {
     return birthday.getBirthday();
-  }
-
-
-  public String getGender() {
-    return gender;
   }
 
 }
