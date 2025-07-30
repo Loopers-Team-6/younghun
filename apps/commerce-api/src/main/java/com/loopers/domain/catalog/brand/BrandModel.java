@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Table(name = "brand")
-public class Brand extends BaseEntity {
+public class BrandModel extends BaseEntity {
 
   private String userId;
 

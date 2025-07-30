@@ -21,14 +21,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ProductV1ControllerTest {
+class ProductModelV1ControllerTest {
 
   private static final String ENDPOINT = "/api/v1/products/";
   private final TestRestTemplate testRestTemplate;
   private final DatabaseCleanUp databaseCleanUp;
 
   @Autowired
-  public ProductV1ControllerTest(
+  public ProductModelV1ControllerTest(
       TestRestTemplate testRestTemplate,
       DatabaseCleanUp databaseCleanUp
   ) {

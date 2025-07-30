@@ -11,11 +11,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-public class ProductModelTest {
+public class ProductModelModelTest {
 
   @DisplayName("상품 가격을 책정할때,")
   @Nested
-  class ProductPriceTest {
+  class ProductModelPriceTest {
 
     @DisplayName("음수라면, `400 Bad Request`를 반환합니다.")
     @Test

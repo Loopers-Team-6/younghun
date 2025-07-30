@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "product")
-public class Product extends BaseEntity {
+public class ProductModel extends BaseEntity {
   private Long brandId;
   @Embedded
   private ProductName name;
@@ -25,7 +25,7 @@ public class Product extends BaseEntity {
   @Column(columnDefinition = "TEXT")
   private String description;
 
-  public Product(Long brandId, String name, BigInteger price, String description) {
+  public ProductModel(Long brandId, String name, BigInteger price, String description) {
     this.brandId = brandId;
     this.name = ProductName.of(name);
     this.price = ProductPrice.of(price);

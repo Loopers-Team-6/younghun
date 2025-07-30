@@ -1,18 +1,18 @@
 package com.loopers.domain.brand;
 
 import com.loopers.domain.catalog.brand.embeded.Products;
-import com.loopers.domain.catalog.brand.product.Product;
+import com.loopers.domain.catalog.product.ProductModel;
 import java.math.BigInteger;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-public class BrandModelTest {
+public class BrandModelModelTest {
 
   @DisplayName("브랜드에 상품을,")
   @Nested
-  class ProductList {
+  class ProductModelList {
 
     @Test
     @DisplayName("추가하지 않고, 초기 상태인 경우, 상품 리스트의 길이는 0이다.")
@@ -30,7 +30,7 @@ public class BrandModelTest {
     void thenProductListSizePlus1_whenAddProductInBrand() {
       //given
       Products products = Products.of();
-      Product product = new Product(1L,"상품1", BigInteger.valueOf(200),"상품11");
+      ProductModel product = new ProductModel(1L,"상품1", BigInteger.valueOf(200),"상품11");
       //when
       products.add(product);
       //then

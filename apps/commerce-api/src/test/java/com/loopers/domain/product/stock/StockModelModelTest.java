@@ -9,7 +9,7 @@ import com.loopers.support.error.ErrorType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class StockModelTest {
+public class StockModelModelTest {
 
   @DisplayName("재고가 0미만이라면 `400 Bad Request`를 반환합니다.")
   @Test

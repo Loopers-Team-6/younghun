@@ -1,7 +1,7 @@
 package com.loopers.domain.catalog.brand.embeded;
 
 
-import com.loopers.domain.catalog.product.Product;
+import com.loopers.domain.catalog.product.ProductModel;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
@@ -12,12 +12,12 @@ import lombok.Getter;
 @Getter
 public class Products {
   @OneToMany(mappedBy = "brandId")
-  private List<Product> products;
+  private List<ProductModel> products;
 
   protected Products() {
   }
 
-  private Products(List<Product> products) {
+  private Products(List<ProductModel> products) {
     this.products = products;
   }
 
@@ -25,11 +25,11 @@ public class Products {
     return new Products(new ArrayList<>());
   }
 
-  public static Products of(List<Product> products) {
+  public static Products of(List<ProductModel> products) {
     return new Products(products);
   }
 
-  public void add(Product product) {
+  public void add(ProductModel product) {
     this.products.add(product);
   }
 

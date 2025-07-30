@@ -20,13 +20,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class BrandV1ControllerTest {
+class BrandModelV1ControllerTest {
 
   private final TestRestTemplate testRestTemplate;
   private final DatabaseCleanUp databaseCleanUp;
 
   @Autowired
-  public BrandV1ControllerTest(
+  public BrandModelV1ControllerTest(
       TestRestTemplate testRestTemplate,
       DatabaseCleanUp databaseCleanUp
   ) {
