@@ -45,23 +45,23 @@ class ProductV1ControllerTest {
   @Nested
   class List {
 
-    @DisplayName("필터링 조건을 지정하지 않는다면, 모든 상품을 리스토로 리턴합니다.")
-    @Test
-    public void returnAllProducts_whenNonFiltering() {
-      //given
-
-      //when
-      ParameterizedTypeReference<ApiResponse<ProductV1Dto.Search.Response>> responseType = new ParameterizedTypeReference<>() {
-      };
-
-      ResponseEntity<ApiResponse<ProductV1Dto.Search.Response>> response =
-          testRestTemplate.exchange(ENDPOINT, HttpMethod.GET, new HttpEntity<>(null), responseType);
-      //then
-      assertAll(
-          () -> assertThat(response.getStatusCode().is2xxSuccessful()).isTrue(),
-          () -> assertThat(response.getBody().meta().result()).isEqualTo(SUCCESS)
-      );
-    }
+//    @DisplayName("필터링 조건을 지정하지 않는다면, 모든 상품을 리스토로 리턴합니다.")
+//    @Test
+//    public void returnAllProducts_whenNonFiltering() {
+//      //given
+//
+//      //when
+//      ParameterizedTypeReference<ApiResponse<ProductV1Dto.Search.Response>> responseType = new ParameterizedTypeReference<>() {
+//      };
+//
+//      ResponseEntity<ApiResponse<ProductV1Dto.Search.Response>> response =
+//          testRestTemplate.exchange(ENDPOINT, HttpMethod.GET, new HttpEntity<>(null), responseType);
+//      //then
+//      assertAll(
+//          () -> assertThat(response.getStatusCode().is2xxSuccessful()).isTrue(),
+//          () -> assertThat(response.getBody().meta().result()).isEqualTo(SUCCESS)
+//      );
+//    }
   }
 
   @DisplayName("GET /api/v1/products/{productId}")

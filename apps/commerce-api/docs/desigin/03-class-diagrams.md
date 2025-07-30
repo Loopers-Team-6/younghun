@@ -38,29 +38,39 @@ User --> Birthday : Vo
 
 %% 좋아요
 class Like {
-    - Long id
-    - User user
-    - Product product
-    - LocalDateTime createdAt
-    - LocalDateTime updatedAt
+ - Long id
+ - User user
+ - Product product
+ - boolean liked
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt 
+ 
+ + like()
+ + unLike()
 }
 
 
 %% 브랜드
 class Brand {
-    - Long id
-    - BrandName name
-    - List<Product> products
-    - LocalDateTime createdAt
-    - LocalDateTime updatedAt
-    - LocalDateTime deletedAt
-  
-    + add(productId: Long, name: ProductName): void 
+ - Long id
+ - BrandName name
+ - Products products
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
 }
 
 class BrandName {
-    <<Embedded>>
-    - String brandName
+ <<Embedded>>
+ - String brandName
+}
+
+class Products {
+ <<Embedded>>
+ - List<Product> products
+    
+ + add(Product:prdocut): void
 }
 
 Brand --> BrandName : Vo
@@ -68,26 +78,35 @@ Brand --> BrandName : Vo
 
 %% 상품
 class Product {
-    - Long id
-    - ProductName name
-    - ProductPrice price
-    - String description
-    - LocalDateTime createdAt
-    - LocalDateTime updatedAt
-    - LocalDateTime deletedAt
+ - Long id
+ - ProductName name
+ - ProductPrice price
+ - Stock stock
+ - String description
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
 }
 
 class ProductName {
-    <<Embedded>>
-    - String productName
+ <<Embedded>>
+ - String productName
+}
+
+class ProductPrice {
+ <<Embedded>>
+ - BigInteger price
 }
 
 Product --> ProductName : Vo
+Product --> ProductPrice : Vo
+Product --> Stock : 소유
 
 %% 재고
 class Stock { 
  - Long id
- - Product product
+ - Long productId
+ - Long stock
  - ProductStock stock
  - LocalDateTime createdAt
  - LocalDateTime updatedAt
@@ -96,48 +115,52 @@ class Stock {
 }
 
 class ProductStock {
-    <<Embedded>>
-    - Long stock
-    + decrease(Product prduct, ProductStock prductStock): long
+ <<Embedded>>
+ - Long stock
+ + decrease(Long stock): ProductStock
 }
 
 Stock --> ProductStock : Vo
 
 %% 주문
 class Order {
-  - Long id
-  - OrderNumber orderNumber
-  - String address
-  - OrderStatus status
-  - OrderItems orderItems
-  - User user
-  - String memo
-  - TotalPrice totalPrice
-  - LocalDateTime createdAt
-  - LocalDateTime updatedAt
-  - LocalDateTime deletedAt
+ - Long id
+ - OrderNumber orderNumber
+ - String address
+ - OrderStatus status
+ - OrderItems orderItems
+ - User user
+ - String memo
+ - TotalPrice totalPrice
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
 }
 
 
 class OrderItems {
-    <<Embedded>>
-    - List<OrderItem> orderItems
-    + addPrice(List<OrderItem> orderItem) : BigInteger
+ <<Embedded>>
+ - List<OrderItem> orderItems
+ + add(OrderItem orderItem) : void
+ + addAll(List<OrderItem> orderItem) void
+ + sum() : BigInteger
+ + remove(Long productId) : void
+ + removeAll(List<Long> productIds) : void
+ + size() : int
+ + findQunantity(long productId) : long
 }
 
-class TotalPrice {
-    <<Embedded>>
-    - BigInteger price
-}
 
 class OrderNumber {
-    <<Embedded>>
-    - String number
+ <<Embedded>>
+ - String number
+    
+ + generate() : String
 }
 
 class OrderStatus {
-    <<enumeration>>
-    ORDER, PAYMENT, DODE
+ <<enumeration>>
+ ORDER, CANCEL,  DODE
 }
 
 Order --> OrderNumber : Vo
@@ -172,6 +195,7 @@ class OrderItem {
   - LocalDateTime createdAt
   - LocalDateTime updatedAt
   - LocalDateTime deletedAt
+  + plusQuantity(long qauntity) : void
 }
 
 class Quantity {
