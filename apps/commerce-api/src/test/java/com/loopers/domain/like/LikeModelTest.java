@@ -8,6 +8,7 @@ import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -38,32 +39,49 @@ public class LikeModelTest {
     assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
   }
 
+
   @Test
-  @DisplayName("특정 상품을 좋아요를 누른다면, `좋아요`가 등록된다.")
-  void returnLikeInfo_whenInputUserIdAndProductId() {
+  @DisplayName("최초로 상품에 좋아요를 하는 경우,`좋아요`상태가 true가 된다..")
+  void returnTrue_whenLikedProduct() {
     //given
     String userId = "user";
     Long productId = 1L;
     //when
-    LikeModel likeModel = LikeModel.register(userId, productId);
+    LikeModel liked = LikeModel.register(userId, productId);
     //then
-    assertAll(() -> assertThat(likeModel.getUserId().equals(userId)),
-              () -> assertThat(likeModel.getProductId()).isEqualTo(productId));
+    assertThat(liked.isLiked()).isTrue();
   }
 
 
   @Test
-  @DisplayName("좋아요가 된 상품을 해제 한다면, `좋아요`가 삭제된다.")
-  void returnRemoveLikeInfo_whenCancelLike() {
+  @DisplayName("상품에 좋아요 해제를 하는 경우,`좋아요`상태가 false가 된다..")
+  void returnFalse_whenUnLikedProduct() {
     //given
     String userId = "user";
     Long productId = 1L;
-    LikeModel likeModel =  LikeModel.register(userId, productId);
+    LikeModel liked = LikeModel.register(userId, productId);
     //when
-    ZonedDateTime cancelTime = likeModel.cancel();
+    liked.unLike();
     //then
-    assertThat(likeModel.getDeletedAt()).isEqualTo(cancelTime);
+    assertThat(liked.isLiked()).isFalse();
   }
+
+
+  @Test
+  @DisplayName("상품에 좋아요 해제된 상품에 좋아요를 하는 경우,`좋아요`상태가 true가 된다..")
+  void returnLiTrue_whenLikedProductAgain() {
+    //given
+    String userId = "user";
+    Long productId = 1L;
+    LikeModel liked = LikeModel.register(userId, productId);
+    liked.unLike();
+    //when
+    liked.like();
+    //then
+    assertThat(liked.isLiked()).isTrue();
+  }
+
+
 
 
 }
