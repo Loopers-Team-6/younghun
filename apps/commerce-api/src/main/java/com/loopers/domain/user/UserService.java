@@ -13,7 +13,7 @@ public class UserService {
 
   @Transactional
   public UserModel createUser(UserModel userModel) {
-    userRepository.duplicateUserId(userModel.getUserId());
+    userRepository.duplicateUserId(userModel.getMemberId());
     return userRepository.save(userModel);
   }
 
