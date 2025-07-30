@@ -9,9 +9,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.Builder;
+import lombok.Getter;
 
 @Entity
 @Table(name = "member")
+@Getter
 public class UserModel extends BaseEntity {
 
   @Embedded
@@ -47,11 +49,6 @@ public class UserModel extends BaseEntity {
 
   public LocalDate getBirthday() {
     return birthday.getBirthday();
-  }
-
-
-  public String getGender() {
-    return gender;
   }
 
 }
