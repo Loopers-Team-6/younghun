@@ -1,4 +1,4 @@
-package com.loopers.domain.product.embeded;
+package com.loopers.domain.catalog.product.embeded;
 
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;

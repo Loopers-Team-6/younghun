@@ -1,4 +1,4 @@
-package com.loopers.domain.product.embeded;
+package com.loopers.domain.catalog.product.embeded;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

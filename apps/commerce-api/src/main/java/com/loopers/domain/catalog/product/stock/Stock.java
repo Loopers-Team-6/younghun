@@ -1,7 +1,7 @@
-package com.loopers.domain.product.stock;
+package com.loopers.domain.catalog.product.stock;
 
 import com.loopers.domain.BaseEntity;
-import com.loopers.domain.product.stock.embeded.ProductStock;
+import com.loopers.domain.catalog.product.stock.embeded.ProductStock;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

@@ -1,7 +1,7 @@
 package com.loopers.domain.brand;
 
-import com.loopers.domain.brand.embeded.Products;
-import com.loopers.domain.product.Product;
+import com.loopers.domain.catalog.brand.embeded.Products;
+import com.loopers.domain.catalog.brand.product.Product;
 import java.math.BigInteger;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

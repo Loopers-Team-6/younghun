@@ -1,6 +1,7 @@
-package com.loopers.domain.brand.embeded;
+package com.loopers.domain.catalog.brand.embeded;
 
-import com.loopers.domain.product.Product;
+
+import com.loopers.domain.catalog.product.Product;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;

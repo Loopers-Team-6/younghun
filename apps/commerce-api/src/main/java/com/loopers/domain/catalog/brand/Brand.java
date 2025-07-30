@@ -1,8 +1,8 @@
-package com.loopers.domain.brand;
+package com.loopers.domain.catalog.brand;
 
 import com.loopers.domain.BaseEntity;
-import com.loopers.domain.brand.embeded.BrandName;
-import com.loopers.domain.brand.embeded.Products;
+import com.loopers.domain.catalog.brand.embeded.BrandName;
+import com.loopers.domain.catalog.brand.embeded.Products;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

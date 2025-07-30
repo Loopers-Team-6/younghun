@@ -3,7 +3,7 @@ package com.loopers.domain.product.stock;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import com.loopers.domain.product.stock.embeded.ProductStock;
+import com.loopers.domain.catalog.product.stock.embeded.ProductStock;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import org.junit.jupiter.api.DisplayName;

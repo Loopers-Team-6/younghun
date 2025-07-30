@@ -3,7 +3,7 @@ package com.loopers.domain.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import com.loopers.domain.product.embeded.ProductPrice;
+import com.loopers.domain.catalog.product.embeded.ProductPrice;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import java.math.BigInteger;
