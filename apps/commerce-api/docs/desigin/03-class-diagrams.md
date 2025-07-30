@@ -17,7 +17,7 @@ class User {
 
 class UserId {
     <<Embedded>>
- - String userId
+ - String memberId
 }
 
 class Email {
@@ -173,7 +173,7 @@ class OrderHistory {
   - OrderStatus status
   - List<OrderItem> orderItem
   - BigInteger totalPrice
-  - String userId
+  - String memberId
   - String memo
   
   - LocalDateTime createdAt
