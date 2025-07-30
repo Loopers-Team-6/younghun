@@ -1,7 +1,11 @@
 package com.loopers.domain.order;
 
 import com.loopers.domain.BaseEntity;
+import com.loopers.domain.order.embeded.OrderItems;
 import com.loopers.domain.order.embeded.OrderNumber;
+import com.loopers.domain.order.orderItem.OrderItemModel;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -9,8 +13,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,9 +30,12 @@ public class OrderModel extends BaseEntity {
   @Embedded
   private OrderNumber orderNumber;
 
-  private Long memberId;
+  private String memberId;
 
   private BigInteger totalPrice;
+
+  @Embedded
+  private OrderItems orderItems;
 
   @Column(length = 200)
   private String address;
@@ -36,5 +45,42 @@ public class OrderModel extends BaseEntity {
 
   @Column(columnDefinition = "TEXT")
   private String memo;
+
+
+  @Builder(builderMethodName = "create")
+  public OrderModel(String memberId, List<OrderItemModel> orderItems, String address,
+                    String memo) {
+
+    if (memberId == null) {
+      throw new CoreException(ErrorType.NOT_FOUND, "주문자가 존재하지 않는 경우, 주문서를 작성할 수 없습니다.");
+    }
+
+    if(address == null) {
+      throw new CoreException(ErrorType.NOT_FOUND, "주소가 존재하지 않는 경우, 주문서를 작성할 수 없습니다.");
+    }
+
+    this.orderNumber = new OrderNumber();
+    this.memberId = memberId;
+    this.orderItems = new OrderItems();
+    this.orderItems.addAll(orderItems);
+    this.totalPrice = getTotalPrice();
+    this.address = address;
+    this.status = OrderStatus.ORDER;
+    this.memo = memo;
+  }
+
+  public BigInteger getTotalPrice() {
+    this.totalPrice = orderItems.sum();
+    return totalPrice;
+  }
+
+  public void cancel() {
+    this.status = OrderStatus.CANCEL;
+  }
+
+  public void done() {
+    this.status = OrderStatus.DODE;
+  }
+
 }
 
