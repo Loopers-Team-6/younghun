@@ -2,7 +2,7 @@ package com.loopers.infrastructure.user;
 
 import com.loopers.domain.user.UserModel;
 import com.loopers.domain.user.UserRepository;
-import com.loopers.domain.user.embeded.MemberId;
+import com.loopers.domain.user.embeded.UserId;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import java.util.Optional;
@@ -21,7 +21,7 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public void duplicateUserId(String userId) {
-    Optional<UserModel> exitsUser = repository.findByUserId(new MemberId(userId));
+    Optional<UserModel> exitsUser = repository.findByUserId(new UserId(userId));
     if (exitsUser.isPresent()) {
       throw new CoreException(ErrorType.BAD_REQUEST, "해당 아이디는 이미 가입이 되어있습니다.");
     }
@@ -29,7 +29,7 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public Optional<UserModel> findByUserId(String userId) {
-    return repository.findByUserId(new MemberId(userId));
+    return repository.findByUserId(new UserId(userId));
 
   }
 }

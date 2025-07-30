@@ -6,7 +6,7 @@ public record UserInfo(String userId, String email, String birthday, String gend
 
   public static UserInfo from(UserModel model) {
     return new UserInfo(
-        model.getMemberId(),
+        model.getUserId(),
         model.getEmail(),
         model.getBirthday().toString(),
         model.getGender()

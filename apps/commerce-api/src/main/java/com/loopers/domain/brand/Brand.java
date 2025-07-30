@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "brand")
 public class Brand extends BaseEntity {
 
-  private String memberId;
+  private String userId;
 
   @Embedded
   private Products products;

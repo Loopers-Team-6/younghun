@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.loopers.domain.user.embeded.BirthDay;
 import com.loopers.domain.user.embeded.Email;
-import com.loopers.domain.user.embeded.MemberId;
+import com.loopers.domain.user.embeded.UserId;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ public class UserModelTest {
       // arrange
 
       // act
-      CoreException result = assertThrows(CoreException.class, () -> new MemberId(userId));
+      CoreException result = assertThrows(CoreException.class, () -> new UserId(userId));
       // assert
       assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
     }
@@ -68,13 +68,13 @@ public class UserModelTest {
 
       // when
       UserModel userModel = UserModel.create()
-          .memberId(memberId)
+          .userId(memberId)
           .email(email)
           .birthday(birth)
           .build();
 
       // then
-      assertAll(() -> assertThat(userModel.getMemberId()).isEqualTo(memberId),
+      assertAll(() -> assertThat(userModel.getUserId()).isEqualTo(memberId),
           () -> assertThat(userModel.getEmail()).isEqualTo(email),
           () -> assertThat(userModel.getBirthday()).isEqualTo(birth));
     }

@@ -19,24 +19,24 @@ import lombok.Setter;
 @Setter
 public class PointModel extends BaseEntity {
 
-  private String memberId;
+  private String userId;
   @Embedded
   private Point point;
 
-  public PointModel(String memberId) {
-    validate(memberId);
-    this.memberId = memberId;
+  public PointModel(String userId) {
+    validate(userId);
+    this.userId = userId;
     this.point = new Point();
   }
 
-  public PointModel(String memberId, int point) {
-    validate(memberId);
-    this.memberId = memberId;
+  public PointModel(String userId, int point) {
+    validate(userId);
+    this.userId = userId;
     this.point = new Point(point);
   }
 
-  private void validate(String memberId) {
-    if (memberId == null) {
+  private void validate(String userId) {
+    if (userId == null) {
       throw new CoreException(ErrorType.NOT_FOUND, "포인트 저장시 계정아이디는 필수입니다.");
     }
   }

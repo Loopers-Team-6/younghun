@@ -82,7 +82,7 @@ public class UserServiceIntegrationTest {
       UserModel userModel = userService.getUser(userId);
       // assert
       assertAll(
-          () -> assertThat(userModel.getMemberId()).isNotNull(),
+          () -> assertThat(userModel.getUserId()).isNotNull(),
           () -> assertThat(userModel.getEmail()).isNotNull(),
           () -> assertThat(userModel.getBirthday()).isNotNull(),
           () -> assertThat(userModel.getGender()).isNotNull()

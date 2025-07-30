@@ -54,13 +54,13 @@ public class PointModelTest {
 
     @DisplayName("포인트 저장시 계정 아이디가 존재한다면, 포인트는 0으로 리턴되어집니다.")
     @Test
-    void returnPointIsZero_whenSavingExitsMemberId() {
+    void returnPointIsZero_whenSavingExitsUserId() {
       // given
-      String memberId = "memberId";
+      String userId = "memberId";
       // when
-      PointModel pointModel = new PointModel(memberId);
+      PointModel pointModel = new PointModel(userId);
       // then
-      assertThat(pointModel.getMemberId()).isEqualTo(memberId);
+      assertThat(pointModel.getUserId()).isEqualTo(userId);
       assertThat(pointModel.getPoint()).isEqualTo(0);
     }
 
