@@ -41,9 +41,13 @@ class Like {
  - Long id
  - User user
  - Product product
+ - boolean liked
  - LocalDateTime createdAt
  - LocalDateTime updatedAt
  - LocalDateTime deletedAt 
+ 
+ + like()
+ + unLike()
 }
 
 
