@@ -46,10 +46,23 @@ class Like {
  - LocalDateTime updatedAt
  - LocalDateTime deletedAt 
  
- + like()
- + unLike()
+ + like(): void
+ + unLike(): void
 }
 
+%% 좋아요된 상품
+class LikedProduct {
+ - Product product
+ - int count
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
+
+ + increase(): void
+ + decrese(): void
+}
+
+LikedProduct --> Like: 참조
 
 %% 브랜드
 class Brand {
@@ -137,6 +150,10 @@ class Order {
  - LocalDateTime deletedAt
 }
 
+class TotalPrice {
+ <<Embedded>>
+ - price BigInteger
+}
 
 class OrderItems {
  <<Embedded>>
