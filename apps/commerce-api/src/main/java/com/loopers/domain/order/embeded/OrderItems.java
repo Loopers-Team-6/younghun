@@ -3,9 +3,12 @@ package com.loopers.domain.order.embeded;
 import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +20,12 @@ import lombok.Getter;
 @Getter
 public class OrderItems {
 
-  @OneToMany(mappedBy = "orderId", fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "owner_order_id")
   private List<OrderItemModel> orderItems;
+
+  @Transient
+  private Long parentOrderId;
 
   public OrderItems() {
     this.orderItems = new ArrayList<>();
@@ -40,8 +47,7 @@ public class OrderItems {
 
   // 대량 등록
   public void addAll(List<OrderItemModel> orderItems) {
-
-    if(orderItems == null) {
+    if (orderItems.isEmpty()) {
       return;
     }
 

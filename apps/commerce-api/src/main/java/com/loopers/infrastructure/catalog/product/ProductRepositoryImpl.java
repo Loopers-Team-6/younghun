@@ -80,7 +80,7 @@ public class ProductRepositoryImpl implements ProductRepository {
   @Override
   public ProductModel get(Long productId) {
 
-    if(productId == null) {
+    if (productId == null) {
       throw new CoreException(ErrorType.NOT_FOUND, "상품 ID가 존재하지 않습니다.");
     }
 
@@ -90,6 +90,14 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .where(product.id.eq(productId))
                 .fetchOne())
         .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "상품 ID가 존재하지 않습니다."));
+  }
+
+  @Override
+  public List<ProductModel> getIn(List<Long> productIds) {
+    return query.select(product)
+        .from(product)
+        .where(product.id.in(productIds))
+        .fetch();
   }
 
   enum SortOption {

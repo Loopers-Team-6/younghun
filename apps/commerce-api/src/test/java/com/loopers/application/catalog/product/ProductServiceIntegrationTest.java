@@ -205,7 +205,7 @@ class ProductServiceIntegrationTest {
         //then
         assertThat(productGetInfo.productId()).isEqualTo(productId);
         assertThat(productGetInfo.productName()).isEqualTo(productModel.getName());
-        assertThat(productGetInfo.price()).isEqualTo(productModel.getPrice().getPrice());
+        assertThat(productGetInfo.price()).isEqualTo(productModel.getPrice());
         assertThat(productGetInfo.createdAt()).isEqualTo(productModel.getCreatedAt());
         assertThat(productGetInfo.updatedAt()).isEqualTo(productModel.getUpdatedAt());
         assertThat(productGetInfo.description()).isEqualTo(productModel.getDescription());
