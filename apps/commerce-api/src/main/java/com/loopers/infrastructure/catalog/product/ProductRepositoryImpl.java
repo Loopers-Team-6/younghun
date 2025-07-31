@@ -12,8 +12,6 @@ import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.math.BigInteger;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -97,15 +95,26 @@ public class ProductRepositoryImpl implements ProductRepository {
   }
 
   @Override
-  public ProductModel get(Long productId) {
+  public ProductProjection get(Long productId) {
 
     if (productId == null) {
       throw new CoreException(ErrorType.NOT_FOUND, "상품 ID가 존재하지 않습니다.");
     }
 
     return Optional.ofNullable(
-            query.select(product)
+            query.select(new QProductProjection
+                    (product.id,
+                        product.brandId,
+                        brand.name.name,
+                        product.name.name,
+                        product.price.price,
+                        product.description,
+                        productSignalCount.likeCount,
+                        product.createdAt,
+                        product.updatedAt))
                 .from(product)
+                .leftJoin(brand).on(product.brandId.eq(brand.id))
+                .leftJoin(productSignalCount).on(productSignalCount.productId.eq(product.id))
                 .where(product.id.eq(productId))
                 .fetchOne())
         .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "상품 ID가 존재하지 않습니다."));

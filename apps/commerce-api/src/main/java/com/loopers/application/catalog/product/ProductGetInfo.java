@@ -10,6 +10,7 @@ public record ProductGetInfo(
     String brandName,
     String productName,
     BigInteger price,
+    int likedCount,
     String description,
     ZonedDateTime createdAt,
     ZonedDateTime updatedAt

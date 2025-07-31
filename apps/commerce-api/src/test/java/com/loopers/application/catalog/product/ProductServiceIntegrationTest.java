@@ -4,7 +4,7 @@ package com.loopers.application.catalog.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import com.loopers.domain.catalog.product.ProductModel;
+import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.like.count.ProductSignalCountModel;
 import com.loopers.domain.like.count.ProductSignalCountRepository;
@@ -253,19 +253,23 @@ class ProductServiceIntegrationTest {
       void returnProductInfo_whenExitsProductId() {
         //given
         Long productId = 1L;
-        ProductModel productModel = repository.get(productId);
+        int count = 10;
+        countRepository.save(ProductSignalCountModel.of(productId, count));
+        ProductProjection productModel = repository.get(productId);
         //when
         ProductGetInfo productGetInfo = productFacade.get(productId);
         //then
         assertThat(productGetInfo.productId()).isEqualTo(productId);
         assertThat(productGetInfo.productName()).isEqualTo(productModel.getName());
+        assertThat(productGetInfo.brandName()).isEqualTo(productModel.getBrandName());
         assertThat(productGetInfo.price()).isEqualTo(productModel.getPrice());
+        assertThat(productGetInfo.likedCount()).isEqualTo(count);
         assertThat(productGetInfo.createdAt()).isEqualTo(productModel.getCreatedAt());
-        assertThat(productGetInfo.updatedAt()).isEqualTo(productModel.getUpdatedAt());
+        assertThat(productGetInfo.updatedAt()).isEqualTo(productModel.getUpdateAt());
         assertThat(productGetInfo.description()).isEqualTo(productModel.getDescription());
+        System.out.println(productGetInfo);
       }
     }
-
   }
 
 }

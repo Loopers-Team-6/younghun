@@ -3,7 +3,6 @@ package com.loopers.domain.catalog.product;
 import com.querydsl.core.annotations.QueryProjection;
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,10 +1,7 @@
 package com.loopers.application.catalog.product;
 
-import com.loopers.domain.catalog.brand.BrandRepository;
-import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
-import com.loopers.domain.like.count.ProductSignalCountRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -38,14 +35,17 @@ public class ProductFacade {
 
   // 상세 조회
   public ProductGetInfo get(Long id) {
-    ProductModel productModel = productRepository.get(id);
+    ProductProjection productProjection = productRepository.get(id);
+
     return ProductGetInfo.builder()
-        .productId(productModel.getId())
-        .productName(productModel.getName())
-        .price(productModel.getPrice())
-        .createdAt(productModel.getCreatedAt())
-        .description(productModel.getDescription())
-        .updatedAt(productModel.getUpdatedAt())
+        .productId(productProjection.getId())
+        .productName(productProjection.getName())
+        .brandName(productProjection.getBrandName())
+        .price(productProjection.getPrice())
+        .description(productProjection.getDescription())
+        .likedCount(productProjection.getLikedCount())
+        .createdAt(productProjection.getCreatedAt())
+        .updatedAt(productProjection.getUpdateAt())
         .build();
   }
 
