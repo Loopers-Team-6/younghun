@@ -226,6 +226,7 @@ class Payment {
   - Long id
   - User user
   - String orderNumber
+  - BigInteger orderAmount
   - PaymentAmount paymentAmout
   - String description
   - LocalDateTime createdAt
