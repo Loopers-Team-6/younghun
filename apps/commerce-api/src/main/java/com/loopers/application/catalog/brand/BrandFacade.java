@@ -22,7 +22,7 @@ public class BrandFacade {
     return BrandInfo.builder().brandName(brandModel.getName())
         .brandId(brandModel.getId())
         .products(hasProducts.stream()
-            .map(product -> new HasProduct(product.getId(),
+            .map(product -> HasProduct.of(product.getId(),
                                                         product.getName()))
             .collect(Collectors.toList())).build();
 

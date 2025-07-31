@@ -14,4 +14,9 @@ public record BrandInfo(
   }
 }
 
-record HasProduct(Long productId, String productName) {}
+record HasProduct(Long productId, String productName) {
+  public static HasProduct of(Long productId, String productName) {
+    return new HasProduct(productId, productName);
+  }
+
+}
