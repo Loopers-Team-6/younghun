@@ -190,7 +190,6 @@ class OrderHistory {
   - Long id
   - String orderNumber
   - String address
-  - String productName
   - OrderStatus status
   - List<OrderItem> orderItem
   - BigInteger totalPrice
