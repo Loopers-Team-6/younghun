@@ -73,3 +73,39 @@ INSERT INTO product (brand_id, name, price, description, created_at, updated_at)
 VALUES (4, '블루라이트 차단 안경', 15000, '장시간 사용에도 눈 보호', '2025-07-09 13:00:00', '2025-07-13 15:00:00');
 INSERT INTO product (brand_id, name, price, description, created_at, updated_at)
 VALUES (4, '초음파 세척기', 59000, '악세사리/안경용 초음파 세척기', '2025-07-10 13:00:00', '2025-07-13 15:00:00');
+
+
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (1, 1, 150, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (2, 2, 75, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (3, 3, 30, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (4, 4, 95, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (5, 5, 200, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (6, 6, 120, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (7, 7, 60, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (8, 8, 80, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (9, 9, 45, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (10, 10, 35, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (11, 11, 150, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (12, 12, 90, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (13, 13, 40, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (14, 14, 50, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (15, 15, 85, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (16, 16, 100, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (17, 17, 35, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (18, 18, 150, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (19, 19, 65, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (20, 20, 110, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (21, 21, 200, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (22, 22, 40, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (23, 23, 100, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (24, 24, 55, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (25, 25, 70, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (26, 26, 30, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (27, 27, 60, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (28, 28, 45, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (29, 29, 85, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (30, 30, 75, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (31, 31, 95, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);

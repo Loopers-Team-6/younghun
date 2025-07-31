@@ -3,6 +3,8 @@ package com.loopers.application.order;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.loopers.domain.catalog.product.stock.StockModel;
+import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.infrastructure.order.OrderJpaRepository;
 import com.loopers.utils.DatabaseCleanUp;
@@ -23,6 +25,9 @@ class OrderServiceIntegrationTest {
 
   @Autowired
   private OrderJpaRepository repository;
+
+  @Autowired
+  private StockRepository stockRepository;
 
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
@@ -65,5 +70,31 @@ class OrderServiceIntegrationTest {
 
     System.out.println(orderCreateInfo);
 
+  }
+
+  @DisplayName("주문 생성 시, 재고가 차감이 되어진다.")
+  @Test
+  void returnDecreasedStockQuantity_whenOrderCreated() {
+    //given
+    List<ItemCommands> orderItemModels = new ArrayList<>();
+
+    orderItemModels.add(new ItemCommands(
+        1L, 3L
+    ));
+
+    // 이전
+    StockModel afterStock = stockRepository.get(1L);
+
+    OrderCreateCommand command =
+        new OrderCreateCommand("userId",
+            "서울시 송파구"
+            , orderItemModels, "메모..");
+    //when
+    //주문시
+    OrderCreateInfo orderCreateInfo = orderFacade.create(command);
+
+    StockModel currentStock = stockRepository.get(1L);
+    //then
+    assertThat(currentStock.stock()).isEqualTo(afterStock.stock() - 3L);
   }
 }

@@ -2,11 +2,12 @@ package com.loopers.application.order;
 
 import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.domain.catalog.product.stock.StockModel;
+import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.history.OrderHistoryRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
-import com.loopers.domain.order.orderItem.OrderItemRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import java.util.ArrayList;
@@ -22,9 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderFacade {
   private final OrderRepository orderRepository;
-  private final OrderItemRepository orderItemRepository;
   private final OrderHistoryRepository orderHistoryRepository;
   private final ProductRepository productRepository;
+  private final StockRepository stockRepository;
 
   // 주문 생성
   @Transactional
@@ -67,6 +68,12 @@ public class OrderFacade {
 
     //히스토리 저장
     orderHistoryRepository.save(orderModel);
+
+    for (OrderItemModel orderItem : orderModel.getOrderItems()) {
+      Long productId = orderItem.getProductId();
+      StockModel stockModel = stockRepository.get(productId);
+      stockModel.decrease(orderItem.getQuantity());
+    }
 
     return OrderCreateInfo.create()
         .userId(command.userId())
