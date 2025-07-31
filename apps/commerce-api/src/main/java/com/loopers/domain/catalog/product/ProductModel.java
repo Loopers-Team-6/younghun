@@ -31,4 +31,8 @@ public class ProductModel extends BaseEntity {
     this.price = ProductPrice.of(price);
     this.description = description;
   }
+
+  public String getName() {
+    return name.getName();
+  }
 }
