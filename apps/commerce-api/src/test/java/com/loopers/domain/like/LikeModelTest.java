@@ -37,7 +37,7 @@ public class LikeModelTest {
 
 
   @Test
-  @DisplayName("최초로 상품에 좋아요를 하는 경우,`좋아요`상태가 false가 된다..")
+  @DisplayName("최초로 상품에 좋아요를 하는 경우,`좋아요`상태가 true가 된다..")
   void returnFalse_whenLikedProduct() {
     //given
     String userId = "user";
@@ -45,7 +45,7 @@ public class LikeModelTest {
     //when
     LikeModel liked = LikeModel.register(userId, productId);
     //then
-    assertThat(liked.isLiked()).isFalse();
+    assertThat(liked.isLiked()).isTrue();
   }
 
 

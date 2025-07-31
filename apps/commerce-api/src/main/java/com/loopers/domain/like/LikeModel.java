@@ -20,7 +20,7 @@ public class LikeModel extends BaseEntity {
   private boolean liked;
 
   public static LikeModel register(String userId, Long productId) {
-    return new LikeModel(userId, productId, false);
+    return new LikeModel(userId, productId, true);
   }
 
   private LikeModel(String userId, Long productId, boolean liked) {
