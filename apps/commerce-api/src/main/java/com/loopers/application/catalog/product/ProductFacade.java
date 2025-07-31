@@ -27,7 +27,7 @@ public class ProductFacade {
     return
         ProductSearchInfo.builder()
             .contents(products.stream().map(p -> ProductContents.of(
-                    p.getName(), p.getBrandId(), p.getPrice().getPrice(), p.getCreatedAt(), p.getUpdatedAt()
+                    p.getName(), p.getBrandId(), p.getPrice(), p.getCreatedAt(), p.getUpdatedAt()
                 ))
                 .collect(Collectors.toList()))
             .build();
@@ -39,7 +39,7 @@ public class ProductFacade {
     return ProductGetInfo.builder()
         .productId(productModel.getId())
         .productName(productModel.getName())
-        .price(productModel.getPrice().getPrice())
+        .price(productModel.getPrice())
         .createdAt(productModel.getCreatedAt())
         .description(productModel.getDescription())
         .updatedAt(productModel.getUpdatedAt())

@@ -136,6 +136,7 @@ PAYMENT {
  VARCHAR(20) member_id FK "계정아이디"
  TEXT description "설명"
  BIGINT payment_amount "결제 금액"
+ BIGINT order_amount "결제 금액"
  TimeStamp created_at "생성 시간"
  TimeStamp updated_at "수정 시간"
  TimeStamp deleted_at "삭제 시간"    

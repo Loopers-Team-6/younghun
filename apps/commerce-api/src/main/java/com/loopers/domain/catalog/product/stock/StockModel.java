@@ -23,5 +23,11 @@ public class StockModel extends BaseEntity {
     this.stock = ProductStock.of(stock);
   }
 
+  public void decrease(Long value) {
+    this.stock = stock.decrease(value);
+  }
 
+  public Long stock() {
+    return stock.getStock();
+  }
 }

@@ -35,4 +35,8 @@ public class ProductModel extends BaseEntity {
   public String getName() {
     return name.getName();
   }
+
+  public BigInteger getPrice() {
+    return price.getPrice();
+  }
 }
