@@ -2,7 +2,6 @@ package com.loopers.application.payment;
 
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
-import com.loopers.domain.order.history.OrderHistoryRepository;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
 import com.loopers.domain.point.PointModel;
