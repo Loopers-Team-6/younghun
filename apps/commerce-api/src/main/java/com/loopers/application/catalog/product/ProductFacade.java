@@ -3,6 +3,7 @@ package com.loopers.application.catalog.product;
 import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.domain.catalog.product.ProductRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,12 +20,17 @@ public class ProductFacade {
    */
 
   // 목록 조회
-  public Page<ProductModel> search(ProductCommand command) {
+  public ProductSearchInfo search(ProductCommand command) {
     PageRequest page = PageRequest.of(command.currentPage(), command.perSize());
-
-    return productRepository.search(
-        command.toCriteria(), page
-    );
+    Page<ProductModel> search = productRepository.search(command.toCriteria(), page);
+    List<ProductModel> products = search.getContent();
+    return
+        ProductSearchInfo.builder()
+            .contents(products.stream().map(p -> ProductContents.of(
+                    p.getName(), p.getBrandId(), p.getPrice().getPrice(), p.getCreatedAt(), p.getUpdatedAt()
+                ))
+                .collect(Collectors.toList()))
+            .build();
   }
 
   // 상세 조회

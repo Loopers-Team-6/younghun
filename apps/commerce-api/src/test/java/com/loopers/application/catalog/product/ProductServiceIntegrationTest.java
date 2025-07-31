@@ -3,7 +3,6 @@ package com.loopers.application.catalog.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.utils.DatabaseCleanUp;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -13,7 +12,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.test.context.jdbc.Sql;
 
 @Sql("/sql/test-fixture.sql")
@@ -37,11 +35,11 @@ class ProductServiceIntegrationTest {
     //given
     ProductCommand command = ProductCommand.builder().build();
     //when
-    Page<ProductModel> search = productFacade.search(command);
+    ProductSearchInfo search = productFacade.search(command);
     //then
     assertThat(search).isNotNull();
-    assertThat(search.getContent()).hasSize(10);
-    search.getContent().forEach(System.out::println);
+    assertThat(search.contents()).hasSize(10);
+    search.contents().forEach(System.out::println);
   }
 
 
@@ -53,11 +51,11 @@ class ProductServiceIntegrationTest {
         .perSize(13)
         .build();
     //when
-    Page<ProductModel> search = productFacade.search(command);
+    ProductSearchInfo search = productFacade.search(command);
     //then
     assertThat(search).isNotNull();
-    assertThat(search.getContent()).hasSize(13);
-    search.getContent().forEach(System.out::println);
+    assertThat(search.contents()).hasSize(13);
+    search.contents().forEach(System.out::println);
   }
 
   @DisplayName("페이지 시작 갯수를 다르게 조회 하는 경우, 서로 다른 페이지의 내용은 서로 다릅니다.")
@@ -73,8 +71,8 @@ class ProductServiceIntegrationTest {
         .perSize(13)
         .build();
     //when
-    Page<ProductModel> search = productFacade.search(command1);
-    Page<ProductModel> search2 = productFacade.search(command2);
+    ProductSearchInfo search = productFacade.search(command1);
+    ProductSearchInfo search2 = productFacade.search(command2);
     //then
     assertThat(search).isNotEqualTo(search2);
   }
@@ -89,12 +87,12 @@ class ProductServiceIntegrationTest {
         .perSize(3)
         .build();
     //when
-    Page<ProductModel> search = productFacade.search(command);
+    ProductSearchInfo search = productFacade.search(command);
     //then
-    List<ProductModel> content = search.getContent();
+    List<ProductContents> content = search.contents();
 
-    for (ProductModel productModel : content) {
-      assertThat(productModel.getBrandId()).isEqualTo(command.brandId());
+    for (ProductContents productModel : content) {
+      assertThat(productModel.brandId()).isEqualTo(command.brandId());
     }
   }
 
@@ -110,12 +108,12 @@ class ProductServiceIntegrationTest {
         .perSize(3)
         .build();
     //when
-    Page<ProductModel> search = productFacade.search(command);
+    ProductSearchInfo search = productFacade.search(command);
     //then
-    List<ProductModel> content = search.getContent();
+    List<ProductContents> contents = search.contents();
 
-    for (ProductModel productModel : content) {
-      assertThat(productModel.getName()).contains(productName);
+    for (ProductContents content : contents) {
+      assertThat(content.name()).contains(productName);
     }
   }
 
@@ -129,14 +127,14 @@ class ProductServiceIntegrationTest {
         .perSize(3)
         .build();
     //when
-    Page<ProductModel> search = productFacade.search(command);
-    List<ProductModel> content = search.getContent();
-    ProductModel preModel = content.get(0);
+    ProductSearchInfo search = productFacade.search(command);
+    List<ProductContents> contents = search.contents();
+    ProductContents preContents = contents.get(0);
     //then
-    for (int i = 1; i < content.size(); i++) {
-      ProductModel nextModel = content.get(i);
-      assertThat(preModel.getCreatedAt()).isAfterOrEqualTo(nextModel.getCreatedAt());
-      preModel = nextModel;
+    for (int i = 1; i < contents.size(); i++) {
+      ProductContents nextModel = contents.get(i);
+      assertThat(preContents.createdAt()).isAfterOrEqualTo(nextModel.createdAt());
+      preContents = nextModel;
     }
   }
 
@@ -150,18 +148,15 @@ class ProductServiceIntegrationTest {
         .perSize(3)
         .build();
     //when
-    Page<ProductModel> search = productFacade.search(command);
-    List<ProductModel> content = search.getContent();
-    ProductModel preModel = content.get(0);
+    ProductSearchInfo search = productFacade.search(command);
+    List<ProductContents> contents = search.contents();
+    ProductContents preContent = contents.get(0);
     //then
 
-    for (int i = 0; i < content.size(); i++) {
-      System.out.println(content.get(i).getPrice().getPrice());
-    }
-    for (int i = 1; i < content.size(); i++) {
-      ProductModel nextModel = content.get(i);
-      assertThat(preModel.getPrice().getPrice().compareTo(nextModel.getPrice().getPrice()) <= 0).isTrue();
-      preModel = nextModel;
+    for (int i = 1; i < contents.size(); i++) {
+      ProductContents nextModel = contents.get(i);
+      assertThat(preContent.price().compareTo(nextModel.price()) <= 0).isTrue();
+      preContent = nextModel;
     }
 
   }
