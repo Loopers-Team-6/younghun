@@ -1,4 +1,4 @@
-package com.loopers.application.catalog;
+package com.loopers.application.catalog.brand;
 
 import java.util.List;
 import lombok.Builder;

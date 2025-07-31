@@ -1,4 +1,4 @@
-package com.loopers.application.catalog;
+package com.loopers.application.catalog.brand;
 
 import com.loopers.domain.catalog.brand.BrandModel;
 import com.loopers.domain.catalog.brand.BrandRepository;

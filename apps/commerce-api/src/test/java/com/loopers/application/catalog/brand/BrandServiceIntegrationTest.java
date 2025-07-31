@@ -1,4 +1,4 @@
-package com.loopers.application.catalog;
+package com.loopers.application.catalog.brand;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertThrows;
