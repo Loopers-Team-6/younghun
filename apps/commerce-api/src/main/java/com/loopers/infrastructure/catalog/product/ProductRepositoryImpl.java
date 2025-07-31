@@ -5,6 +5,8 @@ import com.loopers.domain.catalog.product.ProductCriteria;
 import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.catalog.product.QProductModel;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -73,6 +75,21 @@ public class ProductRepositoryImpl implements ProductRepository {
     Long total = Optional.ofNullable(totalCount).orElse(0L);
 
     return new PageImpl<>(content, pageable, total);
+  }
+
+  @Override
+  public ProductModel get(Long productId) {
+
+    if(productId == null) {
+      throw new CoreException(ErrorType.NOT_FOUND, "상품 ID가 존재하지 않습니다.");
+    }
+
+    return Optional.ofNullable(
+            query.select(product)
+                .from(product)
+                .where(product.id.eq(productId))
+                .fetchOne())
+        .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "상품 ID가 존재하지 않습니다."));
   }
 
   enum SortOption {

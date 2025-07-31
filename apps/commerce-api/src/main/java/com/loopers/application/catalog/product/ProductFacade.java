@@ -34,5 +34,16 @@ public class ProductFacade {
   }
 
   // 상세 조회
+  public ProductGetInfo get(Long id) {
+    ProductModel productModel = productRepository.get(id);
+    return ProductGetInfo.builder()
+        .productId(productModel.getId())
+        .productName(productModel.getName())
+        .price(productModel.getPrice().getPrice())
+        .createdAt(productModel.getCreatedAt())
+        .description(productModel.getDescription())
+        .updatedAt(productModel.getUpdatedAt())
+        .build();
+  }
 
 }
