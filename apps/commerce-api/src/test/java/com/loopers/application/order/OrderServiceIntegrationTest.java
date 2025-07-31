@@ -41,13 +41,13 @@ class OrderServiceIntegrationTest {
   @Test
   void returnOrderInfo_whenCreateOrder() {
     //given
-    List<ItemCommands> orderItemModels = new ArrayList<>();
+    List<OrderItemCommands> orderItemModels = new ArrayList<>();
 
-    orderItemModels.add(new ItemCommands(
+    orderItemModels.add(new OrderItemCommands(
         1L, 1L
     ));
 
-    orderItemModels.add(new ItemCommands(
+    orderItemModels.add(new OrderItemCommands(
         2L, 2L
     ));
 
@@ -76,9 +76,9 @@ class OrderServiceIntegrationTest {
   @Test
   void returnDecreasedStockQuantity_whenOrderCreated() {
     //given
-    List<ItemCommands> orderItemModels = new ArrayList<>();
+    List<OrderItemCommands> orderItemModels = new ArrayList<>();
 
-    orderItemModels.add(new ItemCommands(
+    orderItemModels.add(new OrderItemCommands(
         1L, 3L
     ));
 

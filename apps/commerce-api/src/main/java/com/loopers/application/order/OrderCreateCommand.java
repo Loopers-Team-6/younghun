@@ -5,14 +5,10 @@ import java.util.List;
 public record OrderCreateCommand(
     String userId,
     String address,
-    List<ItemCommands> items,
+    List<OrderItemCommands> items,
     String memo
 ) {
 }
 
-record ItemCommands(
-    Long productId,
-    Long quantity
-) {
-}
+
 

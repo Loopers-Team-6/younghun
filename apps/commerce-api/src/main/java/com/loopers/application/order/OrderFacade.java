@@ -33,8 +33,8 @@ public class OrderFacade {
     // 계산하기 편하게 map으로 변환
     Map<Long, Long> items = command.items().stream()
         .collect(Collectors.toMap(
-            ItemCommands::productId,
-            ItemCommands::quantity
+            OrderItemCommands::productId,
+            OrderItemCommands::quantity
         ));
     // 가져와서 각각의 가격을 가져온다.
     ArrayList<Long> productIds = new ArrayList<>(items.keySet());
