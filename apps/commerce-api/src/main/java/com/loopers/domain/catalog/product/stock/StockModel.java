@@ -1,7 +1,7 @@
-package com.loopers.domain.product.stock;
+package com.loopers.domain.catalog.product.stock;
 
 import com.loopers.domain.BaseEntity;
-import com.loopers.domain.product.stock.embeded.ProductStock;
+import com.loopers.domain.catalog.product.stock.embeded.ProductStock;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "stock")
-public class Stock extends BaseEntity {
+public class StockModel extends BaseEntity {
   private Long productId;
   @Embedded
   private ProductStock stock;
 
-  public Stock(Long productId, Long stock) {
+  public StockModel(Long productId, Long stock) {
     this.productId = productId;
     this.stock = ProductStock.of(stock);
   }

@@ -3,13 +3,13 @@ package com.loopers.domain.product.stock;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import com.loopers.domain.product.stock.embeded.ProductStock;
+import com.loopers.domain.catalog.product.stock.embeded.ProductStock;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class StockModelTest {
+public class StockModelModelTest {
 
   @DisplayName("재고가 0미만이라면 `400 Bad Request`를 반환합니다.")
   @Test

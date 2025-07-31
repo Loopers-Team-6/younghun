@@ -1,8 +1,8 @@
-package com.loopers.domain.product;
+package com.loopers.domain.catalog.product;
 
 import com.loopers.domain.BaseEntity;
-import com.loopers.domain.product.embeded.ProductName;
-import com.loopers.domain.product.embeded.ProductPrice;
+import com.loopers.domain.catalog.product.embeded.ProductName;
+import com.loopers.domain.catalog.product.embeded.ProductPrice;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "product")
-public class Product extends BaseEntity {
+public class ProductModel extends BaseEntity {
   private Long brandId;
   @Embedded
   private ProductName name;
@@ -25,10 +25,14 @@ public class Product extends BaseEntity {
   @Column(columnDefinition = "TEXT")
   private String description;
 
-  public Product(Long brandId, String name, BigInteger price, String description) {
+  public ProductModel(Long brandId, String name, BigInteger price, String description) {
     this.brandId = brandId;
     this.name = ProductName.of(name);
     this.price = ProductPrice.of(price);
     this.description = description;
+  }
+
+  public String getName() {
+    return name.getName();
   }
 }
