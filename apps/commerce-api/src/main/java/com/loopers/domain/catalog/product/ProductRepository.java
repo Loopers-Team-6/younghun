@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProductRepository {
   List<ProductModel> listOf(Long brandId);
-  Page<ProductModel> search(ProductCriteria criteria, Pageable pageable);
+  Page<ProductProjection> search(ProductCriteria criteria, Pageable pageable);
   ProductModel get(Long productId);
 
   List<ProductModel> getIn(List<Long> productIds);

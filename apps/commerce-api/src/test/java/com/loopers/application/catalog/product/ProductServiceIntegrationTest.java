@@ -6,6 +6,8 @@ import static org.junit.Assert.assertThrows;
 
 import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.domain.like.count.ProductSignalCountModel;
+import com.loopers.domain.like.count.ProductSignalCountRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import com.loopers.utils.DatabaseCleanUp;
@@ -33,6 +35,8 @@ class ProductServiceIntegrationTest {
   private ProductFacade productFacade;
   @Autowired
   private ProductRepository repository;
+  @Autowired
+  private ProductSignalCountRepository countRepository;
 
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
@@ -134,6 +138,28 @@ class ProductServiceIntegrationTest {
       }
     }
 
+
+    @DisplayName("브랜드 명으로 조회하는 경우, 해당하는 상품 리스트가 조회됩니다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"루", "소마", "가나", "닉스"})
+    void returnProductList_whenSearchingBrandName(String brandName) {
+      //given
+      ProductCommand command = ProductCommand.builder()
+          .brandName(brandName)
+          .currentPage(0)
+          .perSize(3)
+          .build();
+      //when
+      ProductSearchInfo search = productFacade.search(command);
+      //then
+      List<ProductContents> contents = search.contents();
+
+      for (ProductContents content : contents) {
+        assertThat(content.brandName()).contains(brandName);
+      }
+    }
+
+
     @DisplayName("생성일 기준으로 조회하는 경우, 해당하는 상품 리스트가 조회됩니다.")
     @Test
     void returnProductList_whenSortingCreatedAt() {
@@ -173,6 +199,34 @@ class ProductServiceIntegrationTest {
       for (int i = 1; i < contents.size(); i++) {
         ProductContents nextModel = contents.get(i);
         assertThat(preContent.price().compareTo(nextModel.price()) <= 0).isTrue();
+        preContent = nextModel;
+      }
+
+    }
+
+
+    @DisplayName("좋아요 갯수를 기준으로 조회하는 경우, 해당하는 상품 리스트가 조회됩니다.(내림차순)")
+    @Test
+    void returnProductList_whenSortingLikedDesc() {
+      //given
+      countRepository.save(ProductSignalCountModel.of(1L, 10));
+      countRepository.save(ProductSignalCountModel.of(2L, 20));
+      countRepository.save(ProductSignalCountModel.of(3L, 30));
+      countRepository.save(ProductSignalCountModel.of(4L, 15));
+
+      ProductCommand command = ProductCommand.builder()
+          .sort(SortOption.LIKES_DESC)
+          .currentPage(0)
+          .perSize(3)
+          .build();
+      //when
+      ProductSearchInfo search = productFacade.search(command);
+      List<ProductContents> contents = search.contents();
+      ProductContents preContent = contents.getFirst();
+      //then
+      for (int i = 1; i < contents.size(); i++) {
+        ProductContents nextModel = contents.get(i);
+        assertThat(preContent.likeCount()).isGreaterThanOrEqualTo(nextModel.likeCount());
         preContent = nextModel;
       }
 

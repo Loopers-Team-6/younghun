@@ -1,7 +1,10 @@
 package com.loopers.application.catalog.product;
 
+import com.loopers.domain.catalog.brand.BrandRepository;
 import com.loopers.domain.catalog.product.ProductModel;
+import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.domain.like.count.ProductSignalCountRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -16,18 +19,18 @@ public class ProductFacade {
 
 
   /*
-  latest, price_asc, likes_desc (구현 못함)
+  latest, price_asc, likes_desc
    */
 
   // 목록 조회
   public ProductSearchInfo search(ProductCommand command) {
     PageRequest page = PageRequest.of(command.currentPage(), command.perSize());
-    Page<ProductModel> search = productRepository.search(command.toCriteria(), page);
-    List<ProductModel> products = search.getContent();
+    Page<ProductProjection> search = productRepository.search(command.toCriteria(), page);
+    List<ProductProjection> products = search.getContent();
     return
         ProductSearchInfo.builder()
             .contents(products.stream().map(p -> ProductContents.of(
-                    p.getName(), p.getBrandId(), p.getPrice(), p.getCreatedAt(), p.getUpdatedAt()
+                    p.getName(), p.getBrandId(), p.getBrandName(), p.getLikedCount(), p.getPrice(), p.getCreatedAt(), p.getUpdateAt()
                 ))
                 .collect(Collectors.toList()))
             .build();

@@ -3,12 +3,17 @@ package com.loopers.infrastructure.catalog.product;
 import com.loopers.domain.catalog.brand.QBrandModel;
 import com.loopers.domain.catalog.product.ProductCriteria;
 import com.loopers.domain.catalog.product.ProductModel;
+import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.catalog.product.QProductModel;
+import com.loopers.domain.catalog.product.QProductProjection;
+import com.loopers.domain.like.count.QProductSignalCountModel;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.math.BigInteger;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +28,7 @@ public class ProductRepositoryImpl implements ProductRepository {
   private final JPAQueryFactory query;
   private final QProductModel product = QProductModel.productModel;
   private final QBrandModel brand = QBrandModel.brandModel;
+  private final QProductSignalCountModel productSignalCount = QProductSignalCountModel.productSignalCountModel;
 
   // 브랜드에서 해당 프로젝트 조회시
   public List<ProductModel> listOf(Long brandId) {
@@ -32,7 +38,7 @@ public class ProductRepositoryImpl implements ProductRepository {
   }
 
   // 검색
-  public Page<ProductModel> search(ProductCriteria criteria, Pageable pageable) {
+  public Page<ProductProjection> search(ProductCriteria criteria, Pageable pageable) {
     Long brandId = criteria.brandId();
     String productName = criteria.productName();
     String brandName = criteria.brandName();
@@ -43,17 +49,30 @@ public class ProductRepositoryImpl implements ProductRepository {
     if (brandId != null) {
       where.and(product.brandId.eq(brandId));
     }
+    if (brandName != null) {
+      where.and(brand.name.name.contains(brandName));
+    }
+
     if (productName != null) {
       where.and(product.name.name.contains(productName));
     }
     if (brandName != null) {
       where.and(brand.name.name.contains(brandName));
     }
-
     // content
-    List<ProductModel> content = query.select(product)
+    List<ProductProjection> content = query.select(new QProductProjection
+            (product.id,
+                product.brandId,
+                brand.name.name,
+                product.name.name,
+                product.price.price,
+                product.description,
+                productSignalCount.likeCount,
+                product.createdAt,
+                product.updatedAt))
         .from(product)
         .leftJoin(brand).on(product.brandId.eq(brand.id))
+        .leftJoin(productSignalCount).on(productSignalCount.productId.eq(product.id))
         .where(where)
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
@@ -61,7 +80,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             switch (sort) {
               case LATEST -> product.createdAt.desc();
               case PRICE_ASC -> product.price.price.asc();
-              case LIKES_DESC -> null;
+              case LIKES_DESC -> productSignalCount.likeCount.desc();
             })
         .fetch();
 

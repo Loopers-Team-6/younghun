@@ -21,13 +21,18 @@ public record ProductSearchInfo(
 record ProductContents(
     String name,
     Long brandId,
+    String brandName,
+    int likeCount,
     BigInteger price,
     ZonedDateTime createdAt,
     ZonedDateTime updatedAt
 ) {
 
-  public static ProductContents of(String name, Long brandId, BigInteger price, ZonedDateTime createdAt,
+  public static ProductContents of(String name, Long brandId,
+                                   String brandName,
+                                   int likeCount,
+                                   BigInteger price, ZonedDateTime createdAt,
                                    ZonedDateTime updatedAt) {
-    return new ProductContents(name, brandId, price, createdAt, updatedAt);
+    return new ProductContents(name, brandId, brandName, likeCount, price, createdAt, updatedAt);
   }
 }
