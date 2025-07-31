@@ -45,6 +45,10 @@ public class PointModel extends BaseEntity {
     this.point = this.point.charge(point);
   }
 
+  public void use(int point) {
+    this.point = this.point.use(point);
+  }
+
 
   public int getPoint() {
     return point.getPoint();

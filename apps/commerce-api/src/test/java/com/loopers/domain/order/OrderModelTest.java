@@ -449,6 +449,8 @@ class OrderModelTest {
           .memo(memo)
           .build();
 
+      orderModel.addOrderItemsAfterSave(orderItems);
+
       //then
       assertAll(() -> assertThat(orderModel.getUserId()).isEqualTo(userId),
           () -> assertThat(orderModel.getTotalPrice()).isEqualTo(9000),

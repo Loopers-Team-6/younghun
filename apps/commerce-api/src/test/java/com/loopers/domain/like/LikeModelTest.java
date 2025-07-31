@@ -38,7 +38,7 @@ public class LikeModelTest {
 
   @Test
   @DisplayName("최초로 상품에 좋아요를 하는 경우,`좋아요`상태가 true가 된다..")
-  void returnTrue_whenLikedProduct() {
+  void returnFalse_whenLikedProduct() {
     //given
     String userId = "user";
     Long productId = 1L;
