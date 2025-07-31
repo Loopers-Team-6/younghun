@@ -146,7 +146,7 @@ class ProductServiceIntegrationTest {
       //when
       ProductSearchInfo search = productFacade.search(command);
       List<ProductContents> contents = search.contents();
-      ProductContents preContents = contents.get(0);
+      ProductContents preContents = contents.getFirst();
       //then
       for (int i = 1; i < contents.size(); i++) {
         ProductContents nextModel = contents.get(i);
@@ -167,7 +167,7 @@ class ProductServiceIntegrationTest {
       //when
       ProductSearchInfo search = productFacade.search(command);
       List<ProductContents> contents = search.contents();
-      ProductContents preContent = contents.get(0);
+      ProductContents preContent = contents.getFirst();
       //then
 
       for (int i = 1; i < contents.size(); i++) {
