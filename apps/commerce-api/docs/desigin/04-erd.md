@@ -49,10 +49,10 @@ PRODUCT_LIKE {
 }
 
 %%좋아요된 상품
-LIKED_PRODUCT { 
+PRODUCT_SIGNAL_COUNT { 
  BIGINT id PK "좋아요된 상품 ID"
  BIGINT prduct_id FK "상품 ID"
- int count "좋아요 count"
+ int product_count "좋아요 count"
  TIMESTAMP created_at "생성 시간"
  TIMESTAMP updated_at "수정 시간"
  TIMESTAMP deleted_at "삭제 시간"
@@ -147,7 +147,7 @@ PRODUCT || -- || STOCK : has
 PRODUCT || -- o{PRODUCT_LIKE  : reference
 MEMBER || -- o{PRODUCT_LIKE : reference
 
-LIKED_PRODUCT || -- o{PRODUCT_LIKE : reference
+PRODUCT_SIGNAL_COUNT || -- o{PRODUCT_LIKE : reference
 
 MEMBER || -- o{ POINT : has
 

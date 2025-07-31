@@ -51,9 +51,9 @@ class Like {
 }
 
 %% 좋아요된 상품
-class LikedProduct {
+class ProductSignalCount {
  - Product product
- - int count
+ - int prdouctCount
  - LocalDateTime createdAt
  - LocalDateTime updatedAt
  - LocalDateTime deletedAt
@@ -62,7 +62,7 @@ class LikedProduct {
  + decrese(): void
 }
 
-LikedProduct --> Like: 참조
+ProductSignalCount --> Like: 참조
 
 %% 브랜드
 class Brand {

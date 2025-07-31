@@ -1,4 +1,4 @@
-package com.loopers.domain.like.product;
+package com.loopers.domain.like.count;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class LikedProductModelTest {
+class ProductSignalCountModelTest {
 
   @DisplayName("좋아요는 상품 ID가 존재하지 않는다면, `404 NotFound`가 발생합니다.")
   @Test
@@ -18,7 +18,7 @@ class LikedProductModelTest {
     //given
     Long productId = null;
     // when
-    CoreException result = assertThrows(CoreException.class, () -> LikedProductModel.of(productId, 10));
+    CoreException result = assertThrows(CoreException.class, () -> ProductSignalCountModel.of(productId, 10));
     // then
     assertThat(result.getErrorType()).isEqualTo(ErrorType.NOT_FOUND);
   }
@@ -27,9 +27,9 @@ class LikedProductModelTest {
   @ParameterizedTest
   @ValueSource(ints = {1, 2, 10, 100, 1000})
   void returnPlusOne_whenCallbackIncrease(int count) {
-    LikedProductModel likedProductModel = LikedProductModel.of(1L, count);
-    likedProductModel.increase(false);
-    assertThat(likedProductModel.getCount()).isEqualTo(count + 1);
+    ProductSignalCountModel productSignalCountModel = ProductSignalCountModel.of(1L, count);
+    productSignalCountModel.increase(false);
+    assertThat(productSignalCountModel.getLikeCount()).isEqualTo(count + 1);
   }
 
   // 좋아요 해제를 누르는 경우
@@ -37,9 +37,9 @@ class LikedProductModelTest {
   @ParameterizedTest
   @ValueSource(ints = {-1, 0})
   void throwBadRequest_whenLikedCountUnderZero(int count) {
-    LikedProductModel likedProductModel = LikedProductModel.of(1L, count);
+    ProductSignalCountModel productSignalCountModel = ProductSignalCountModel.of(1L, count);
     // when
-    CoreException result = assertThrows(CoreException.class, () -> likedProductModel.decrease(true));
+    CoreException result = assertThrows(CoreException.class, () -> productSignalCountModel.decrease(true));
     // then
     assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
   }
@@ -48,8 +48,8 @@ class LikedProductModelTest {
   @Test
   void returnPlusOne_whenCallbackDecrease() {
     int count = 10;
-    LikedProductModel likedProductModel = LikedProductModel.of(1L, count);
-    likedProductModel.decrease(true);
-    assertThat(likedProductModel.getCount()).isEqualTo(count - 1);
+    ProductSignalCountModel productSignalCountModel = ProductSignalCountModel.of(1L, count);
+    productSignalCountModel.decrease(true);
+    assertThat(productSignalCountModel.getLikeCount()).isEqualTo(count - 1);
   }
 }
