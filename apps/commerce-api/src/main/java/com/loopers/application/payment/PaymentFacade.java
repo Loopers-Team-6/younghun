@@ -1,10 +1,13 @@
 package com.loopers.application.payment;
 
+
 import com.loopers.domain.catalog.product.stock.StockModel;
 import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
+import com.loopers.domain.order.OrderModel;
+import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
 import com.loopers.domain.point.PointModel;
@@ -40,7 +43,7 @@ public class PaymentFacade {
 
     // 결제 처리
     PaymentModel payment = paymentRepository.save(paymentModel);
-
+    
     // 재고 차감
     for (OrderItemModel orderItem : orderModel.getOrderItems()) {
       Long productId = orderItem.getProductId();

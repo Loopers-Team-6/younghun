@@ -45,7 +45,7 @@ public class PointModel extends BaseEntity {
   public void charge(BigInteger point) {
     this.point = this.point.charge(point);
   }
-
+  
   public void use(BigInteger point) {
     this.point = this.point.use(point);
   }

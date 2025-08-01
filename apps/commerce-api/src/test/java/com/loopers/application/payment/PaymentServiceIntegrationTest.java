@@ -93,8 +93,7 @@ class PaymentServiceIntegrationTest {
     PointModel currentPoint = pointRepository.get(userId);
     //then
     assertThat(currentPoint.getPoint()).isEqualTo(
-        afterPoint.getPoint().subtract(totalPrice).intValue());
-
+        afterPoint.getPoint().subtract(totalPrice));
     System.out.println(payment);
   }
 
@@ -113,4 +112,5 @@ class PaymentServiceIntegrationTest {
     //then
     assertThat(currentStock.stock()).isEqualTo(afterStock.stock() - 1L);
   }
+      
 }
