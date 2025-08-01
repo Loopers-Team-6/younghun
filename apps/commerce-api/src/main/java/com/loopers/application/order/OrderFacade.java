@@ -2,8 +2,6 @@ package com.loopers.application.order;
 
 import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.domain.catalog.product.ProductRepository;
-import com.loopers.domain.catalog.product.stock.StockModel;
-import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.history.OrderHistoryRepository;
@@ -11,7 +9,6 @@ import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,7 +22,6 @@ public class OrderFacade {
   private final OrderRepository orderRepository;
   private final OrderHistoryRepository orderHistoryRepository;
   private final ProductRepository productRepository;
-  private final StockRepository stockRepository;
 
   // 주문 생성
   @Transactional
@@ -46,7 +42,6 @@ public class OrderFacade {
 
     // 주문서 저장
     OrderModel orderModel = orderRepository.save(OrderModel.create()
-        .orderItems(Collections.emptyList())
         .userId(command.userId())
         .address(command.address())
         .memo(command.memo())
@@ -90,14 +85,26 @@ public class OrderFacade {
         .build();
   }
 
-  // 주문 확인
-  public void confirm() {
-
-  }
-
   //주문 취소
-  public void cancel() {
-
+  @Transactional
+  public OrderCancelInfo cancel(String userId, String orderNumber) {
+    // 주문 확인
+    OrderModel orderModel = orderRepository.ofOrderNumber(userId, orderNumber);
+    // 취소
+    orderModel.cancel();
+    // 히스토리 저장
+    orderHistoryRepository.save(orderModel);
+    //결과
+    return new OrderCancelInfo(
+        userId,
+        orderNumber,
+        orderModel.getOrderItems().stream().map(item ->
+            new CancelItems(
+                item.getProductId(),
+                item.getQuantity(),
+                item.getUnitPrice())).toList()
+        , orderModel.getStatus().name()
+    );
   }
 
 }

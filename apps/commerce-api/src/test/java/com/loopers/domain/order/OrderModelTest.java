@@ -17,6 +17,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class OrderModelTest {
 
@@ -322,42 +324,16 @@ class OrderModelTest {
     @Test
     void throws404NotFound_whenNotExitsOrder_asUserId() {
       //given
-      Long productId = 1L;
-      Long productId2 = 2L;
-
-      OrderItemModel orderItem1 = OrderItemModel.builder()
-          .orderId(1L)
-          .productId(productId)
-          .quantity(1L)
-          .unitPrice(BigInteger.valueOf(100))
-          .build();
-
-      OrderItemModel orderItem2 = OrderItemModel.builder()
-          .orderId(1L)
-          .productId(productId2)
-          .quantity(8L)
-          .unitPrice(BigInteger.valueOf(1000))
-          .build();
-
-      OrderItemModel orderItem3 = OrderItemModel.builder()
-          .orderId(1L)
-          .productId(productId)
-          .quantity(9L)
-          .unitPrice(BigInteger.valueOf(100))
-          .build();
-
-      List<OrderItemModel> orderItems = List.of(orderItem1, orderItem2, orderItem3);
-
       String address = "서울시 송파구";
       String memo = "문앞에 두세요";
 
       //when
       CoreException result = assertThrows(CoreException.class, () -> OrderModel.create()
           .userId(null)
-          .orderItems(orderItems)
           .address(address)
           .memo(memo)
           .build());
+
       //then
       assertThat(result.getErrorType()).isEqualTo(ErrorType.NOT_FOUND);
     }
@@ -366,40 +342,12 @@ class OrderModelTest {
     @Test
     void throws404NotFound_whenNotExitsAddress() {
       //given
-      Long productId = 1L;
-      Long productId2 = 2L;
-
-      OrderItemModel orderItem1 = OrderItemModel.builder()
-          .orderId(1L)
-          .productId(productId)
-          .quantity(1L)
-          .unitPrice(BigInteger.valueOf(100))
-          .build();
-
-      OrderItemModel orderItem2 = OrderItemModel.builder()
-          .orderId(1L)
-          .productId(productId2)
-          .quantity(8L)
-          .unitPrice(BigInteger.valueOf(1000))
-          .build();
-
-      OrderItemModel orderItem3 = OrderItemModel.builder()
-          .orderId(1L)
-          .productId(productId)
-          .quantity(9L)
-          .unitPrice(BigInteger.valueOf(100))
-          .build();
-
-      List<OrderItemModel> orderItems = List.of(orderItem1, orderItem2, orderItem3);
-
       String userId = "userId";
       String address = null;
       String memo = "문앞에 두세요";
-
       //when
       CoreException result = assertThrows(CoreException.class, () -> OrderModel.create()
           .userId(userId)
-          .orderItems(orderItems)
           .address(address)
           .memo(memo)
           .build());
@@ -444,7 +392,6 @@ class OrderModelTest {
       //when
       OrderModel orderModel = OrderModel.create()
           .userId(userId)
-          .orderItems(orderItems)
           .address(address)
           .memo(memo)
           .build();
@@ -459,6 +406,21 @@ class OrderModelTest {
           () -> assertThat(orderModel.getMemo()).isEqualTo(memo));
 
     }
+  }
+
+  @DisplayName("주문상태가 주문이 아닌 경우, `400 BadRequest`를 반환합니다.")
+  @ParameterizedTest
+  @ValueSource(strings = {"CANCEL", "DONE"})
+  void throw400BadRequest_whenOderStateIsNotOrder(String state) {
+    // given
+    OrderModel orderModel = OrderModel.create().userId("userId")
+        .address("주소")
+        .memo("메모").build();
+    orderModel.forceChange(state);
+    //when
+    CoreException result = assertThrows(CoreException.class, orderModel::cancel);
+    //then
+    assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
   }
 
   // 주문을 취소하는 경우
@@ -488,6 +450,6 @@ class OrderModelTest {
     //when
     orderModel.done();
     //then
-    assertThat(orderModel.getStatus()).isEqualTo(OrderStatus.DODE);
+    assertThat(orderModel.getStatus()).isEqualTo(OrderStatus.DONE);
   }
 }
