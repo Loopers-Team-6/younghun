@@ -69,12 +69,6 @@ public class OrderFacade {
     //히스토리 저장
     orderHistoryRepository.save(orderModel);
 
-    for (OrderItemModel orderItem : orderModel.getOrderItems()) {
-      Long productId = orderItem.getProductId();
-      StockModel stockModel = stockRepository.get(productId);
-      stockModel.decrease(orderItem.getQuantity());
-    }
-
     return OrderCreateInfo.create()
         .userId(command.userId())
         .orderId(orderModel.getId())

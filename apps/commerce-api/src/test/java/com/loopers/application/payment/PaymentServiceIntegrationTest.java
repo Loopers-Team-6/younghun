@@ -6,6 +6,8 @@ import com.loopers.application.order.OrderCreateCommand;
 import com.loopers.application.order.OrderCreateInfo;
 import com.loopers.application.order.OrderFacade;
 import com.loopers.application.order.OrderItemCommands;
+import com.loopers.domain.catalog.product.stock.StockModel;
+import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;
 import com.loopers.domain.user.UserModel;
@@ -37,6 +39,9 @@ class PaymentServiceIntegrationTest {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private StockRepository stockRepository;
 
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
@@ -91,5 +96,21 @@ class PaymentServiceIntegrationTest {
         afterPoint.getPoint().subtract(totalPrice).intValue());
 
     System.out.println(payment);
+  }
+
+  @DisplayName("결재 생성 시, 재고가 차감이 되어진다.")
+  @Test
+  void returnDecreasedStockQuantity_whenPaymentCreated() {
+    //given
+    StockModel afterStock = stockRepository.get(1L);
+    pointRepository.charge(userId, BigInteger.valueOf(500000));
+    PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), orderCreateInfo.totalPrice(), "shot");
+    //when
+    //결제시
+    paymentFacade.payment(command);
+
+    StockModel currentStock = stockRepository.get(1L);
+    //then
+    assertThat(currentStock.stock()).isEqualTo(afterStock.stock() - 1L);
   }
 }
