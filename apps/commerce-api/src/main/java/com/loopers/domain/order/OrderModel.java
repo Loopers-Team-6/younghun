@@ -48,7 +48,7 @@ public class OrderModel extends BaseEntity {
 
 
   @Builder(builderMethodName = "create")
-  public OrderModel(String userId, List<OrderItemModel> orderItems, String address,
+  public OrderModel(String userId, String address,
                     String memo) {
 
     if (userId == null) {
@@ -88,12 +88,20 @@ public class OrderModel extends BaseEntity {
   }
 
   public void cancel() {
+
+    if (status != OrderStatus.ORDER) {
+      throw new CoreException(ErrorType.BAD_REQUEST, "주문 상태가 아닌 주문은 취소할 수 없습니다.");
+    }
+
     this.status = OrderStatus.CANCEL;
   }
 
   public void done() {
-    this.status = OrderStatus.DODE;
+    this.status = OrderStatus.DONE;
   }
 
+  public void forceChange(String state) {
+    this.status = OrderStatus.valueOf(state);
+  }
 }
 
