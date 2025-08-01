@@ -9,6 +9,7 @@ import com.loopers.infrastructure.user.UserJpaRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import com.loopers.utils.DatabaseCleanUp;
+import java.math.BigInteger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,7 +47,7 @@ public class PointServiceIntegrationTest {
     void returnSavingPointWhenExitsUserId() {
       //arrange
       String userId = "test";
-      int point = 5000;
+      BigInteger point = BigInteger.valueOf(5000);
       userJpaRepository.save(new UserModel(userId, "test@test.com", "2020-01-01", "M"));
       pointJpaRepository.save(new PointModel(userId, point));
       // act
@@ -60,7 +61,7 @@ public class PointServiceIntegrationTest {
     void returnNullWhenNotExitsUserId() {
       //arrange
       String userId = "test";
-      int point = 5000;
+      BigInteger point = BigInteger.valueOf(5000);
       pointJpaRepository.save(new PointModel(userId, point));
       // act
       PointModel pointModel = pointService.get(userId);
@@ -80,7 +81,7 @@ public class PointServiceIntegrationTest {
     void returnNotFoundException_whenChargingWithNonExistentUserId() {
       //arrange
       String userId = "notExist";
-      int point = 5000;
+      BigInteger point = BigInteger.valueOf(5000);
       // act
       CoreException result = assertThrows(CoreException.class, () -> pointService.charge(userId, point));
       // assert

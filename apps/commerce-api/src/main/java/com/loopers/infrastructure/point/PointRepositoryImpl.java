@@ -7,6 +7,7 @@ import com.loopers.domain.user.embeded.UserId;
 import com.loopers.infrastructure.user.UserJpaRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
+import java.math.BigInteger;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -31,7 +32,7 @@ public class PointRepositoryImpl implements PointRepository {
 
   @Override
   @Transactional
-  public PointModel charge(String userId, int point) {
+  public PointModel charge(String userId, BigInteger point) {
 
     Optional<UserModel> userExists = userRepository.findByUserId(new UserId(userId));
 
