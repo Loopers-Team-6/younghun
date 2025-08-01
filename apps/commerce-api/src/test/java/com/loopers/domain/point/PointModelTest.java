@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThrows;
 import com.loopers.domain.point.embeded.Point;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
+import java.math.BigInteger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,9 @@ public class PointModelTest {
     @DisplayName("0 이하의 정수로 포인트를 충전하는 경우, `400 BadRequest`를 반환한다.")
     @ParameterizedTest
     @ValueSource(ints = {-1, 0})
-    void throwsBadRequest_whenChargingZeroOrLessPoints(int point) {
+    void throwsBadRequest_whenChargingZeroOrLessPoints(int intPoint) {
       // given
+      BigInteger point = BigInteger.valueOf(intPoint);
       // when
       CoreException result = assertThrows(CoreException.class, () -> new Point().charge(point));
       // then
@@ -33,7 +35,7 @@ public class PointModelTest {
     @Test
     void throwsBadRequest_whenUsingZeroLessPoints() {
       // given
-      int point = -1;
+      BigInteger point = BigInteger.valueOf(-1);
       // when
       CoreException result = assertThrows(CoreException.class, () -> new Point().use(point));
       // then
@@ -45,7 +47,7 @@ public class PointModelTest {
     @Test
     void throwsBadRequest_whenSavingZeroLessPoints() {
       // given
-      int point = -1;
+      BigInteger point = BigInteger.valueOf(-1);
       // when
       CoreException result = assertThrows(CoreException.class, () -> new Point(point));
       // then
@@ -63,7 +65,6 @@ public class PointModelTest {
       assertThat(pointModel.getUserId()).isEqualTo(userId);
       assertThat(pointModel.getPoint()).isEqualTo(0);
     }
-
 
 
   }

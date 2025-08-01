@@ -1,5 +1,11 @@
 package com.loopers.application.payment;
 
+
+import com.loopers.domain.catalog.product.stock.StockModel;
+import com.loopers.domain.catalog.product.stock.StockRepository;
+import com.loopers.domain.order.OrderModel;
+import com.loopers.domain.order.OrderRepository;
+import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.payment.PaymentModel;
@@ -15,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class PaymentFacade {
   private final PaymentRepository paymentRepository;
   private final OrderRepository orderRepository;
+  private final StockRepository stockRepository;
   private final PointRepository pointRepository;
 
   @Transactional
@@ -24,7 +31,7 @@ public class PaymentFacade {
 
     // 포인트 감소
     PointModel hasPoint = pointRepository.get(command.userId());
-    hasPoint.use(command.payment().intValue());
+    hasPoint.use(command.payment());
 
     PaymentModel paymentModel = PaymentModel.create()
         .userId(command.userId())
@@ -36,6 +43,13 @@ public class PaymentFacade {
 
     // 결제 처리
     PaymentModel payment = paymentRepository.save(paymentModel);
+    
+    // 재고 차감
+    for (OrderItemModel orderItem : orderModel.getOrderItems()) {
+      Long productId = orderItem.getProductId();
+      StockModel stockModel = stockRepository.get(productId);
+      stockModel.decrease(orderItem.getQuantity());
+    }
 
     // 주문 완료
     orderModel.done();
