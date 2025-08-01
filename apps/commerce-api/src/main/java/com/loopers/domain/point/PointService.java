@@ -1,5 +1,6 @@
 package com.loopers.domain.point;
 
+import java.math.BigInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class PointService {
     return pointRepository.get(userId);
   }
 
-  public PointModel charge(String userId, int point) {
+  public PointModel charge(String userId, BigInteger point) {
     return pointRepository.charge(userId, point);
   }
 }

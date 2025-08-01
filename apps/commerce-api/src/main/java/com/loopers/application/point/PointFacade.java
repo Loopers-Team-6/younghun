@@ -2,6 +2,7 @@ package com.loopers.application.point;
 
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointService;
+import java.math.BigInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class PointFacade {
     return PointInfo.from(point);
   }
 
-  public PointInfo charge(String userId, int point) {
+  public PointInfo charge(String userId, BigInteger point) {
     PointModel model = pointService.charge(userId, point);
     return PointInfo.from(model);
   }

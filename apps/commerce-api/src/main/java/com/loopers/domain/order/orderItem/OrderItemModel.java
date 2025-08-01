@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class OrderItemModel extends BaseEntity {
 
-  @Column(nullable = false)
+  @Column(name = "owner_order_id", nullable = false)
   private Long orderId;
   @Column(nullable = false)
   private Long productId;
@@ -48,6 +48,10 @@ public class OrderItemModel extends BaseEntity {
     if(unitPrice == null) {
       this.unitPrice = BigInteger.ZERO;
     }
+  }
+
+  public void addOrderId(Long orderId) {
+    this.orderId = orderId;
   }
 
   public void plusQuantity(Long quantity) {

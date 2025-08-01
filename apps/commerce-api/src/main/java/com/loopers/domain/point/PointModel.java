@@ -7,6 +7,7 @@ import com.loopers.support.error.ErrorType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.math.BigInteger;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,7 @@ public class PointModel extends BaseEntity {
     this.point = new Point();
   }
 
-  public PointModel(String userId, int point) {
+  public PointModel(String userId, BigInteger point) {
     validate(userId);
     this.userId = userId;
     this.point = new Point(point);
@@ -41,12 +42,16 @@ public class PointModel extends BaseEntity {
     }
   }
 
-  public void charge(int point) {
+  public void charge(BigInteger point) {
     this.point = this.point.charge(point);
   }
 
+  public void use(BigInteger point) {
+    this.point = this.point.use(point);
+  }
 
-  public int getPoint() {
+
+  public BigInteger getPoint() {
     return point.getPoint();
   }
 

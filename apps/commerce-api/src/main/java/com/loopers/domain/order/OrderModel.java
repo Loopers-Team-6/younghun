@@ -55,23 +55,36 @@ public class OrderModel extends BaseEntity {
       throw new CoreException(ErrorType.NOT_FOUND, "주문자가 존재하지 않는 경우, 주문서를 작성할 수 없습니다.");
     }
 
-    if(address == null) {
+    if (address == null) {
       throw new CoreException(ErrorType.NOT_FOUND, "주소가 존재하지 않는 경우, 주문서를 작성할 수 없습니다.");
     }
 
     this.orderNumber = new OrderNumber();
     this.userId = userId;
     this.orderItems = new OrderItems();
-    this.orderItems.addAll(orderItems);
-    this.totalPrice = getTotalPrice();
+    this.totalPrice = BigInteger.ZERO;
     this.address = address;
     this.status = OrderStatus.ORDER;
     this.memo = memo;
   }
 
-  public BigInteger getTotalPrice() {
+  public void addOrderItemsAfterSave(List<OrderItemModel> orderItems) {
+    this.orderItems.addAll(orderItems);
+    this.totalPrice = sumPrice(); // 총액 재계산
+  }
+
+  public BigInteger sumPrice() {
     this.totalPrice = orderItems.sum();
     return totalPrice;
+  }
+
+
+  public String getOrderNumber() {
+    return this.orderNumber.getNumber();
+  }
+
+  public List<OrderItemModel> getOrderItems() {
+    return this.orderItems.getOrderItems();
   }
 
   public void cancel() {

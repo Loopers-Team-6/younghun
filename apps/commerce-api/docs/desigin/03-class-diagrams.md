@@ -46,10 +46,23 @@ class Like {
  - LocalDateTime updatedAt
  - LocalDateTime deletedAt 
  
- + like()
- + unLike()
+ + like(): void
+ + unLike(): void
 }
 
+%% 좋아요된 상품
+class ProductSignalCount {
+ - Product product
+ - int prdouctCount
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
+
+ + increase(): void
+ + decrese(): void
+}
+
+ProductSignalCount --> Like: 참조
 
 %% 브랜드
 class Brand {
@@ -137,6 +150,10 @@ class Order {
  - LocalDateTime deletedAt
 }
 
+class TotalPrice {
+ <<Embedded>>
+ - price BigInteger
+}
 
 class OrderItems {
  <<Embedded>>
@@ -173,7 +190,6 @@ class OrderHistory {
   - Long id
   - String orderNumber
   - String address
-  - String productName
   - OrderStatus status
   - List<OrderItem> orderItem
   - BigInteger totalPrice
@@ -210,6 +226,7 @@ class Payment {
   - Long id
   - User user
   - String orderNumber
+  - BigInteger orderAmount
   - PaymentAmount paymentAmout
   - String description
   - LocalDateTime createdAt
