@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.loopers.domain.catalog.product.stock.StockModel;
-import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.infrastructure.order.OrderJpaRepository;
 import com.loopers.support.error.CoreException;
@@ -28,9 +26,6 @@ class OrderServiceIntegrationTest {
 
   @Autowired
   private OrderJpaRepository repository;
-
-  @Autowired
-  private StockRepository stockRepository;
 
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
