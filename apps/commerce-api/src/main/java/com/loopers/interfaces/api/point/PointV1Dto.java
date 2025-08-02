@@ -1,5 +1,6 @@
 package com.loopers.interfaces.api.point;
 
+import com.loopers.application.point.PointChargeInfo;
 import com.loopers.application.point.PointInfo;
 import java.math.BigInteger;
 
@@ -16,8 +17,8 @@ public class PointV1Dto {
   }
 
   public record ChargeResponse(String userId, BigInteger point) {
-      public static ChargeResponse from(PointInfo pointInfo) {
-        return new ChargeResponse(pointInfo.userId(), pointInfo.point());
+      public static ChargeResponse from(PointChargeInfo chargeInfo) {
+        return new ChargeResponse(chargeInfo.userId(), chargeInfo.point());
     }
   }
 

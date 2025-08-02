@@ -6,12 +6,12 @@ import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
-import com.loopers.domain.order.OrderModel;
-import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,9 @@ public class PaymentFacade {
     OrderModel orderModel = orderRepository.ofOrderNumber(orderNumber);
 
     // 포인트 감소
-    PointModel hasPoint = pointRepository.get(command.userId());
+    PointModel hasPoint = pointRepository.get(command.userId()).orElseThrow(
+        () -> new CoreException(ErrorType.BAD_REQUEST, "사용할 수 있는 포인트가 존재하지 않습니다.")
+    );
     hasPoint.use(command.payment());
 
     PaymentModel paymentModel = PaymentModel.create()

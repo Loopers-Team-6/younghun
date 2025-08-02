@@ -6,6 +6,7 @@ import com.loopers.application.order.OrderCreateCommand;
 import com.loopers.application.order.OrderCreateInfo;
 import com.loopers.application.order.OrderFacade;
 import com.loopers.application.order.OrderItemCommands;
+import com.loopers.application.point.PointFacade;
 import com.loopers.domain.catalog.product.stock.StockModel;
 import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.domain.point.PointModel;
@@ -36,6 +37,8 @@ class PaymentServiceIntegrationTest {
 
   @Autowired
   private PointRepository pointRepository;
+  @Autowired
+  private PointFacade  pointFacade;
 
   @Autowired
   private UserRepository userRepository;
@@ -83,14 +86,14 @@ class PaymentServiceIntegrationTest {
   void returnDecreasePoint_whenPaymentCreated() {
     //given
     String orderNumber = orderCreateInfo.orderNumber();
-    pointRepository.charge(userId, BigInteger.valueOf(500000));
-    PointModel afterPoint = pointRepository.get(userId);
+    pointFacade.charge(userId, BigInteger.valueOf(500000));
+    PointModel afterPoint = pointRepository.get(userId).get();
     BigInteger totalPrice = BigInteger.valueOf(100000);
     PaymentCommand command = new PaymentCommand(userId, orderNumber, totalPrice, "shot");
 
     //when
     PaymentInfo payment = paymentFacade.payment(command);
-    PointModel currentPoint = pointRepository.get(userId);
+    PointModel currentPoint = pointRepository.get(userId).get();
     //then
     assertThat(currentPoint.getPoint()).isEqualTo(
         afterPoint.getPoint().subtract(totalPrice));
@@ -102,7 +105,7 @@ class PaymentServiceIntegrationTest {
   void returnDecreasedStockQuantity_whenPaymentCreated() {
     //given
     StockModel afterStock = stockRepository.get(1L);
-    pointRepository.charge(userId, BigInteger.valueOf(500000));
+    pointFacade.charge(userId, BigInteger.valueOf(500000));
     PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), orderCreateInfo.totalPrice(), "shot");
     //when
     //결제시
