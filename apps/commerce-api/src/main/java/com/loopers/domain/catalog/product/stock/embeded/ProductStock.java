@@ -16,7 +16,7 @@ public class ProductStock {
   }
 
   private ProductStock(Long stock) {
-    validate(stock);
+//    validate(stock);
     this.stock = stock;
   }
 

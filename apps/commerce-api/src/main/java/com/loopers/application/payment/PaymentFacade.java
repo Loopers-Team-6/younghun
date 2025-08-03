@@ -1,11 +1,10 @@
 package com.loopers.application.payment;
 
 
-import com.loopers.domain.catalog.product.stock.StockModel;
-import com.loopers.domain.catalog.product.stock.StockRepository;
+import com.loopers.application.payment.stock.StockDecreaseCommand;
+import com.loopers.application.payment.stock.StockProcessor;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
-import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
 import com.loopers.domain.point.PointModel;
@@ -13,6 +12,7 @@ import com.loopers.domain.point.PointRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import jakarta.transaction.Transactional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +21,9 @@ import org.springframework.stereotype.Service;
 public class PaymentFacade {
   private final PaymentRepository paymentRepository;
   private final OrderRepository orderRepository;
-  private final StockRepository stockRepository;
   private final PointRepository pointRepository;
+
+  private final StockProcessor stockProcessor;
 
   @Transactional
   public PaymentInfo payment(PaymentCommand command) {
@@ -45,13 +46,13 @@ public class PaymentFacade {
 
     // 결제 처리
     PaymentModel payment = paymentRepository.save(paymentModel);
-    
+
     // 재고 차감
-    for (OrderItemModel orderItem : orderModel.getOrderItems()) {
-      Long productId = orderItem.getProductId();
-      StockModel stockModel = stockRepository.get(productId);
-      stockModel.decrease(orderItem.getQuantity());
-    }
+    stockProcessor.decreaseStocks(orderModel.getOrderItems()
+        .stream()
+        .map(o -> new StockDecreaseCommand(o.getProductId(), o.getQuantity()))
+        .collect(Collectors.toList())
+    );
 
     // 주문 완료
     orderModel.done();
