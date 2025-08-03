@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThrows;
 
 import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
-import com.loopers.domain.catalog.product.status.ProductStatus;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import com.loopers.utils.DatabaseCleanUp;
