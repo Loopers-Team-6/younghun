@@ -1,4 +1,4 @@
-package com.loopers.domain.like.count;
+package com.loopers.domain.catalog.product.status;
 
 import com.loopers.domain.BaseEntity;
 import com.loopers.support.error.CoreException;
@@ -10,44 +10,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "product_signal_count")
+@Table(name = "product_status")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ProductSignalCountModel extends BaseEntity {
+public class ProductStatus extends BaseEntity {
   private Long productId;
   private int likeCount;
 
-  private ProductSignalCountModel(Long productId) {
+
+  private ProductStatus(Long productId) {
     if (productId == null) {
       throw new CoreException(ErrorType.NOT_FOUND, "상품ID가 존재하지 않는다면 좋아요를 증감할 수 없습니다");
     }
     this.productId = productId;
   }
 
-  private ProductSignalCountModel(Long productId, int likeCount) {
+  private ProductStatus(Long productId, int likeCount) {
     this(productId);
     this.likeCount = likeCount;
   }
 
-  public static ProductSignalCountModel register(Long productId) {
-    return new ProductSignalCountModel(productId, 1);
+  public static ProductStatus register(Long productId) {
+    return new ProductStatus(productId, 1);
   }
 
-  public static ProductSignalCountModel of(Long productId, int count) {
-    return new ProductSignalCountModel(productId, count);
+  public static ProductStatus of(Long productId, int count) {
+    return new ProductStatus(productId, count);
   }
 
-  public void increase(boolean isLiked) {
-    if (isLiked) {
-      return;
-    }
+  public void increase() {
     this.likeCount += 1;
   }
 
-  public void decrease(boolean isLiked) {
-    if (!isLiked) {
-      return;
-    }
+  public void decrease() {
     int likeCurrentCount = this.likeCount - 1;
 
     if (likeCurrentCount < 0) {

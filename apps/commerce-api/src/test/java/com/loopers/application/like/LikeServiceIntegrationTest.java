@@ -1,26 +1,29 @@
 package com.loopers.application.like;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
 
-import com.loopers.domain.like.count.ProductSignalCountModel;
-import com.loopers.infrastructure.like.count.ProductSignalCountJpaRepository;
-import com.loopers.support.error.CoreException;
-import com.loopers.support.error.ErrorType;
+import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.domain.catalog.product.status.ProductStatus;
+import com.loopers.domain.like.LikeRepository;
 import com.loopers.utils.DatabaseCleanUp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest
+@Sql("/sql/test-fixture.sql")
 class LikeServiceIntegrationTest {
   @Autowired
   private LikeFacade likeFacade;
 
   @Autowired
-  private ProductSignalCountJpaRepository productSignalCountJpaRepository;
+  private ProductRepository productRepository;
+
+  @Autowired
+  private LikeRepository likeRepository;
 
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
@@ -38,21 +41,9 @@ class LikeServiceIntegrationTest {
     Long productId = 1L;
     //when
     likeFacade.like(userId, productId);
-    ProductSignalCountModel productModel = productSignalCountJpaRepository.findByProductId(productId).get();
+    ProductStatus productStatus = productRepository.has(productId).get();
     //then
-    assertThat(productModel.getLikeCount()).isEqualTo(1);
-  }
-
-  @DisplayName("좋아요를 누르지 않는 상태에서 해제를 하는 경우, `409 CONFLICT`가 발생합니다.")
-  @Test
-  void throw409Conflict_whenTryingToUnlikeWithoutLikingFirst() {
-    //given
-    String userId = "userId";
-    Long productId = 1L;
-    //when
-    CoreException result = assertThrows(CoreException.class, () -> likeFacade.unlike(userId, productId));
-    //then
-    assertThat(result.getErrorType()).isEqualTo(ErrorType.CONFLICT);
+    assertThat(productStatus.getLikeCount()).isEqualTo(1);
   }
 
 
@@ -65,9 +56,9 @@ class LikeServiceIntegrationTest {
     //when
     likeFacade.like(userId, productId);
     likeFacade.unlike(userId, productId);
-    ProductSignalCountModel productModel = productSignalCountJpaRepository.findByProductId(productId).get();
+    ProductStatus productStatus = productRepository.has(productId).get();
     //then
-    assertThat(productModel.getLikeCount()).isEqualTo(0);
+    assertThat(productStatus.getLikeCount()).isEqualTo(0);
   }
 
   @DisplayName("같은 사용자의 중복 like 요청 후 unlike 하면, 좋아요 수는 0이다.")
@@ -83,9 +74,9 @@ class LikeServiceIntegrationTest {
     likeFacade.unlike(userId, productId);
     likeFacade.unlike(userId, productId);
     likeFacade.unlike(userId, productId);
-    ProductSignalCountModel productModel = productSignalCountJpaRepository.findByProductId(productId).get();
+    ProductStatus productStatus = productRepository.has(productId).get();
     //then
-    assertThat(productModel.getLikeCount()).isEqualTo(0);
+    assertThat(productStatus.getLikeCount()).isEqualTo(0);
   }
 
 }

@@ -17,7 +17,7 @@ public class LikeModelTest {
     String userId = null;
     Long productId = 1L;
     //when
-    CoreException result = assertThrows(CoreException.class, () -> LikeModel.register(userId, productId));
+    CoreException result = assertThrows(CoreException.class, () -> LikeModel.of(userId, productId));
     //then
     assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
   }
@@ -30,53 +30,10 @@ public class LikeModelTest {
     String userId = "user";
     Long productId = null;
     //when
-    CoreException result = assertThrows(CoreException.class, () ->  LikeModel.register(userId, productId));
+    CoreException result = assertThrows(CoreException.class, () ->  LikeModel.of(userId, productId));
     //then
     assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
   }
-
-
-  @Test
-  @DisplayName("최초로 상품에 좋아요를 하는 경우,`좋아요`상태가 true가 된다..")
-  void returnFalse_whenLikedProduct() {
-    //given
-    String userId = "user";
-    Long productId = 1L;
-    //when
-    LikeModel liked = LikeModel.register(userId, productId);
-    //then
-    assertThat(liked.isLiked()).isTrue();
-  }
-
-
-  @Test
-  @DisplayName("상품에 좋아요 해제를 하는 경우,`좋아요`상태가 false가 된다..")
-  void returnFalse_whenUnLikedProduct() {
-    //given
-    String userId = "user";
-    Long productId = 1L;
-    LikeModel liked = LikeModel.register(userId, productId);
-    //when
-    liked.unLike();
-    //then
-    assertThat(liked.isLiked()).isFalse();
-  }
-
-
-  @Test
-  @DisplayName("상품에 좋아요 해제된 상품에 좋아요를 하는 경우,`좋아요`상태가 true가 된다..")
-  void returnLiTrue_whenLikedProductAgain() {
-    //given
-    String userId = "user";
-    Long productId = 1L;
-    LikeModel liked = LikeModel.register(userId, productId);
-    liked.unLike();
-    //when
-    liked.like();
-    //then
-    assertThat(liked.isLiked()).isTrue();
-  }
-
 
 
 

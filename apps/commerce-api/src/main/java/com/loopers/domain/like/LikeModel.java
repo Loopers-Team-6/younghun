@@ -17,13 +17,12 @@ public class LikeModel extends BaseEntity {
 
   private String userId;
   private Long productId;
-  private boolean liked;
 
-  public static LikeModel register(String userId, Long productId) {
-    return new LikeModel(userId, productId, true);
+  public static LikeModel of(String userId, Long productId) {
+    return new LikeModel(userId, productId);
   }
 
-  private LikeModel(String userId, Long productId, boolean liked) {
+  private LikeModel(String userId, Long productId) {
     if (userId == null) {
       throw new CoreException(ErrorType.BAD_REQUEST, "계정 아이디는 필수입니다.");
     }
@@ -33,26 +32,6 @@ public class LikeModel extends BaseEntity {
 
     this.userId = userId;
     this.productId = productId;
-    this.liked = liked;
   }
-
-  public void like() {
-    // 좋아요가 눌렸을때
-    if (liked) {
-      return;
-    }
-
-    // 반영
-    this.liked = true;
-  }
-
-  public void unLike() {
-    if (!liked) {
-      return;
-    }
-
-    this.liked = false;
-  }
-
 
 }

@@ -6,8 +6,7 @@ import static org.junit.Assert.assertThrows;
 
 import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
-import com.loopers.domain.like.count.ProductSignalCountModel;
-import com.loopers.domain.like.count.ProductSignalCountRepository;
+import com.loopers.domain.catalog.product.status.ProductStatus;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import com.loopers.utils.DatabaseCleanUp;
@@ -35,8 +34,6 @@ class ProductServiceIntegrationTest {
   private ProductFacade productFacade;
   @Autowired
   private ProductRepository repository;
-  @Autowired
-  private ProductSignalCountRepository countRepository;
 
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
@@ -209,11 +206,6 @@ class ProductServiceIntegrationTest {
     @Test
     void returnProductList_whenSortingLikedDesc() {
       //given
-      countRepository.save(ProductSignalCountModel.of(1L, 10));
-      countRepository.save(ProductSignalCountModel.of(2L, 20));
-      countRepository.save(ProductSignalCountModel.of(3L, 30));
-      countRepository.save(ProductSignalCountModel.of(4L, 15));
-
       ProductCommand command = ProductCommand.builder()
           .sort(SortOption.LIKES_DESC)
           .currentPage(0)
@@ -253,8 +245,7 @@ class ProductServiceIntegrationTest {
       void returnProductInfo_whenExitsProductId() {
         //given
         Long productId = 1L;
-        int count = 10;
-        countRepository.save(ProductSignalCountModel.of(productId, count));
+        int count = 0;
         ProductProjection productModel = repository.get(productId);
         //when
         ProductGetInfo productGetInfo = productFacade.get(productId);

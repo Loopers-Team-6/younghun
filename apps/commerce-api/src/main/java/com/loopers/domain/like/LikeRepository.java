@@ -4,6 +4,8 @@ import java.util.Optional;
 
 public interface LikeRepository {
 
-  Optional<LikeModel> find(String userId, Long productId);
-  void save(LikeModel likeModel);
+  Optional<LikeModel> liked(String userId, Long productId);
+  void like(String userId, Long productId);
+
+  void unlike(String userId, Long productId);
 }
