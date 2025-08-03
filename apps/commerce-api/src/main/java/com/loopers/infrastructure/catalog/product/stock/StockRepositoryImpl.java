@@ -14,7 +14,7 @@ public class StockRepositoryImpl implements StockRepository {
 
   public StockModel get(Long productId) {
     return stockJpaRepository.findByProductId(productId).orElseThrow(
-        () -> new CoreException(ErrorType.NOT_FOUND, "상품 ID가 존재하지 않습니다.")
+        () -> new CoreException(ErrorType.NOT_FOUND, "상품이 존재하지 않습니다.")
     );
   }
 }
