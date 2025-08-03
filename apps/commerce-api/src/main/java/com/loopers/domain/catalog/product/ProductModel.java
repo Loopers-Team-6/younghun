@@ -3,9 +3,11 @@ package com.loopers.domain.catalog.product;
 import com.loopers.domain.BaseEntity;
 import com.loopers.domain.catalog.product.embeded.ProductName;
 import com.loopers.domain.catalog.product.embeded.ProductPrice;
+import com.loopers.domain.catalog.product.status.ProductStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
 import lombok.AccessLevel;
@@ -24,6 +26,9 @@ public class ProductModel extends BaseEntity {
   private ProductPrice price;
   @Column(columnDefinition = "TEXT")
   private String description;
+
+  @OneToOne
+  private ProductStatus status;
 
   public ProductModel(Long brandId, String name, BigInteger price, String description) {
     this.brandId = brandId;

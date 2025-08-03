@@ -109,3 +109,16 @@ INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VA
 INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (29, 29, 85, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
 INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (30, 30, 75, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
 INSERT INTO stock (id, product_id, stock, created_at, updated_at, deleted_at) VALUES (31, 31, 95, '2025-07-15 10:00:00', '2025-07-15 10:00:00', NULL);
+
+
+INSERT INTO product_status (product_id, like_count, created_at, updated_at)
+VALUES (1, 0, now(), now()),
+       (2, 1, now(), now()),
+       (3, 2, now(), now()),
+       (4, 3, now(), now()),
+       (5, 4, now(), now()),
+       (6, 5, now(), now()),
+       (7, 6, now(), now()),
+       (8, 7, now(), now()),
+       (9, 8, now(), now()),
+       (10, 9, now(), now());

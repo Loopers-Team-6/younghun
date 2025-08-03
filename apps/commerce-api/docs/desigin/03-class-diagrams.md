@@ -41,7 +41,6 @@ class Like {
  - Long id
  - User user
  - Product product
- - boolean liked
  - LocalDateTime createdAt
  - LocalDateTime updatedAt
  - LocalDateTime deletedAt 
@@ -49,20 +48,6 @@ class Like {
  + like(): void
  + unLike(): void
 }
-
-%% 좋아요된 상품
-class ProductSignalCount {
- - Product product
- - int prdouctCount
- - LocalDateTime createdAt
- - LocalDateTime updatedAt
- - LocalDateTime deletedAt
-
- + increase(): void
- + decrese(): void
-}
-
-ProductSignalCount --> Like: 참조
 
 %% 브랜드
 class Brand {
@@ -101,6 +86,18 @@ class Product {
  - LocalDateTime deletedAt
 }
 
+%% 좋아요된 상품
+class ProductStatus { 
+ - Product product
+ - int likeCount
+ - LocalDateTime createdAt
+ - LocalDateTime updatedAt
+ - LocalDateTime deletedAt
+
+ + increase(): void
+ + decrese(): void
+}
+
 class ProductName {
  <<Embedded>>
  - String productName
@@ -114,6 +111,7 @@ class ProductPrice {
 Product --> ProductName : Vo
 Product --> ProductPrice : Vo
 Product --> Stock : 소유
+Product --> ProductStatus : 소유
 
 %% 재고
 class Stock { 

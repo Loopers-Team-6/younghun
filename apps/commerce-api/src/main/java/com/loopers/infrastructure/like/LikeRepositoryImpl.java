@@ -11,12 +11,17 @@ import org.springframework.stereotype.Repository;
 public class LikeRepositoryImpl implements LikeRepository {
   private final LikeJpaRepository repository;
 
-  public Optional<LikeModel> find(String userId, Long productId) {
+  public Optional<LikeModel> liked(String userId, Long productId) {
     return repository.findByUserIdAndProductId(userId, productId);
   }
 
-  public void save(LikeModel likeModel) {
-    repository.save(likeModel);
+  public void like(String userId, Long productId) {
+    repository.save(LikeModel.of(userId, productId));
+  }
+
+  @Override
+  public void unlike(String userId, Long productId) {
+    repository.delete(userId, productId);
   }
 
 

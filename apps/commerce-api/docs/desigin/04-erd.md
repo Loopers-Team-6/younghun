@@ -41,7 +41,6 @@ PRODUCT_LIKE {
  BIGINT id PK "좋아요 아이디"   
  BIGINT member_id FK "계정 아이디"
  BIGINT product_id FK "상품아이디"
- BOOL   liked  "좋아요 상태"
  
  TIMESTAMP created_at "생성 시간"
  TIMESTAMP updated_at "수정 시간"
@@ -49,10 +48,10 @@ PRODUCT_LIKE {
 }
 
 %%좋아요된 상품
-PRODUCT_SIGNAL_COUNT { 
- BIGINT id PK "좋아요된 상품 ID"
+PRODUCT_STAUS { 
+ BIGINT id PK "상품 상태 ID"
  BIGINT prduct_id FK "상품 ID"
- int product_count "좋아요 count"
+ int like_count "좋아요 count"
  TIMESTAMP created_at "생성 시간"
  TIMESTAMP updated_at "수정 시간"
  TIMESTAMP deleted_at "삭제 시간"
@@ -144,11 +143,11 @@ PAYMENT {
 
 BRAND ||--o{PRODUCT : has
 PRODUCT || -- || STOCK : has
+PRODUCT  || -- || PRODUCT_STAUS : has
 
 PRODUCT || -- o{PRODUCT_LIKE  : reference
 MEMBER || -- o{PRODUCT_LIKE : reference
 
-PRODUCT_SIGNAL_COUNT || -- o{PRODUCT_LIKE : reference
 
 MEMBER || -- o{ POINT : has
 

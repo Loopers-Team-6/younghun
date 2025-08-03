@@ -7,7 +7,8 @@ import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.catalog.product.QProductModel;
 import com.loopers.domain.catalog.product.QProductProjection;
-import com.loopers.domain.like.count.QProductSignalCountModel;
+import com.loopers.domain.catalog.product.status.ProductStatus;
+import com.loopers.domain.catalog.product.status.QProductStatus;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import com.querydsl.core.BooleanBuilder;
@@ -26,7 +27,7 @@ public class ProductRepositoryImpl implements ProductRepository {
   private final JPAQueryFactory query;
   private final QProductModel product = QProductModel.productModel;
   private final QBrandModel brand = QBrandModel.brandModel;
-  private final QProductSignalCountModel productSignalCount = QProductSignalCountModel.productSignalCountModel;
+  private final QProductStatus status = QProductStatus.productStatus;
 
   // 브랜드에서 해당 프로젝트 조회시
   public List<ProductModel> listOf(Long brandId) {
@@ -65,12 +66,12 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product.name.name,
                 product.price.price,
                 product.description,
-                productSignalCount.likeCount,
+                status.likeCount,
                 product.createdAt,
                 product.updatedAt))
         .from(product)
         .leftJoin(brand).on(product.brandId.eq(brand.id))
-        .leftJoin(productSignalCount).on(productSignalCount.productId.eq(product.id))
+        .leftJoin(status).on(status.productId.eq(product.id))
         .where(where)
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
@@ -78,7 +79,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             switch (sort) {
               case LATEST -> product.createdAt.desc();
               case PRICE_ASC -> product.price.price.asc();
-              case LIKES_DESC -> productSignalCount.likeCount.desc();
+              case LIKES_DESC -> status.likeCount.desc();
             })
         .fetch();
 
@@ -109,12 +110,12 @@ public class ProductRepositoryImpl implements ProductRepository {
                         product.name.name,
                         product.price.price,
                         product.description,
-                        productSignalCount.likeCount,
+                        status.likeCount,
                         product.createdAt,
                         product.updatedAt))
                 .from(product)
                 .leftJoin(brand).on(product.brandId.eq(brand.id))
-                .leftJoin(productSignalCount).on(productSignalCount.productId.eq(product.id))
+                .leftJoin(status).on(status.productId.eq(product.id))
                 .where(product.id.eq(productId))
                 .fetchOne())
         .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "상품 ID가 존재하지 않습니다."));
@@ -127,6 +128,15 @@ public class ProductRepositoryImpl implements ProductRepository {
         .where(product.id.in(productIds))
         .fetch();
   }
+
+  @Override
+  public Optional<ProductStatus> has(Long productId) {
+    return Optional.ofNullable(query.select(status)
+        .from(status)
+        .where(status.productId.eq(productId))
+        .fetchOne());
+  }
+
 
   enum SortOption {
     LATEST, PRICE_ASC, LIKES_DESC
