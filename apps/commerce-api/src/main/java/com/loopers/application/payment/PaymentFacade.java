@@ -1,6 +1,7 @@
 package com.loopers.application.payment;
 
 
+import com.loopers.application.payment.point.PointUseHandler;
 import com.loopers.application.payment.stock.StockDecreaseCommand;
 import com.loopers.application.payment.stock.StockProcessor;
 import com.loopers.domain.order.OrderModel;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class PaymentFacade {
   private final PaymentRepository paymentRepository;
   private final OrderRepository orderRepository;
-  private final PointRepository pointRepository;
+  private final PointUseHandler pointUseHandler;
 
   private final StockProcessor stockProcessor;
 
@@ -31,21 +32,16 @@ public class PaymentFacade {
     OrderModel orderModel = orderRepository.ofOrderNumber(orderNumber);
 
     // 포인트 감소
-    PointModel hasPoint = pointRepository.get(command.userId()).orElseThrow(
-        () -> new CoreException(ErrorType.BAD_REQUEST, "사용할 수 있는 포인트가 존재하지 않습니다.")
-    );
-    hasPoint.use(command.payment());
-
-    PaymentModel paymentModel = PaymentModel.create()
-        .userId(command.userId())
-        .orderNumber(orderNumber)
-        .description(command.description())
-        .orderAmount(command.payment())
-        .paymentAmount(orderModel.getTotalPrice())
-        .build();
+    pointUseHandler.use(command.userId(), command.payment());
 
     // 결제 처리
-    PaymentModel payment = paymentRepository.save(paymentModel);
+    PaymentModel payment = paymentRepository.save(PaymentModel.create()
+                                                              .userId(command.userId())
+                                                              .orderNumber(orderNumber)
+                                                              .description(command.description())
+                                                              .orderAmount(command.payment())
+                                                              .paymentAmount(orderModel.getTotalPrice())
+                                                              .build());
 
     // 재고 차감
     stockProcessor.decreaseStocks(orderModel.getOrderItems()
