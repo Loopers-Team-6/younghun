@@ -3,6 +3,8 @@ package com.loopers.domain.point;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import com.loopers.application.point.PointFacade;
+import com.loopers.application.point.PointInfo;
 import com.loopers.domain.user.UserModel;
 import com.loopers.infrastructure.point.PointJpaRepository;
 import com.loopers.infrastructure.user.UserJpaRepository;
@@ -21,7 +23,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 @SpringBootTest
 public class PointServiceIntegrationTest {
   @MockitoSpyBean
-  private PointService pointService;
+  private PointFacade pointFacade;
   @MockitoSpyBean
   private UserJpaRepository userJpaRepository;
   @MockitoSpyBean
@@ -51,9 +53,9 @@ public class PointServiceIntegrationTest {
       userJpaRepository.save(new UserModel(userId, "test@test.com", "2020-01-01", "M"));
       pointJpaRepository.save(new PointModel(userId, point));
       // act
-      PointModel pointModel = pointService.get(userId);
+      PointInfo pointInfo = pointFacade.get(userId);
       // assert
-      assertThat(pointModel.getPoint()).isEqualTo(point);
+      assertThat(pointInfo.point()).isEqualTo(point);
     }
 
     @DisplayName("해당 ID 의 회원이 존재하지 않을 경우, null 이 반환된다.")
@@ -64,9 +66,9 @@ public class PointServiceIntegrationTest {
       BigInteger point = BigInteger.valueOf(5000);
       pointJpaRepository.save(new PointModel(userId, point));
       // act
-      PointModel pointModel = pointService.get(userId);
+      PointInfo pointInfo = pointFacade.get(userId);
       // assert
-      assertThat(pointModel).isNull();
+      assertThat(pointInfo).isNull();
     }
 
   }
@@ -83,7 +85,7 @@ public class PointServiceIntegrationTest {
       String userId = "notExist";
       BigInteger point = BigInteger.valueOf(5000);
       // act
-      CoreException result = assertThrows(CoreException.class, () -> pointService.charge(userId, point));
+      CoreException result = assertThrows(CoreException.class, () -> pointFacade.charge(userId, point));
       // assert
       assertThat(result.getErrorType()).isEqualTo(ErrorType.NOT_FOUND);
     }
