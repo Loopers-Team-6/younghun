@@ -2,18 +2,13 @@ package com.loopers.application.payment;
 
 
 import com.loopers.application.payment.point.PointUseHandler;
-import com.loopers.application.payment.stock.StockDecreaseCommand;
 import com.loopers.application.payment.stock.StockProcessor;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
+import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
-import com.loopers.domain.point.PointModel;
-import com.loopers.domain.point.PointRepository;
-import com.loopers.support.error.CoreException;
-import com.loopers.support.error.ErrorType;
 import jakarta.transaction.Transactional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,19 +31,25 @@ public class PaymentFacade {
 
     // 결제 처리
     PaymentModel payment = paymentRepository.save(PaymentModel.create()
-                                                              .userId(command.userId())
-                                                              .orderNumber(orderNumber)
-                                                              .description(command.description())
-                                                              .orderAmount(command.payment())
-                                                              .paymentAmount(orderModel.getTotalPrice())
-                                                              .build());
+        .userId(command.userId())
+        .orderNumber(orderNumber)
+        .description(command.description())
+        .orderAmount(command.payment())
+        .paymentAmount(orderModel.getTotalPrice())
+        .build());
 
     // 재고 차감
-    stockProcessor.decreaseStocks(orderModel.getOrderItems()
-        .stream()
-        .map(o -> new StockDecreaseCommand(o.getProductId(), o.getQuantity()))
-        .collect(Collectors.toList())
-    );
+
+    for (OrderItemModel orderItem : orderModel.getOrderItems()) {
+      Long productId = orderItem.getProductId();
+      Long quantity = orderItem.getQuantity();
+      stockProcessor.decreaseStock(productId, quantity);
+    }
+//    stockProcessor.decreaseStocks(orderModel.getOrderItems()
+//        .stream()
+//        .map(o -> new StockDecreaseCommand(o.getProductId(), o.getQuantity()))
+//        .collect(Collectors.toList())
+//    );
 
     // 주문 완료
     orderModel.done();
