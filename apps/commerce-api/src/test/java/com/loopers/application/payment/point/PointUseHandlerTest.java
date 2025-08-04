@@ -1,7 +1,6 @@
 package com.loopers.application.payment.point;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;
