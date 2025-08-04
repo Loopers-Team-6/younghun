@@ -13,7 +13,7 @@ public class StockRepositoryImpl implements StockRepository {
   private final StockJpaRepository stockJpaRepository;
 
   public StockModel get(Long productId) {
-    return stockJpaRepository.findByProductId(productId).orElseThrow(
+    return stockJpaRepository.findByProductIdWithRock(productId).orElseThrow(
         () -> new CoreException(ErrorType.NOT_FOUND, "상품이 존재하지 않습니다.")
     );
   }

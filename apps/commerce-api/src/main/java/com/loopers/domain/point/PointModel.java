@@ -7,7 +7,9 @@ import com.loopers.support.error.ErrorType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,9 @@ public class PointModel extends BaseEntity {
   private String userId;
   @Embedded
   private Point point;
+
+  @Version
+  private Timestamp version;
 
   public PointModel(String userId) {
     validate(userId);
