@@ -13,6 +13,7 @@ import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;
 import com.loopers.domain.user.UserModel;
 import com.loopers.domain.user.UserRepository;
+import com.loopers.infrastructure.catalog.product.stock.StockJpaRepository;
 import com.loopers.utils.DatabaseCleanUp;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ class PaymentServiceIntegrationTest {
 
   @Autowired
   private StockRepository stockRepository;
+
+  @Autowired
+  private StockJpaRepository stockJpaRepository;
 
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
@@ -104,14 +108,14 @@ class PaymentServiceIntegrationTest {
   @Test
   void returnDecreasedStockQuantity_whenPaymentCreated() {
     //given
-    StockModel afterStock = stockRepository.get(1L);
+    StockModel afterStock = stockJpaRepository.findByProductId(1L).get();
     pointFacade.charge(userId, BigInteger.valueOf(500000));
     PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), orderCreateInfo.totalPrice(), "shot");
     //when
     //결제시
     paymentFacade.payment(command);
 
-    StockModel currentStock = stockRepository.get(1L);
+    StockModel currentStock = stockJpaRepository.findByProductId(1L).get();
     //then
     assertThat(currentStock.stock()).isEqualTo(afterStock.stock() - 1L);
   }
