@@ -1,4 +1,4 @@
-package com.loopers.application.payment.point;
+package com.loopers.application.payment.handler;
 
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;

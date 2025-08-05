@@ -2,7 +2,7 @@ package com.loopers.application.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.loopers.application.payment.stock.StockProcessor;
+import com.loopers.application.payment.processor.StockProcessor;
 import com.loopers.domain.catalog.product.stock.StockModel;
 import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.infrastructure.catalog.product.ProductJpaRepository;
@@ -20,7 +20,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest
 @Sql("/sql/test-fixture.sql")
-public class StockProcessorTest {
+public class OrderStockProcessorTest {
   @Autowired
   private ProductJpaRepository productJpaRepository;
 
