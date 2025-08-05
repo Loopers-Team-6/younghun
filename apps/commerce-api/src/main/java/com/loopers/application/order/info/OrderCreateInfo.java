@@ -35,21 +35,3 @@ public record OrderCreateInfo(
         .build();
   }
 }
-
-record ItemInfos(
-    Long productId,
-    Long quantity,
-    BigInteger unitPrice
-) {
-
-  public static List<ItemInfos> from(List<OrderItemModel> orderItems) {
-    return orderItems
-        .stream().map(
-            orderItem -> new ItemInfos(
-                orderItem.getProductId(),
-                orderItem.getQuantity(),
-                orderItem.getUnitPrice()
-            )
-        ).toList();
-  }
-}

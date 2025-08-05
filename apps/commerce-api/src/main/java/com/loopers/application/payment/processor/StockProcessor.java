@@ -1,4 +1,4 @@
-package com.loopers.application.payment.stock;
+package com.loopers.application.payment.processor;
 
 import com.loopers.domain.catalog.product.stock.StockModel;
 import com.loopers.domain.catalog.product.stock.StockRepository;

@@ -1,8 +1,9 @@
 package com.loopers.application.payment;
 
 
-import com.loopers.application.payment.point.PointUseHandler;
-import com.loopers.application.payment.stock.StockProcessor;
+import com.loopers.application.payment.command.PaymentCommand;
+import com.loopers.application.payment.handler.PointUseHandler;
+import com.loopers.application.payment.processor.StockProcessor;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
