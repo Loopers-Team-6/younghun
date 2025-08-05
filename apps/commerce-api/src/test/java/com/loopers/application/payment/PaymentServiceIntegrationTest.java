@@ -39,7 +39,7 @@ class PaymentServiceIntegrationTest {
   @Autowired
   private PointRepository pointRepository;
   @Autowired
-  private PointFacade  pointFacade;
+  private PointFacade pointFacade;
 
   @Autowired
   private UserRepository userRepository;
@@ -68,6 +68,9 @@ class PaymentServiceIntegrationTest {
         new OrderCreateCommand(userId,
             "서울시 송파구"
             , orderItemModels, "메모..");
+
+    pointRepository.save(new PointModel(userId, BigInteger.valueOf(50000000)));
+
     orderCreateInfo = orderFacade.create(command);
 
     UserModel userModel = userRepository.save(
@@ -90,11 +93,9 @@ class PaymentServiceIntegrationTest {
   void returnDecreasePoint_whenPaymentCreated() {
     //given
     String orderNumber = orderCreateInfo.orderNumber();
-    pointFacade.charge(userId, BigInteger.valueOf(500000));
     PointModel afterPoint = pointRepository.get(userId).get();
     BigInteger totalPrice = BigInteger.valueOf(100000);
     PaymentCommand command = new PaymentCommand(userId, orderNumber, totalPrice, "shot");
-
     //when
     PaymentInfo payment = paymentFacade.payment(command);
     PointModel currentPoint = pointRepository.get(userId).get();
@@ -119,5 +120,5 @@ class PaymentServiceIntegrationTest {
     //then
     assertThat(currentStock.stock()).isEqualTo(afterStock.stock() - 1L);
   }
-      
+
 }

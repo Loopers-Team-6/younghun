@@ -64,6 +64,7 @@ class OrderServiceIntegrationTest {
             "서울시 송파구"
             , orderItemModels, "메모..");
     //when
+    pointRepository.save(new PointModel("userId", BigInteger.valueOf(500000000)));
     OrderCreateInfo orderCreateInfo = orderFacade.create(command);
 
     OrderModel dbModel = repository.findById(orderCreateInfo.orderId()).get();
@@ -100,6 +101,7 @@ class OrderServiceIntegrationTest {
         new OrderCreateCommand(order,
             "서울시 송파구"
             , orderItemModels, "메모..");
+    pointRepository.save(new PointModel("userId", BigInteger.valueOf(500000000)));
     OrderCreateInfo orderCreateInfo = orderFacade.create(command);
     //when
     CoreException result = assertThrows(CoreException.class, () -> orderFacade.cancel("userId2", orderCreateInfo.orderNumber()));
@@ -127,6 +129,7 @@ class OrderServiceIntegrationTest {
         new OrderCreateCommand(order,
             "서울시 송파구"
             , orderItemModels, "메모..");
+    pointRepository.save(new PointModel("userId", BigInteger.valueOf(500000000)));
     OrderCreateInfo orderCreateInfo = orderFacade.create(command);
     //when
     OrderCancelInfo cancel = orderFacade.cancel(order, orderCreateInfo.orderNumber());
