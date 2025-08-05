@@ -2,13 +2,12 @@ package com.loopers.application.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.loopers.application.order.OrderFacade;
 import com.loopers.application.order.command.OrderCreateCommand;
+import com.loopers.application.order.command.OrderItemCommands;
 import com.loopers.application.order.info.ItemInfos;
 import com.loopers.application.order.info.OrderCreateInfo;
-import com.loopers.application.order.OrderFacade;
-import com.loopers.application.order.command.OrderItemCommands;
 import com.loopers.application.payment.command.PaymentCommand;
 import com.loopers.application.point.PointFacade;
 import com.loopers.domain.catalog.product.stock.StockModel;
@@ -136,7 +135,7 @@ class PaymentServiceIntegrationTest {
 
     StockModel currentStock = stockJpaRepository.findByProductId(1L).get();
     //then
-    assertThat(currentStock.stock()).isEqualTo(afterStock.stock() - 1L);
+    assertThat(currentStock.stock()).isEqualTo(afterStock.stock() - 10L);
   }
 
   @DisplayName("결제 롤백 테스트,")

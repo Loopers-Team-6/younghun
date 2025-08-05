@@ -1,7 +1,6 @@
 package com.loopers.application.order.info;
 
 import com.loopers.domain.order.OrderModel;
-import com.loopers.domain.order.orderItem.OrderItemModel;
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import java.util.List;
