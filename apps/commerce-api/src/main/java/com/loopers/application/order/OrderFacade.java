@@ -1,5 +1,11 @@
 package com.loopers.application.order;
 
+import com.loopers.application.order.command.OrderCreateCommand;
+import com.loopers.application.order.handler.OrderHistoryHandler;
+import com.loopers.application.order.info.OrderCancelInfo;
+import com.loopers.application.order.info.OrderCreateInfo;
+import com.loopers.application.order.processor.OrderProcessor;
+import com.loopers.application.order.validator.PointValidator;
 import com.loopers.domain.order.OrderModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,12 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderFacade {
   private final OrderProcessor orderProcessor;
+  private final PointValidator pointValidator;
   private final OrderHistoryHandler orderHistoryHandler;
+
   // 주문 생성
   @Transactional
   public OrderCreateInfo create(OrderCreateCommand command) {
     //주문서를 만들고
     OrderModel orderModel = orderProcessor.create(command);
+
+    //포인트 확인
+    pointValidator.check(orderModel.getUserId(), orderModel.getTotalPrice());
 
     //히스토리 저장
     orderHistoryHandler.create(orderModel);

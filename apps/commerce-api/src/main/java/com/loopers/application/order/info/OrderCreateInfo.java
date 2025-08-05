@@ -1,4 +1,4 @@
-package com.loopers.application.order;
+package com.loopers.application.order.info;
 
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.orderItem.OrderItemModel;

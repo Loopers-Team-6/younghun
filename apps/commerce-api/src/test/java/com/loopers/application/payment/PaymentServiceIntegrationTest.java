@@ -2,10 +2,10 @@ package com.loopers.application.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.loopers.application.order.OrderCreateCommand;
-import com.loopers.application.order.OrderCreateInfo;
+import com.loopers.application.order.command.OrderCreateCommand;
+import com.loopers.application.order.info.OrderCreateInfo;
 import com.loopers.application.order.OrderFacade;
-import com.loopers.application.order.OrderItemCommands;
+import com.loopers.application.order.command.OrderItemCommands;
 import com.loopers.application.point.PointFacade;
 import com.loopers.domain.catalog.product.stock.StockModel;
 import com.loopers.domain.catalog.product.stock.StockRepository;

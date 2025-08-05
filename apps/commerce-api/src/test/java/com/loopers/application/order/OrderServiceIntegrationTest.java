@@ -4,15 +4,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.loopers.application.order.command.OrderCreateCommand;
+import com.loopers.application.order.command.OrderItemCommands;
+import com.loopers.application.order.info.OrderCancelInfo;
+import com.loopers.application.order.info.OrderCreateInfo;
 import com.loopers.domain.order.OrderModel;
+import com.loopers.domain.point.PointModel;
+import com.loopers.domain.point.PointRepository;
 import com.loopers.infrastructure.order.OrderJpaRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import com.loopers.utils.DatabaseCleanUp;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +35,8 @@ class OrderServiceIntegrationTest {
   @Autowired
   private OrderJpaRepository repository;
 
+  @Autowired
+  private PointRepository pointRepository;
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
 
@@ -124,5 +134,33 @@ class OrderServiceIntegrationTest {
     assertThat(cancel.orderStaus()).isEqualTo("CANCEL");
   }
 
+  @DisplayName("주문시 포인트 확인,")
+  @Nested
+  class Point {
+
+    @DisplayName("주문 시 유저의 포인트 잔액이 부족할 경우 `400 Bad Request`를 반환한다.")
+    @Test
+    void throw400_whenUserHasLessPointsThanOrderRequires() {
+      //given
+      List<OrderItemCommands> orderItemModels = new ArrayList<>();
+
+      orderItemModels.add(new OrderItemCommands(
+          1L, 1L
+      ));
+
+      OrderCreateCommand command =
+          new OrderCreateCommand("userId",
+              "서울시 송파구"
+              , orderItemModels, "메모..");
+
+      pointRepository.save(new PointModel("userId", BigInteger.valueOf(1)));
+
+      //when
+      CoreException result = assertThrows(CoreException.class, () -> orderFacade.create(command));
+      //then
+      assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
+
+    }
+  }
 
 }
