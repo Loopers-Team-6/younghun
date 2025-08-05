@@ -163,4 +163,34 @@ class OrderServiceIntegrationTest {
     }
   }
 
+  @DisplayName("주문시, 재고 확인")
+  @Nested
+  class Stock {
+
+    @DisplayName("주문 시 재고가 부족할 경우 `400 Bad Request`를 반환한다.")
+    @Test
+    void throw400_whenCreatingOrderWithInsufficientStock() {
+      //given
+      List<OrderItemCommands> orderItemModels = new ArrayList<>();
+
+      orderItemModels.add(new OrderItemCommands(
+          1L, 3000L
+      ));
+
+      OrderCreateCommand command =
+          new OrderCreateCommand("userId",
+              "서울시 송파구"
+              , orderItemModels, "메모..");
+
+      pointRepository.save(new PointModel("userId", BigInteger.valueOf(500000000)));
+
+      //when
+      CoreException result = assertThrows(CoreException.class, () -> orderFacade.create(command));
+      //then
+      assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
+
+    }
+
+  }
+
 }

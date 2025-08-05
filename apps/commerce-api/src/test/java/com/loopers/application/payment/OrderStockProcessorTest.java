@@ -20,7 +20,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest
 @Sql("/sql/test-fixture.sql")
-public class StockProcessorTest {
+public class OrderStockProcessorTest {
   @Autowired
   private ProductJpaRepository productJpaRepository;
 

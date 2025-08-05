@@ -5,6 +5,7 @@ import com.loopers.application.order.handler.OrderHistoryHandler;
 import com.loopers.application.order.info.OrderCancelInfo;
 import com.loopers.application.order.info.OrderCreateInfo;
 import com.loopers.application.order.processor.OrderProcessor;
+import com.loopers.application.order.processor.OrderStockProcessor;
 import com.loopers.application.order.validator.PointValidator;
 import com.loopers.domain.order.OrderModel;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderFacade {
   private final OrderProcessor orderProcessor;
   private final PointValidator pointValidator;
+  private final OrderStockProcessor stockProcessor;
   private final OrderHistoryHandler orderHistoryHandler;
 
   // 주문 생성
@@ -26,6 +28,9 @@ public class OrderFacade {
 
     //포인트 확인
     pointValidator.check(orderModel.getUserId(), orderModel.getTotalPrice());
+
+    //재고 확인
+    stockProcessor.check(orderModel.getOrderItems());
 
     //히스토리 저장
     orderHistoryHandler.create(orderModel);
