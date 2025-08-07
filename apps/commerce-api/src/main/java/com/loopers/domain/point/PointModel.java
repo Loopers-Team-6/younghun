@@ -5,7 +5,6 @@ import com.loopers.domain.point.embeded.Point;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.NoSuchElementException;
@@ -26,9 +25,6 @@ public class PointModel extends BaseEntity {
   private String userId;
   @Embedded
   private Point point;
-
-  @Version
-  private Timestamp version;
 
   public PointModel(String userId) {
     validate(userId);

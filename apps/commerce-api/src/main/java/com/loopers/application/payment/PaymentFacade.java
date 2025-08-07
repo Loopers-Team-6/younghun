@@ -46,11 +46,6 @@ public class PaymentFacade {
       Long quantity = orderItem.getQuantity();
       stockProcessor.decreaseStock(productId, quantity);
     }
-//    stockProcessor.decreaseStocks(orderModel.getOrderItems()
-//        .stream()
-//        .map(o -> new StockDecreaseCommand(o.getProductId(), o.getQuantity()))
-//        .collect(Collectors.toList())
-//    );
 
     // 주문 완료
     orderModel.done();
