@@ -14,7 +14,7 @@ public class PointRepositoryImpl implements PointRepository {
 
   @Override
   public Optional<PointModel> get(String userId) {
-    return pointRepository.findByUserId(userId);
+    return pointRepository.findByUserIdWithLock(userId);
   }
 
   @Override
