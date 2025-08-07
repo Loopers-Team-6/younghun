@@ -110,12 +110,12 @@ class PaymentServiceIntegrationTest {
   void returnDecreasePoint_whenPaymentCreated() {
     //given
     String orderNumber = orderCreateInfo.orderNumber();
-    PointModel afterPoint = pointRepository.get(userId).get();
+    PointModel afterPoint = pointJpaRepository.findByUserId(userId).get();
     BigInteger totalPrice = BigInteger.valueOf(100000);
     PaymentCommand command = new PaymentCommand(userId, orderNumber, totalPrice, "shot");
     //when
     PaymentInfo payment = paymentFacade.payment(command);
-    PointModel currentPoint = pointRepository.get(userId).get();
+    PointModel currentPoint = pointJpaRepository.findByUserId(userId).get();
     //then
     assertThat(currentPoint.getPoint()).isEqualTo(
         afterPoint.getPoint().subtract(totalPrice));
@@ -199,7 +199,7 @@ class PaymentServiceIntegrationTest {
       //given
       String orderNumber = orderCreateInfo.orderNumber();
       // 기존 포인트
-      PointModel hasPoint = pointRepository.get(userId).get();
+      PointModel hasPoint = pointJpaRepository.findByUserId(userId).get();
       // 모든 재고는 재거한다.
       stockJpaRepository.deleteAll();
       stockJpaRepository.save(new StockModel(1L, 1L));
@@ -213,7 +213,7 @@ class PaymentServiceIntegrationTest {
 
       //when
       assertThatThrownBy(() -> paymentFacade.payment(payment));
-      PointModel currentPoint = pointRepository.get(userId).get();
+      PointModel currentPoint = pointJpaRepository.findByUserId(userId).get();
       Optional<PaymentModel> paymentModel = paymentRepository.get(orderNumber);
 
       //then
