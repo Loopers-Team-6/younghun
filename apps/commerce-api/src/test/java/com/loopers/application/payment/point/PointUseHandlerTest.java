@@ -47,7 +47,7 @@ class PointUseHandlerTest {
     //when
     pointUseHandler.use(userId, usePoint);
     //then
-    PointModel currentPoint = pointRepository.get(userId).get();
+    PointModel currentPoint = pointJpaRepository.findByUserId(userId).get();
     assertThat(currentPoint.getPoint()).isEqualTo(afterPoint.getPoint().subtract(usePoint));
   }
 

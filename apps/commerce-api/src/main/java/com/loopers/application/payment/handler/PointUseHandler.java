@@ -16,7 +16,7 @@ public class PointUseHandler {
 
   @Transactional
   public void use(String userId, BigInteger amount) {
-    PointModel hasPoint = pointRepository.get(userId).orElseThrow(
+    PointModel hasPoint = pointRepository.getWithLock(userId).orElseThrow(
         () -> new CoreException(ErrorType.BAD_REQUEST, "사용할 수 있는 포인트가 존재하지 않습니다.")
     );
     hasPoint.use(amount);
