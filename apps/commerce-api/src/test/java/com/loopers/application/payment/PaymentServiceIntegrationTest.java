@@ -158,7 +158,7 @@ class PaymentServiceIntegrationTest {
           ));
 
       // 포인트 1로 변환
-      pointJpaRepository.deleteAll();
+      pointJpaRepository.deleteByUserIdForTest(userId);
       PointModel model = pointRepository.save(new PointModel(userId, BigInteger.valueOf(1)));
 
       PaymentCommand payment = new PaymentCommand(
@@ -201,7 +201,7 @@ class PaymentServiceIntegrationTest {
       // 기존 포인트
       PointModel hasPoint = pointJpaRepository.findByUserId(userId).get();
       // 모든 재고는 재거한다.
-      stockJpaRepository.deleteAll();
+      stockJpaRepository.deleteByProductIdForTest(1L);
       stockJpaRepository.save(new StockModel(1L, 1L));
 
       PaymentCommand payment = new PaymentCommand(
