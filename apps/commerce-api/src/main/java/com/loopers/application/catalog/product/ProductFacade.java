@@ -30,6 +30,10 @@ public class ProductFacade {
                     p.getName(), p.getId(), p.getBrandName(), p.getLikedCount(), p.getPrice(), p.getCreatedAt(), p.getUpdateAt()
                 ))
                 .collect(Collectors.toList()))
+            .page(search.getNumber())
+            .size(search.getSize())
+            .totalPages(search.getTotalPages())
+            .totalElements(search.getTotalElements())
             .build();
   }
 

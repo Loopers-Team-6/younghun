@@ -18,12 +18,13 @@ public class ProductV1Condition {
   private Integer perSize;
 
   public ProductCommand toCommand() {
-    return new ProductCommand(
-        brandId,
-        brandName,
-        productName,
-        sort == null ? null : SortOption.valueOf(sort),
-        currentPage,
-        perSize);
+    return ProductCommand.builder()
+        .brandId(brandId)
+        .brandName(brandName)
+        .productName(productName)
+        .sort(sort == null ? null : SortOption.valueOf(sort))
+        .currentPage(currentPage)
+        .perSize(perSize)
+        .build();
   }
 }

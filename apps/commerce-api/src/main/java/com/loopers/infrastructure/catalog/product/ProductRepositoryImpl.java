@@ -82,6 +82,7 @@ public class ProductRepositoryImpl implements ProductRepository {
               case PRICE_ASC -> product.price.price.asc();
               case LIKES_DESC -> status.likeCount.desc();
             })
+        .orderBy(product.id.asc())
         .fetch();
 
     // 갯수

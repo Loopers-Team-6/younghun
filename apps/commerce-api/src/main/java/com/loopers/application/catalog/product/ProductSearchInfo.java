@@ -7,7 +7,7 @@ public record ProductSearchInfo(
     List<ProductContents> contents,
     int page,
     int size,
-    int totalElements,
+    long totalElements,
     int totalPages
 ) {
 
