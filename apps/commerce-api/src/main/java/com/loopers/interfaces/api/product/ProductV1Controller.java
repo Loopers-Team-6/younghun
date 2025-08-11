@@ -1,27 +1,29 @@
 package com.loopers.interfaces.api.product;
 
+import com.loopers.application.catalog.product.ProductFacade;
+import com.loopers.application.catalog.product.ProductGetInfo;
 import com.loopers.interfaces.api.ApiResponse;
-import com.loopers.interfaces.api.product.ProductV1Dto.Search.Contents;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@RequiredArgsConstructor
 public class ProductV1Controller {
-
+  private final ProductFacade productFacade;
 
   @GetMapping
-  public ApiResponse<ProductV1Dto.Search.Response> search() {
+  public ApiResponse<ProductV1Dto.Search.Response> search(
+      @ModelAttribute ProductV1Condition condition
+  ) {
     return ApiResponse.success(
-        new ProductV1Dto.Search.Response(
-            List.of(new Contents(1L,"상품1"),new Contents(2L,"상품2")),
-            1,1,1,1
-        )
+        ProductV1Dto.Search.Response.from(productFacade.search(condition.toCommand()))
     );
   }
 

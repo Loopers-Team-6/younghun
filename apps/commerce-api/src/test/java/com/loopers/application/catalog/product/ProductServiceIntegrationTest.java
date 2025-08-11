@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThrows;
 
 import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.infrastructure.catalog.brand.BrandJpaRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import com.loopers.utils.DatabaseCleanUp;
@@ -33,6 +34,9 @@ class ProductServiceIntegrationTest {
   private ProductFacade productFacade;
   @Autowired
   private ProductRepository repository;
+
+  @Autowired
+  private BrandJpaRepository brandRepository;
 
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
@@ -108,8 +112,9 @@ class ProductServiceIntegrationTest {
       //then
       List<ProductContents> content = search.contents();
 
+      String brandName = brandRepository.findById(1L).get().getName();
       for (ProductContents productModel : content) {
-        assertThat(productModel.brandId()).isEqualTo(command.brandId());
+        assertThat(productModel.brandName()).isEqualTo(brandName);
       }
     }
 
