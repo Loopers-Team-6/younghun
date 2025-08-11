@@ -102,7 +102,7 @@ class ProductModelV1ControllerTest {
   @DisplayName("GET /api/v1/products/{productId}")
   @Nested
   class Get {
-    Function<Long, String> ENDPOINT_GET = id -> ENDPOINT + id;
+    Function<Long, String> ENDPOINT_GET = id -> ENDPOINT + "/" + id;
 
 
     @DisplayName("상품 ID가 존재하지 않는다면, 404 NotFound Exception을 반환합니다.")
@@ -130,12 +130,19 @@ class ProductModelV1ControllerTest {
     @Test
     public void returnProductInfo_whenProductId() {
       //given
-      Long id = 1L;
+      BrandModel brandModel = brandRepository.save(new BrandModel("userId", "브랜드 명"));
+
+      ProductModel productModel = productRepository.save(new ProductModel(brandModel.getId(), "상품1", BigInteger.valueOf(2000), "상품 설명"));
+
+      stockRepository.save(new StockModel(productModel.getId(), 100L));
+
+      productStatusJpaRepository.save(ProductStatus.of(productModel.getId(), 0));
+
       //when
       ParameterizedTypeReference<ApiResponse<ProductV1Dto.Get.Response>> responseType = new ParameterizedTypeReference<>() {
       };
 
-      String endpoint = ENDPOINT_GET.apply(id);
+      String endpoint = ENDPOINT_GET.apply(productModel.getId());
 
       ResponseEntity<ApiResponse<ProductV1Dto.Get.Response>> response =
           testRestTemplate.exchange(endpoint, HttpMethod.GET, new HttpEntity<>(null), responseType);
@@ -144,7 +151,7 @@ class ProductModelV1ControllerTest {
       assertAll(
           () -> assertThat(response.getStatusCode().is2xxSuccessful()).isTrue(),
           () -> assertThat(response.getBody().meta().result()).isEqualTo(SUCCESS),
-          () -> assertThat(response.getBody().data().id()).isEqualTo(id)
+          () -> assertThat(response.getBody().data().productId()).isEqualTo(1L)
       );
     }
 

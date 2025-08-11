@@ -1,10 +1,7 @@
 package com.loopers.interfaces.api.product;
 
 import com.loopers.application.catalog.product.ProductFacade;
-import com.loopers.application.catalog.product.ProductGetInfo;
 import com.loopers.interfaces.api.ApiResponse;
-import java.math.BigInteger;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,12 +25,7 @@ public class ProductV1Controller {
   }
 
   @GetMapping("/{productId}")
-  public ApiResponse<ProductV1Dto.Get.Response> search(@PathVariable Long productId) {
-    return ApiResponse.success(
-        new ProductV1Dto.Get.Response(
-            productId,"상품1", BigInteger.valueOf(2000),"이건 검정색이고 암튼 좋아요",
-            LocalDateTime.now(),LocalDateTime.now()
-        )
-    );
+  public ApiResponse<ProductV1Dto.Get.Response> get(@PathVariable Long productId) {
+    return ApiResponse.success(ProductV1Dto.Get.Response.from(productFacade.get(productId)));
   }
 }
