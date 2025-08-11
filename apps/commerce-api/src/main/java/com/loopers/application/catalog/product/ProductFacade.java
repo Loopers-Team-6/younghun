@@ -27,7 +27,7 @@ public class ProductFacade {
     return
         ProductSearchInfo.builder()
             .contents(products.stream().map(p -> ProductContents.of(
-                    p.getName(), p.getBrandId(), p.getBrandName(), p.getLikedCount(), p.getPrice(), p.getCreatedAt(), p.getUpdateAt()
+                    p.getName(), p.getId(), p.getBrandName(), p.getLikedCount(), p.getPrice(), p.getCreatedAt(), p.getUpdateAt()
                 ))
                 .collect(Collectors.toList()))
             .build();
