@@ -15,7 +15,7 @@ public class ProductV1Dto {
     record Response(List<Contents> contents,
                     int page,
                     int size,
-                    int totalElements,
+                    long totalElements,
                     int totalPages) {
 
       public static Response from(ProductSearchInfo search) {

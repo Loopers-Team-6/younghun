@@ -19,9 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/like/products")
 @RequiredArgsConstructor
-public class LikeV1Controller {
+public class LikeV1Controller implements LikeV1ApiSpec {
   private final LikeFacade likeFacade;
 
+  @Override
   @PostMapping("/{productId}")
   public ApiResponse<Response> register(
       @RequestHeader("X-User-Id") String userId,
@@ -30,6 +31,7 @@ public class LikeV1Controller {
     return ApiResponse.success(Response.from(userId, productId));
   }
 
+  @Override
   @DeleteMapping("/{productId}")
   public ApiResponse<Unregister.Response> unregister(
       @RequestHeader("X-User-Id") String userId,
