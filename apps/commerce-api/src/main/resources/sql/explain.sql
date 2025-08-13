@@ -15,6 +15,5 @@ explain SELECT
                             on p.id = s.product_id
                  inner join product_status ps
                             on p.id = ps.product_id
-        where p.brand_id = 1
         order by ps.like_count desc
         limit 0,10;

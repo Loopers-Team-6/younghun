@@ -5,13 +5,19 @@
 -- 이 값은 현재 세션에만 적용됩니다.
 SET @@cte_max_recursion_depth = 1000000;
 
-
--- brand 데이터 삽입
-INSERT INTO brand (user_id, name, created_at, updated_at) VALUES
-                                                              ('user1', '루프스', NOW(), NOW()),
-                                                              ('user2', '소마웨어', NOW(), NOW()),
-                                                              ('user3', '에이블코어', NOW(), NOW()),
-                                                              ('user4', '하이로닉스', NOW(), NOW());
+-- 100만 개의 brand 더미 데이터 삽입
+INSERT INTO brand (user_id, name, created_at, updated_at)
+WITH RECURSIVE numbers AS (
+    SELECT 1 AS n
+    UNION ALL
+    SELECT n + 1 FROM numbers WHERE n < 1000000
+)
+SELECT
+    CONCAT('user', n) AS user_id,
+    CONCAT('Brand Name ', n) AS name,
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS created_at,
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS updated_at
+FROM numbers;
 
 -- 100만 개의 product 더미 데이터 삽입
 INSERT INTO product (brand_id, name, price, description, created_at, updated_at)
@@ -21,7 +27,8 @@ WITH RECURSIVE numbers AS (
     SELECT n + 1 FROM numbers WHERE n < 1000000
 )
 SELECT
-    FLOOR(1 + RAND() * 4) AS brand_id,
+    -- brand_id는 1부터 100만까지 랜덤하게 선택하도록 수정했습니다.
+    FLOOR(1 + RAND() * 1000000) AS brand_id,
     CONCAT('Product Name ', n) AS name,
     FLOOR(100 + RAND() * 2000000) * 100 AS price,
     CONCAT('Description for Product ', n) AS description,
