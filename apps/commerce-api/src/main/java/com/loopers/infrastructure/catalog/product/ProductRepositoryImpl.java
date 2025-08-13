@@ -28,7 +28,6 @@ public class ProductRepositoryImpl implements ProductRepository {
   private final JPAQueryFactory query;
   private final QProductModel product = QProductModel.productModel;
   private final QBrandModel brand = QBrandModel.brandModel;
-  private final QProductStatus status = QProductStatus.productStatus;
 
   // 브랜드에서 해당 프로젝트 조회시
   public List<ProductModel> listOf(Long brandId) {
@@ -67,12 +66,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product.name.name,
                 product.price.price,
                 product.description,
-                status.likeCount,
+                product.likeCount,
                 product.createdAt,
                 product.updatedAt))
         .from(product)
         .leftJoin(brand).on(product.brandId.eq(brand.id))
-        .leftJoin(status).on(status.productId.eq(product.id))
         .where(where)
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
@@ -80,7 +78,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             switch (sort) {
               case LATEST -> product.createdAt.desc();
               case PRICE_ASC -> product.price.price.asc();
-              case LIKES_DESC -> status.likeCount.desc();
+              case LIKES_DESC -> product.likeCount.desc();
             })
         .orderBy(product.id.asc())
         .fetch();
@@ -112,12 +110,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                         product.name.name,
                         product.price.price,
                         product.description,
-                        status.likeCount,
+                        product.likeCount,
                         product.createdAt,
                         product.updatedAt))
                 .from(product)
                 .leftJoin(brand).on(product.brandId.eq(brand.id))
-                .leftJoin(status).on(status.productId.eq(product.id))
                 .where(product.id.eq(productId))
                 .fetchOne())
         .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "상품 ID가 존재하지 않습니다."));
@@ -132,18 +129,18 @@ public class ProductRepositoryImpl implements ProductRepository {
   }
 
   @Override
-  public Optional<ProductStatus> has(Long productId) {
-    return Optional.ofNullable(query.select(status)
-        .from(status)
-        .where(status.productId.eq(productId))
+  public Optional<ProductModel> has(Long productId) {
+    return Optional.ofNullable(query.select(product)
+        .from(product)
+        .where(product.id.eq(productId))
         .fetchOne());
   }
 
   @Override
-  public Optional<ProductStatus> hasWithLock(Long productId) {
-    return Optional.ofNullable(query.select(status)
-        .from(status)
-        .where(status.productId.eq(productId))
+  public Optional<ProductModel> hasWithLock(Long productId) {
+    return Optional.ofNullable(query.select(product)
+        .from(product)
+        .where(product.id.eq(productId))
         .setLockMode(LockModeType.PESSIMISTIC_WRITE)
         .fetchOne());
   }

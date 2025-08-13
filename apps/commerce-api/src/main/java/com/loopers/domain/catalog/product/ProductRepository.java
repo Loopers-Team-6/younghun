@@ -1,6 +1,5 @@
 package com.loopers.domain.catalog.product;
 
-import com.loopers.domain.catalog.product.status.ProductStatus;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -13,8 +12,8 @@ public interface ProductRepository {
 
   List<ProductModel> getIn(List<Long> productIds);
 
-  Optional<ProductStatus> has(Long productId);
+  Optional<ProductModel> has(Long productId);
 
-  Optional<ProductStatus> hasWithLock(Long productId);
+  Optional<ProductModel> hasWithLock(Long productId);
 
 }

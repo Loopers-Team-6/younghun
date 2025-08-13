@@ -1,5 +1,6 @@
 package com.loopers.application.like;
 
+import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.catalog.product.status.ProductStatus;
 import com.loopers.domain.like.LikeModel;
@@ -19,7 +20,7 @@ public class LikeFacade {
 
   @Transactional
   public void like(String userId, Long productId) {
-    ProductStatus productStatus = productRepository.hasWithLock(productId).orElseThrow(
+    ProductModel productStatus = productRepository.hasWithLock(productId).orElseThrow(
         () -> new CoreException(ErrorType.NOT_FOUND, "해당하는 상품이 존재하지 않습니다.")
     );
     Optional<LikeModel> likeModel = likeRepository.liked(userId, productId);
@@ -31,12 +32,12 @@ public class LikeFacade {
 
     //좋아요
     likeRepository.like(userId, productId);
-    productStatus.increase();
+//    productStatus.increase();
   }
 
   @Transactional
   public void unlike(String userId, Long productId) {
-    ProductStatus productStatus = productRepository.hasWithLock(productId).orElseThrow(
+    ProductModel productStatus = productRepository.hasWithLock(productId).orElseThrow(
         () -> new CoreException(ErrorType.NOT_FOUND, "해당하는 상품이 존재하지 않습니다.")
     );
 
@@ -48,6 +49,6 @@ public class LikeFacade {
     }
 
     likeRepository.unlike(userId, productId);
-    productStatus.decrease();
+//    productStatus.decrease();
   }
 }
