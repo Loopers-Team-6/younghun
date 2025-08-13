@@ -28,11 +28,7 @@ public class ProductModel extends BaseEntity {
   @Column(columnDefinition = "TEXT")
   private String description;
 
-  @OneToOne
-  private ProductStatus status;
-
-  @OneToOne
-  private StockModel stock;
+  private int likeCount;
 
   public ProductModel(Long brandId, String name, BigInteger price, String description) {
     this.brandId = brandId;

@@ -14,7 +14,7 @@ INSERT INTO brand (user_id, name, created_at, updated_at) VALUES
                                                               ('user4', '하이로닉스', NOW(), NOW());
 
 -- 100만 개의 product 더미 데이터 삽입
-INSERT INTO product (brand_id, name, price, description, created_at, updated_at)
+INSERT INTO product (brand_id, name, price, like_count, description, created_at, updated_at)
 WITH RECURSIVE numbers AS (
     SELECT 1 AS n
     UNION ALL
@@ -23,10 +23,11 @@ WITH RECURSIVE numbers AS (
 SELECT
     FLOOR(1 + RAND() * 4) AS brand_id,
     CONCAT('Product Name ', n) AS name,
-    FLOOR(100 + RAND() * 1901) * 100 AS price,
+    FLOOR(100 + RAND() * 2000000) * 100 AS price,
+    FLOOR(RAND() * 2000000) AS like_count,
     CONCAT('Description for Product ', n) AS description,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS created_at,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS updated_at
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS created_at,
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS updated_at
 FROM numbers;
 
 -- 100만 개의 stock 더미 데이터 삽입
@@ -43,16 +44,3 @@ SELECT
     TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS updated_at
 FROM numbers;
 
--- 100만 개의 product_status 더미 데이터 삽입
-INSERT INTO product_status (product_id, like_count, created_at, updated_at)
-WITH RECURSIVE numbers AS (
-    SELECT 1 AS n
-    UNION ALL
-    SELECT n + 1 FROM numbers WHERE n < 1000000
-)
-SELECT
-    n AS product_id,
-    FLOOR(RAND() * 3001) AS like_count,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS created_at,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS updated_at
-FROM numbers;
