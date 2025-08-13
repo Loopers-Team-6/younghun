@@ -23,10 +23,10 @@ WITH RECURSIVE numbers AS (
 SELECT
     FLOOR(1 + RAND() * 4) AS brand_id,
     CONCAT('Product Name ', n) AS name,
-    FLOOR(100 + RAND() * 1901) * 100 AS price,
+    FLOOR(100 + RAND() * 2000000) * 100 AS price,
     CONCAT('Description for Product ', n) AS description,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS created_at,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS updated_at
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS created_at,
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS updated_at
 FROM numbers;
 
 -- 100만 개의 stock 더미 데이터 삽입
@@ -38,9 +38,9 @@ WITH RECURSIVE numbers AS (
 )
 SELECT
     n AS product_id,
-    FLOOR(10 + RAND() * 491) AS stock,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS created_at,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS updated_at
+    FLOOR(10 + RAND() * 2000000) AS stock,
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS created_at,
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS updated_at
 FROM numbers;
 
 -- 100만 개의 product_status 더미 데이터 삽입
@@ -52,7 +52,7 @@ WITH RECURSIVE numbers AS (
 )
 SELECT
     n AS product_id,
-    FLOOR(RAND() * 3001) AS like_count,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS created_at,
-    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 10 * 24 * 3600), NOW()) AS updated_at
+    FLOOR(RAND() * 2000000) AS like_count,
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS created_at,
+    TIMESTAMPADD(SECOND, -FLOOR(RAND() * 300 * 24 * 3600), NOW()) AS updated_at
 FROM numbers;
