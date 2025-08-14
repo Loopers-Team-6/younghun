@@ -67,9 +67,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product.name.name,
                 product.price.price,
                 product.description,
-                status.likeCount,
-                product.createdAt,
-                product.updatedAt))
+                status.likeCount))
         .from(product)
         .leftJoin(brand).on(product.brandId.eq(brand.id))
         .leftJoin(status).on(status.productId.eq(product.id))
@@ -112,9 +110,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                         product.name.name,
                         product.price.price,
                         product.description,
-                        status.likeCount,
-                        product.createdAt,
-                        product.updatedAt))
+                        status.likeCount))
                 .from(product)
                 .leftJoin(brand).on(product.brandId.eq(brand.id))
                 .leftJoin(status).on(status.productId.eq(product.id))
