@@ -8,16 +8,13 @@ public record ProductContents(
     Long id,
     String brandName,
     int likeCount,
-    BigInteger price,
-    ZonedDateTime createdAt,
-    ZonedDateTime updatedAt
+    BigInteger price
 ) {
 
   public static ProductContents of(String name, Long id,
                                    String brandName,
                                    int likeCount,
-                                   BigInteger price, ZonedDateTime createdAt,
-                                   ZonedDateTime updatedAt) {
-    return new ProductContents(name, id, brandName, likeCount, price, createdAt, updatedAt);
+                                   BigInteger price) {
+    return new ProductContents(name, id, brandName, likeCount, price);
   }
 }
