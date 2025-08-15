@@ -9,7 +9,7 @@ public class RedisTestContainersConfig {
   private static final GenericContainer<?> redisContainer;
 
   static {
-    redisContainer = new GenericContainer<>("redis:latest");
+    redisContainer = new GenericContainer<>("redis:latest").withExposedPorts(6379);
     redisContainer.start();
   }
 
