@@ -21,4 +21,8 @@ public class ProductCacheRankRepositoryImpl implements ProductCacheRepository {
   public String get(String key) {
     return redisTemplate.opsForValue().get(key);
   }
+
+  public void remove(String key) {
+    redisTemplate.delete(key);
+  }
 }
