@@ -59,23 +59,24 @@ public class ProductWarmupProcessor {
     PageRequest page = PageRequest.of(command.currentPage(), command.perSize());
     // 1. 캐시 사용 조건(좋아요순 정렬)이면서 캐시에 값이 실제로 존재할 때만 캐시 로직 실행
     if (command.sort() == SortOption.LIKES_DESC) {
-      String value = cacheRepository.get(KEY);
-      if (value != null) {
-        log.info("cache hit");
-        try {
-          List<ProductProjection> cacheContent = new ObjectMapper().readValue(value, new TypeReference<>() {
-          });
-          // 캐시 처리 성공 시, 여기서 결과를 바로 반환하고 메서드를 종료합니다.
-          return new PageImpl<>(cacheContent, Pageable.ofSize(10), 10);
-        } catch (JsonProcessingException e) {
-          throw new CoreException(ErrorType.INTERNAL_ERROR, "json parse error : " + e.getMessage());
+      try {
+        String value = cacheRepository.get(KEY);
+        if (value != null) {
+          log.info("cache hit");
+          try {
+            List<ProductProjection> cacheContent = new ObjectMapper().readValue(value, new TypeReference<>() {
+            });
+            // 캐시 처리 성공 시, 여기서 결과를 바로 반환하고 메서드를 종료합니다.
+            return new PageImpl<>(cacheContent, Pageable.ofSize(10), 10);
+          } catch (JsonProcessingException e) {
+            throw new CoreException(ErrorType.INTERNAL_ERROR, "json parse error : " + e.getMessage());
+          }
         }
+        // '좋아요순'이지만 캐시에 값이 없는 경우 (cache miss)
+        log.info("cache miss");
+      } catch (Exception ignore) {
       }
-      // '좋아요순'이지만 캐시에 값이 없는 경우 (cache miss)
-      log.info("cache miss");
     }
-    // 2. 위 if 블록의 조건을 만족하지 못한 모든 경우 (캐시를 사용하지 않는 정렬 or 캐시 미스)
-    // 이 코드가 실행된다는 것은 DB 조회가 필요하다는 의미입니다.
     return productRepository.search(command.toCriteria(), page);
   }
 }
