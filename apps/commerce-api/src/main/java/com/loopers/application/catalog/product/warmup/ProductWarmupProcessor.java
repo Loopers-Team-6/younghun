@@ -52,7 +52,7 @@ public class ProductWarmupProcessor {
     }
 
     log.info("warm up data : {}", value);
-    cacheRepository.put(KEY, value, Duration.ofMinutes(10));
+    cacheRepository.put(KEY, value, Duration.ofDays(1));
   }
 
   public Page<ProductProjection> searchData(ProductCommand command) {

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class ProductLikeWarmUp {
   private final ProductWarmupProcessor warmupProcessor;
 
-  @Scheduled(cron = "* */5 * * * *")
+  @Scheduled(cron = "0 0 1 * * *")
   public void runTaskWithCron() {
     log.info("Cron 스케쥴 작업 실행: {}", LocalDateTime.now());
     warmupProcessor.warmup();
