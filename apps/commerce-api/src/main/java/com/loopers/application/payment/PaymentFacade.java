@@ -2,6 +2,9 @@ package com.loopers.application.payment;
 
 
 import com.loopers.application.payment.command.PaymentCommand;
+import com.loopers.application.payment.gateway.PaymentGatewayCommand;
+import com.loopers.application.payment.gateway.PaymentGatewayProcessor;
+import com.loopers.application.payment.gateway.PaymentResponse;
 import com.loopers.application.payment.handler.PointUseHandler;
 import com.loopers.application.payment.processor.StockProcessor;
 import com.loopers.domain.order.OrderModel;
@@ -9,6 +12,7 @@ import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
+import com.loopers.interfaces.api.ApiResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,13 +23,16 @@ public class PaymentFacade {
   private final PaymentRepository paymentRepository;
   private final OrderRepository orderRepository;
   private final PointUseHandler pointUseHandler;
-
   private final StockProcessor stockProcessor;
+
+  private final PaymentGatewayProcessor gatewayProcessor;
 
   @Transactional
   public PaymentInfo payment(PaymentCommand command) {
     String orderNumber = command.orderNumber();
     OrderModel orderModel = orderRepository.ofOrderNumber(orderNumber);
+
+    ApiResponse<PaymentResponse> result = gatewayProcessor.send(PaymentGatewayCommand.of(command));
 
     // 포인트 감소
     pointUseHandler.use(command.userId(), command.payment());
