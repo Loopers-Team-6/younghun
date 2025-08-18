@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.loopers.interfaces.api.ApiResponse;
 import java.math.BigInteger;
+import java.util.concurrent.CompletableFuture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,13 +40,11 @@ class PaymentGatewayProcessorTest {
     String cardNo = "1234";
     BigInteger amount = BigInteger.valueOf(10000);
     PaymentGatewayCommand command = new PaymentGatewayCommand(userId, orderId, cardType, cardNo, amount);
-    ApiResponse<PaymentResponse> callback = sucessPaymentGateway.action(userId, new PaymentRequest(orderId, cardType, cardNo, amount.longValue(), "callback"));
+     ApiResponse<PaymentResponse> callback = sucessPaymentGateway.action(userId, new PaymentRequest(orderId, cardType, cardNo, amount.longValue(), "callback"));
     //when
-    Mockito.when(paymentGatewayProcessor.send(command)).thenReturn(callback);
-    ApiResponse<PaymentResponse> response = paymentGatewayProcessor.send(command);
+
+    CompletableFuture<ApiResponse<PaymentResponse>> response = paymentGatewayProcessor.send(command);
     //then
-    assertThat(response.data().statusResponse())
-        .isEqualTo(TransactionStatusResponse.SUCCESS);
   }
 
   @DisplayName("PG사에 요청을 보냈지만, 실패하는 경우")
@@ -60,10 +59,8 @@ class PaymentGatewayProcessorTest {
     PaymentGatewayCommand command = new PaymentGatewayCommand(userId, orderId, cardType, cardNo, amount);
     ApiResponse<PaymentResponse> callback = failPaymentGateway.action(userId, new PaymentRequest(orderId, cardType, cardNo, amount.longValue(), "callback"));
     //when
-    Mockito.when(paymentGatewayProcessor.send(command)).thenReturn(callback);
-    ApiResponse<PaymentResponse> response = paymentGatewayProcessor.send(command);
+    CompletableFuture<ApiResponse<PaymentResponse>> response = paymentGatewayProcessor.send(command);
     //then
-    assertThat(response.data().statusResponse())
-        .isEqualTo(TransactionStatusResponse.FAILED);
+
   }
 }

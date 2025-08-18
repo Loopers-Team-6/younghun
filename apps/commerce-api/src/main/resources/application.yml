@@ -29,6 +29,24 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+resilience4j.circuitbreaker:
+  instances:
+    # 'pg-payment' 라는 이름의 서킷 브레이커 설정
+    pg-payment:
+      registerHealthIndicator: true
+      slidingWindowType: COUNT_BASED   # 최근 요청 '수'를 기반으로 실패율 계산
+      slidingWindowSize: 10            # 최근 10개의 요청을 본다
+      failureRateThreshold: 50         # 그 중 50% (5개) 이상 실패하면 서킷을 연다
+      waitDurationInOpenState: 10s     # 서킷이 열려있는 시간 (10초)
+      permittedNumberOfCallsInHalfOpenState: 2  # 반개방 상태에서 보낼 테스트 요청 수
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+
+resilience4j.timelimiter:
+  instances:
+    # 'pg-payment' 라는 이름의 타임아웃 설정
+    pg-payment:
+      timeoutDuration: 2s              # PG 호출은 2초 안에 응답이 와야 한다
+
 ---
 spring:
   config:
