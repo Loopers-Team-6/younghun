@@ -1,5 +1,6 @@
 package com.loopers.application.order;
 
+import com.loopers.application.order.checker.PointValidator;
 import com.loopers.application.order.command.OrderCreateCommand;
 import com.loopers.application.order.handler.OrderHistoryHandler;
 import com.loopers.application.order.info.OrderCancelInfo;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderFacade {
   private final OrderProcessor orderProcessor;
   private final OrderHistoryHandler orderHistoryHandler;
+  private final PointValidator pointValidator;
 
   // 주문 생성
   @Transactional
