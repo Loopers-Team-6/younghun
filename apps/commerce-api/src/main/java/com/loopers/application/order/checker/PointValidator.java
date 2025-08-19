@@ -14,8 +14,7 @@ public class PointValidator {
   private final PointRepository pointRepository;
 
 
-  public void check(String userId, BigInteger usePoint) {
-
+  public void usePointCheck(String userId, BigInteger usePoint) {
     PointModel pointModel = pointRepository.get(userId)
         .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "포인트가 존재하지 않습니다."));
 

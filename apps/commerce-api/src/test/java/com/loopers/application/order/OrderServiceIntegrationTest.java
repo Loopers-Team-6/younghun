@@ -60,8 +60,9 @@ class OrderServiceIntegrationTest {
 
     OrderCreateCommand command =
         new OrderCreateCommand("userId",
-            "서울시 송파구"
-            , orderItemModels, "메모..");
+            "서울시 송파구",
+            BigInteger.TEN,
+            orderItemModels, "메모..");
     //when
     pointRepository.save(new PointModel("userId", BigInteger.valueOf(500000000)));
     OrderCreateInfo orderCreateInfo = orderFacade.create(command);
@@ -98,8 +99,9 @@ class OrderServiceIntegrationTest {
     String order = "userId"; //주문자
     OrderCreateCommand command =
         new OrderCreateCommand(order,
-            "서울시 송파구"
-            , orderItemModels, "메모..");
+            "서울시 송파구",
+            BigInteger.TEN,
+            orderItemModels, "메모..");
     pointRepository.save(new PointModel("userId", BigInteger.valueOf(500000000)));
     OrderCreateInfo orderCreateInfo = orderFacade.create(command);
     //when
@@ -126,8 +128,9 @@ class OrderServiceIntegrationTest {
     String order = "userId"; //주문자
     OrderCreateCommand command =
         new OrderCreateCommand(order,
-            "서울시 송파구"
-            , orderItemModels, "메모..");
+            "서울시 송파구",
+            BigInteger.TEN,
+            orderItemModels, "메모..");
     pointRepository.save(new PointModel("userId", BigInteger.valueOf(500000000)));
     OrderCreateInfo orderCreateInfo = orderFacade.create(command);
     //when

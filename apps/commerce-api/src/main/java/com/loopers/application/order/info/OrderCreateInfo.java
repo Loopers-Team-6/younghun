@@ -13,6 +13,7 @@ public record OrderCreateInfo(
     String orderNumber,
     String orderStatus,
     String address,
+    BigInteger usePoint,
     List<ItemInfos> items,
     BigInteger totalPrice,
     String memo,
@@ -27,6 +28,7 @@ public record OrderCreateInfo(
         .orderNumber(orderModel.getOrderNumber())
         .orderStatus(orderModel.getStatus().name())
         .address(orderModel.getAddress())
+        .usePoint(orderModel.getUsePoint())
         .totalPrice(orderModel.getTotalPrice())
         .memo(orderModel.getMemo())
         .createdAt(orderModel.getCreatedAt())

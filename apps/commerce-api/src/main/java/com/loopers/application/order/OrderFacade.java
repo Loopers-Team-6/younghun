@@ -23,6 +23,7 @@ public class OrderFacade {
   public OrderCreateInfo create(OrderCreateCommand command) {
     //주문서를 만들고
     OrderModel orderModel = orderProcessor.create(command);
+    pointValidator.usePointCheck(command.userId(), command.usePoint());
 
     //히스토리 저장
     orderHistoryHandler.create(orderModel);

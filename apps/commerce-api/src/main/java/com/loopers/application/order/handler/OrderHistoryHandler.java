@@ -4,6 +4,7 @@ import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.history.OrderHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component

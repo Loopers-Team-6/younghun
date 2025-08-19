@@ -39,7 +39,7 @@ class PointValidatorTest {
     String userId = "userId";
     pointJpaRepository.save(new PointModel(userId, BigInteger.ONE));
     //when
-    CoreException result = assertThrows(CoreException.class, () -> pointValidator.check(userId, BigInteger.TEN));
+    CoreException result = assertThrows(CoreException.class, () -> pointValidator.usePointCheck(userId, BigInteger.TEN));
     //then
     assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
   }
