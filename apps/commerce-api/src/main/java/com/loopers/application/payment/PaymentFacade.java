@@ -14,6 +14,7 @@ import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
 import com.loopers.interfaces.api.ApiResponse;
 import jakarta.transaction.Transactional;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class PaymentFacade {
     String orderNumber = command.orderNumber();
     OrderModel orderModel = orderRepository.ofOrderNumber(orderNumber);
 
-    ApiResponse<PaymentResponse> result = gatewayProcessor.send(PaymentGatewayCommand.of(command));
+    CompletableFuture<ApiResponse<PaymentResponse>> send = gatewayProcessor.send(PaymentGatewayCommand.of(command));
 
     // 포인트 감소
     pointUseHandler.use(command.userId(), command.payment());
