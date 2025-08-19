@@ -85,7 +85,7 @@ class PaymentServiceIntegrationTest {
     OrderCreateCommand command =
         new OrderCreateCommand(userId,
             "서울시 송파구",
-            BigInteger.TEN,
+            BigInteger.valueOf(500),
             orderItemModels, "메모..");
 
     pointRepository.save(new PointModel(userId, BigInteger.valueOf(50000000)));
@@ -113,7 +113,7 @@ class PaymentServiceIntegrationTest {
     //given
     String orderNumber = orderCreateInfo.orderNumber();
     PointModel afterPoint = pointJpaRepository.findByUserId(userId).get();
-    BigInteger totalPrice = BigInteger.valueOf(100000);
+    BigInteger totalPrice = BigInteger.valueOf(500);
     CardType cardType = CardType.KB;
     String cardNo = "1234-1234-1234-1234";
     PaymentCommand command = new PaymentCommand(userId, orderNumber, cardType, cardNo, totalPrice, "shot");

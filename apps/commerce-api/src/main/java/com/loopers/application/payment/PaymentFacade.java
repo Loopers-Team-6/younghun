@@ -33,17 +33,16 @@ public class PaymentFacade {
     String orderNumber = command.orderNumber();
     OrderModel orderModel = orderRepository.ofOrderNumber(orderNumber);
 
-    CompletableFuture<ApiResponse<PaymentResponse>> send = gatewayProcessor.send(PaymentGatewayCommand.of(command));
-
     // 포인트 감소
-    pointUseHandler.use(command.userId(), command.payment());
+    pointUseHandler.use(command.userId(), orderModel.getUsePoint());
 
+    CompletableFuture<ApiResponse<PaymentResponse>> send = gatewayProcessor.send(PaymentGatewayCommand.of(command));
     // 결제 처리
     PaymentModel payment = paymentRepository.save(PaymentModel.create()
         .userId(command.userId())
         .orderNumber(orderNumber)
         .description(command.description())
-        .orderAmount(command.payment())
+        .orderAmount(orderModel.getUsePoint().add(command.payment()))
         .paymentAmount(orderModel.getTotalPrice())
         .build());
 
