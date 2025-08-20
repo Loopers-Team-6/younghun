@@ -1,6 +1,6 @@
-package com.loopers.application.payment.command;
+package com.loopers.application.payment;
 
-import com.loopers.application.payment.gateway.CardType;
+import com.loopers.domain.payment.CardType;
 import java.math.BigInteger;
 
 public record PaymentCommand(
@@ -8,6 +8,7 @@ public record PaymentCommand(
     String orderNumber,
 
     // 어떤 방법으로 결제 할지?
+    String transactionKey,
     CardType cardType,
     String cardNo,
 

@@ -1,5 +1,7 @@
-package com.loopers.application.payment.gateway;
+package com.loopers.application.payment;
 
+import com.loopers.domain.payment.PaymentGateway;
+import com.loopers.domain.payment.TransactionStatusResponse;
 import com.loopers.interfaces.api.ApiResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
@@ -11,14 +13,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PaymentGatewayProcessor {
+public class PaymentGatewayPort {
   private final PaymentGateway paymentGateway;
 
   @CircuitBreaker(name = "pg-payment", fallbackMethod = "handlePaymentFailure")
   @TimeLimiter(name = "pg-payment")
-  public CompletableFuture<ApiResponse<PaymentResponse>> send(PaymentGatewayCommand command) {
-    return CompletableFuture.supplyAsync(() -> paymentGateway.action(command.userId(),
-        new PaymentRequest(command, "http://localhost:8080/payment/callback")));
+  public void send(PaymentGatewayCommand command) {
+    CompletableFuture.supplyAsync(() -> paymentGateway.action(command.userId(),
+        new PaymentRequest(command, "http://localhost:8080/api/v1/payment/callback")));
   }
 
 
@@ -28,7 +30,7 @@ public class PaymentGatewayProcessor {
 
     // 사용자에게는 즉시 실패 응답 전달
     ApiResponse<PaymentResponse> fallbackResponse = ApiResponse.success(
-        new PaymentResponse("asa", TransactionStatusResponse.FAILED, "실패"));
+        new PaymentResponse(command.transactionKey(), TransactionStatusResponse.FAILED, "결제가 실패 하였습니다."));
     return CompletableFuture.completedFuture(fallbackResponse);
   }
 }

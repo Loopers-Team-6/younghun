@@ -1,4 +1,6 @@
-package com.loopers.application.payment.gateway;
+package com.loopers.application.payment;
+
+import com.loopers.domain.payment.CardType;
 
 public record PaymentRequest(
     String orderId,

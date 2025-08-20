@@ -1,11 +1,12 @@
-package com.loopers.application.payment.gateway;
+package com.loopers.application.payment;
 
-import com.loopers.application.payment.command.PaymentCommand;
+import com.loopers.domain.payment.CardType;
 import java.math.BigInteger;
 
 public record PaymentGatewayCommand(
     String userId,
     String orderId,
+    String transactionKey,
     CardType cardType,
     String cardNo,
     BigInteger amount) {
@@ -13,6 +14,7 @@ public record PaymentGatewayCommand(
   private PaymentGatewayCommand(PaymentCommand command) {
     this(command.userId(),
         command.orderNumber(),
+        command.transactionKey(),
         command.cardType(),
         command.cardNo(),
         command.payment());

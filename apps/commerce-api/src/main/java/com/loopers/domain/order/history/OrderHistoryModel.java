@@ -7,6 +7,7 @@ import com.loopers.support.error.ErrorType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.math.BigInteger;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,8 @@ public class OrderHistoryModel extends BaseEntity {
   @Column(nullable = false)
   private String userId;
 
+  private BigInteger usePoint;
+
   @Column(nullable = false, length = 25)
   private String status;
 
@@ -36,6 +39,7 @@ public class OrderHistoryModel extends BaseEntity {
 
   @Builder(builderMethodName = "create")
   public OrderHistoryModel(Long orderId, String orderNumber, String userId, String status, String address,
+                           BigInteger usePoint,
                            String memo) {
 
     if(orderId == null) {

@@ -1,4 +1,4 @@
-package com.loopers.application.order.command;
+package com.loopers.application.order;
 
 public record OrderItemCommands(
     Long productId,
