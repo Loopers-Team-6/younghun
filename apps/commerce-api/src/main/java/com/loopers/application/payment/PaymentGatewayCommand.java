@@ -8,7 +8,6 @@ public record PaymentGatewayCommand(
     String orderId,
     String transactionKey,
     CardType cardType,
-    String cardNo,
     BigInteger amount) {
 
   private PaymentGatewayCommand(PaymentCommand command) {
@@ -16,7 +15,6 @@ public record PaymentGatewayCommand(
         command.orderNumber(),
         command.transactionKey(),
         command.cardType(),
-        command.cardNo(),
         command.payment());
   }
 

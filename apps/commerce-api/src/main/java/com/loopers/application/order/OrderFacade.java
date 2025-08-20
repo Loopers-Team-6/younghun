@@ -10,14 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderFacade {
   private final OrderProcessor orderProcessor;
   private final OrderHistoryHandler orderHistoryHandler;
-  private final PointValidator pointValidator;
 
   // 주문 생성
   @Transactional
   public OrderCreateInfo create(OrderCreateCommand command) {
     //주문서를 만들고
     OrderModel orderModel = orderProcessor.create(command);
-    pointValidator.usePointCheck(command.userId(), command.usePoint());
 
     //히스토리 저장
     orderHistoryHandler.create(orderModel);

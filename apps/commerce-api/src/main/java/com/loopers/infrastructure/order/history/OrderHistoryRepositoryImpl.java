@@ -20,7 +20,6 @@ public class OrderHistoryRepositoryImpl implements OrderHistoryRepository {
         .address(model.getAddress())
         .userId(model.getUserId())
         .status(model.getStatus().name())
-        .usePoint(model.getUsePoint())
         .memo(model.getMemo())
         .build();
 

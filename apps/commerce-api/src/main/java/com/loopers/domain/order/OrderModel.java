@@ -43,7 +43,6 @@ public class OrderModel extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private OrderStatus status;
 
-  private BigInteger usePoint;
 
   @Column(columnDefinition = "TEXT")
   private String memo;
@@ -51,7 +50,6 @@ public class OrderModel extends BaseEntity {
 
   @Builder(builderMethodName = "create")
   public OrderModel(String userId, String address,
-                    BigInteger usePoint,
                     String memo) {
 
     if (userId == null) {
@@ -67,7 +65,6 @@ public class OrderModel extends BaseEntity {
     this.orderItems = new OrderItems();
     this.totalPrice = BigInteger.ZERO;
     this.address = address;
-    this.usePoint = usePoint;
     this.status = OrderStatus.ORDER;
     this.memo = memo;
   }

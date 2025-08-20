@@ -84,7 +84,6 @@ class PaymentServiceIntegrationTest {
     OrderCreateCommand command =
         new OrderCreateCommand(userId,
             "서울시 송파구",
-            BigInteger.valueOf(500),
             orderItemModels, "메모..");
 
     pointRepository.save(new PointModel(userId, BigInteger.valueOf(50000000)));
@@ -116,7 +115,7 @@ class PaymentServiceIntegrationTest {
     BigInteger totalPrice = BigInteger.valueOf(500);
     CardType cardType = CardType.KB;
     String cardNo = "1234-1234-1234-1234";
-    PaymentCommand command = new PaymentCommand(userId, orderNumber, transactionId, cardType, cardNo, totalPrice, "shot");
+    PaymentCommand command = new PaymentCommand(userId, orderNumber, transactionId, cardType, totalPrice, "shot");
     //when
     PaymentInfo payment = paymentFacade.payment(command);
     PointModel currentPoint = pointJpaRepository.findByUserId(userId).get();
@@ -134,8 +133,7 @@ class PaymentServiceIntegrationTest {
     StockModel afterStock = stockJpaRepository.findByProductId(1L).get();
     pointFacade.charge(userId, BigInteger.valueOf(500000));
     CardType cardType = CardType.KB;
-    String cardNo = "1234-1234-1234-1234";
-    PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), transactionId, cardType, cardNo, orderCreateInfo.totalPrice(), "shot");
+    PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), transactionId, cardType, orderCreateInfo.totalPrice(), "shot");
     //when
     //결제시
     paymentFacade.payment(command);
@@ -175,7 +173,6 @@ class PaymentServiceIntegrationTest {
           transactionId,
           orderNumber,
           cardType,
-          cardNo,
           BigInteger.valueOf(30000),
           "설명"
       );
@@ -224,7 +221,6 @@ class PaymentServiceIntegrationTest {
           transactionId,
           orderNumber,
           cardType,
-          cardNo,
           BigInteger.valueOf(30000),
           "설명"
       );
