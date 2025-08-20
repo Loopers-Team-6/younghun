@@ -29,12 +29,12 @@ public class PaymentFacade {
     OrderModel orderModel = orderRepository.ofOrderNumber(orderNumber);
 
     // 포인트 감소
-    pointUseHandler.use(command.userId(), orderModel.getUsePoint());
+    pointUseHandler.use(command.userId(), command.payment());
 
     // 결제 처리
     PaymentModel payment = paymentProcessor.create(new PaymentProcessorVo(
         command.userId(), orderNumber, command.description(),
-        orderModel.getUsePoint().add(command.payment()),
+        command.payment(),
         orderModel.getTotalPrice()
     ));
 
@@ -46,7 +46,10 @@ public class PaymentFacade {
     }
 
     // PG사 요청
-    gatewayProcessor.send(PaymentGatewayCommand.of(command));
+    try {
+      gatewayProcessor.send(PaymentGatewayCommand.of(command));
+    } catch (Exception ignore) {
+    }
 
     // 주문 완료
     orderModel.done();

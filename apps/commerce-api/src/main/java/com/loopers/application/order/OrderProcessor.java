@@ -41,7 +41,6 @@ public class OrderProcessor {
     OrderModel orderModel = orderRepository.save(OrderModel.create()
         .userId(command.userId())
         .address(command.address())
-        .usePoint(command.usePoint())
         .memo(command.memo())
         .build());
 

@@ -1,16 +1,58 @@
 package com.loopers.interfaces.api.payment;
 
+import com.loopers.application.payment.PaymentCommand;
+import com.loopers.application.payment.PaymentInfo;
 import com.loopers.application.payment.callback.PaymentCallBackCommand;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigInteger;
 
 public class PaymentV1Dto {
 
-  /**
-   * val transactionKey: String, val orderId: String, val cardType: CardType, val cardNo: String, val amount: Long, val status:
-   * TransactionStatus, val reason: String?,
-   */
+  public record CreateResponse(
+      String userId,
+      String orderNumber,
+      BigInteger orderPrice, // 주문 금액
+      BigInteger paymentPrice, //결제 금액
+      String description
+  ) {
 
-  record Callback(
+    public CreateResponse(PaymentInfo payment) {
+      this(payment.userId(),
+          payment.orderNumber(),
+          payment.orderPrice(),
+          payment.paymentPrice(),
+          payment.description());
+    }
+  }
+
+  public record Create(
+      @NotNull
+      String orderNumber,
+
+      @NotNull
+      // 어떤 방법으로 결제 할지?
+      String transactionKey,
+      @NotNull
+      CardType cardType,
+
+      @NotNull
+      BigInteger payment,
+      String description
+
+  ) {
+    public PaymentCommand toCommand(String userId) {
+      return new PaymentCommand(
+          userId,
+          orderNumber,
+          transactionKey,
+          cardType.name(),
+          payment,
+          description
+      );
+    }
+  }
+
+  public record Callback(
       @NotNull
       String transactionKey,
       @NotNull
@@ -37,6 +79,7 @@ public class PaymentV1Dto {
           reason
       );
     }
+
   }
 
   enum CardType {

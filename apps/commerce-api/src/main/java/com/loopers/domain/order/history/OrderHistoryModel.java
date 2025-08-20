@@ -26,8 +26,6 @@ public class OrderHistoryModel extends BaseEntity {
   @Column(nullable = false)
   private String userId;
 
-  private BigInteger usePoint;
-
   @Column(nullable = false, length = 25)
   private String status;
 
