@@ -1,6 +1,7 @@
 package com.loopers.domain.payment;
 
 import com.loopers.domain.BaseEntity;
+import com.loopers.domain.payment.paymentHistory.PaymentHistoryModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -63,5 +64,18 @@ public class PaymentModel extends BaseEntity {
 
   public void changeStatus(String status) {
     this.status = PaymentStatus.valueOf(status);
+  }
+
+  public PaymentHistoryModel asHistory(String historyReason) {
+    return PaymentHistoryModel.builder()
+        .paymentId(getId())
+        .userId(userId)
+        .orderNumber(orderNumber)
+        .orderAmount(orderAmount)
+        .paymentAmount(paymentAmount)
+        .paymentStatus(status.name())
+        .description(description)
+        .reason(historyReason)
+        .build();
   }
 }
