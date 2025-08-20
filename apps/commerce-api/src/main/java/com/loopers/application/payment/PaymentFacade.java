@@ -5,7 +5,6 @@ import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentModel;
-import com.loopers.domain.payment.PaymentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PaymentFacade {
-  private final PaymentRepository paymentRepository;
+
+  private final PaymentProcessor paymentHandler;
   private final OrderRepository orderRepository;
   private final PointUseHandler pointUseHandler;
   private final StockProcessor stockProcessor;
@@ -29,13 +29,12 @@ public class PaymentFacade {
     pointUseHandler.use(command.userId(), orderModel.getUsePoint());
 
     // 결제 처리
-    PaymentModel payment = paymentRepository.save(PaymentModel.create()
-        .userId(command.userId())
-        .orderNumber(orderNumber)
-        .description(command.description())
-        .orderAmount(orderModel.getUsePoint().add(command.payment()))
-        .paymentAmount(orderModel.getTotalPrice())
-        .build());
+
+    PaymentModel payment = paymentHandler.create(new PaymentProcessorVo(
+        command.userId(), orderNumber, command.description(),
+        orderModel.getUsePoint().add(command.payment()),
+        orderModel.getTotalPrice()
+    ));
 
     // 재고 차감
     for (OrderItemModel orderItem : orderModel.getOrderItems()) {

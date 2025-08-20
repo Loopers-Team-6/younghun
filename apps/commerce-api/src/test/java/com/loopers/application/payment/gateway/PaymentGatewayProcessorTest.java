@@ -1,15 +1,14 @@
 package com.loopers.application.payment.gateway;
 
-import com.loopers.domain.payment.CardType;
 import com.loopers.application.payment.PaymentGatewayCommand;
 import com.loopers.application.payment.PaymentGatewayProcessor;
 import com.loopers.application.payment.PaymentRequest;
 import com.loopers.application.payment.PaymentResponse;
-import com.loopers.domain.payment.TransactionStatusResponse;
+import com.loopers.domain.payment.CardType;
 import com.loopers.domain.payment.PaymentGateway;
+import com.loopers.domain.payment.TransactionStatusResponse;
 import com.loopers.interfaces.api.ApiResponse;
 import java.math.BigInteger;
-import java.util.concurrent.CompletableFuture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
