@@ -112,10 +112,11 @@ class PaymentServiceIntegrationTest {
     //given
     String orderNumber = orderCreateInfo.orderNumber();
     PointModel afterPoint = pointJpaRepository.findByUserId(userId).get();
+    String transactionId = "transactionId";
     BigInteger totalPrice = BigInteger.valueOf(500);
     CardType cardType = CardType.KB;
     String cardNo = "1234-1234-1234-1234";
-    PaymentCommand command = new PaymentCommand(userId, orderNumber, cardType, cardNo, totalPrice, "shot");
+    PaymentCommand command = new PaymentCommand(userId, orderNumber, transactionId, cardType, cardNo, totalPrice, "shot");
     //when
     PaymentInfo payment = paymentFacade.payment(command);
     PointModel currentPoint = pointJpaRepository.findByUserId(userId).get();
@@ -129,11 +130,12 @@ class PaymentServiceIntegrationTest {
   @Test
   void returnDecreasedStockQuantity_whenPaymentCreated() {
     //given
+    String transactionId = "transactionId";
     StockModel afterStock = stockJpaRepository.findByProductId(1L).get();
     pointFacade.charge(userId, BigInteger.valueOf(500000));
     CardType cardType = CardType.KB;
     String cardNo = "1234-1234-1234-1234";
-    PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), cardType, cardNo, orderCreateInfo.totalPrice(), "shot");
+    PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), transactionId, cardType, cardNo, orderCreateInfo.totalPrice(), "shot");
     //when
     //결제시
     paymentFacade.payment(command);
@@ -151,6 +153,7 @@ class PaymentServiceIntegrationTest {
     void shouldRollbackPayment_whenPointIsInsufficient() {
       //given
       String orderNumber = orderCreateInfo.orderNumber();
+      String transactionId = "transactionId";
       List<Long> orderProducts = orderCreateInfo.items()
           .stream().map(ItemInfos::productId).toList();
       Map<Long, Long> originProductStock = stockJpaRepository.findAll()
@@ -169,6 +172,7 @@ class PaymentServiceIntegrationTest {
 
       PaymentCommand payment = new PaymentCommand(
           userId,
+          transactionId,
           orderNumber,
           cardType,
           cardNo,
@@ -208,6 +212,7 @@ class PaymentServiceIntegrationTest {
       CardType cardType = CardType.KB;
       String cardNo = "1234-1234-1234-1234";
       String orderNumber = orderCreateInfo.orderNumber();
+      String transactionId = "transactionId";
       // 기존 포인트
       PointModel hasPoint = pointJpaRepository.findByUserId(userId).get();
       // 모든 재고는 재거한다.
@@ -216,6 +221,7 @@ class PaymentServiceIntegrationTest {
 
       PaymentCommand payment = new PaymentCommand(
           userId,
+          transactionId,
           orderNumber,
           cardType,
           cardNo,

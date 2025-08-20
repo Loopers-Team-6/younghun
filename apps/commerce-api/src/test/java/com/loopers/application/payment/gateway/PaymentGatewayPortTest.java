@@ -1,17 +1,23 @@
 package com.loopers.application.payment.gateway;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.loopers.application.payment.PaymentGatewayCommand;
 import com.loopers.application.payment.PaymentGatewayPort;
 import com.loopers.application.payment.PaymentRequest;
 import com.loopers.application.payment.PaymentResponse;
 import com.loopers.domain.payment.CardType;
 import com.loopers.domain.payment.PaymentGateway;
+import com.loopers.domain.payment.PaymentModel;
+import com.loopers.domain.payment.PaymentStatus;
 import com.loopers.domain.payment.TransactionStatusResponse;
+import com.loopers.infrastructure.payment.PaymentJpaRepository;
 import com.loopers.interfaces.api.ApiResponse;
 import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -20,6 +26,10 @@ class PaymentGatewayPortTest {
 
   @MockitoBean
   private PaymentGatewayPort paymentGatewayPort;
+
+
+  @Autowired
+  private PaymentJpaRepository repository;
 
   private PaymentGateway sucessPaymentGateway;
   private PaymentGateway failPaymentGateway;
@@ -47,6 +57,7 @@ class PaymentGatewayPortTest {
     ApiResponse<PaymentResponse> callback = sucessPaymentGateway.action(userId, new PaymentRequest(orderId, cardType, cardNo, amount.longValue(), "callback"));
     //when
     paymentGatewayPort.send(command);
+    PaymentModel paymentModel = repository.findByOrderNumber(orderId).get();
     //then
   }
 
