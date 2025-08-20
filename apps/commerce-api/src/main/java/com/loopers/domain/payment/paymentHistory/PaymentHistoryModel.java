@@ -1,8 +1,11 @@
 package com.loopers.domain.payment.paymentHistory;
 
 import com.loopers.domain.BaseEntity;
+import com.loopers.domain.payment.PaymentTool;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
 import lombok.AccessLevel;
@@ -30,6 +33,10 @@ public class PaymentHistoryModel extends BaseEntity {
 
   @Column(columnDefinition = "TEXT", nullable = false)
   private String description;
+
+
+  @Enumerated(EnumType.STRING)
+  private PaymentTool paymentTool;
 
   @Column(nullable = false)
   private BigInteger paymentAmount;

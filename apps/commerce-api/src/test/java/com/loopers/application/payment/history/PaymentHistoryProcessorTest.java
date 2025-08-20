@@ -1,7 +1,9 @@
 package com.loopers.application.payment.history;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.loopers.application.payment.PaymentHistoryProcessor;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.paymentHistory.PaymentHistoryModel;
 import com.loopers.infrastructure.payment.PaymentJpaRepository;

@@ -1,12 +1,8 @@
 package com.loopers.application.payment;
 
 
-import com.loopers.application.payment.callback.PaymentCallBackCommand;
-import com.loopers.application.payment.history.PaymentHistoryProcessor;
-import com.loopers.domain.order.OrderModel;
-import com.loopers.domain.order.OrderRepository;
-import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentModel;
+import com.loopers.domain.payment.PaymentTool;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,44 +13,12 @@ public class PaymentFacade {
 
   private final PaymentProcessor paymentProcessor;
   private final PaymentHistoryProcessor paymentHistoryProcessor;
-  private final OrderRepository orderRepository;
-  private final PointUseHandler pointUseHandler;
-  private final StockProcessor stockProcessor;
+  private final PaymentStrategyFactory paymentFactory;
 
-  private final PaymentGatewayPort gatewayProcessor;
-
-  @Transactional
   public PaymentInfo payment(PaymentCommand command) {
-    String orderNumber = command.orderNumber();
-    OrderModel orderModel = orderRepository.ofOrderNumber(orderNumber);
 
-    // 포인트 감소
-    pointUseHandler.use(command.userId(), command.payment());
-
-    // 결제 처리
-    PaymentModel payment = paymentProcessor.create(new PaymentProcessorVo(
-        command.userId(), orderNumber, command.description(),
-        command.payment(),
-        orderModel.getTotalPrice()
-    ));
-
-    // 재고 차감
-    for (OrderItemModel orderItem : orderModel.getOrderItems()) {
-      Long productId = orderItem.getProductId();
-      Long quantity = orderItem.getQuantity();
-      stockProcessor.decreaseStock(productId, quantity);
-    }
-
-    // PG사 요청
-    try {
-      gatewayProcessor.send(PaymentGatewayCommand.of(command));
-    } catch (Exception ignore) {
-    }
-
-    // 주문 완료
-    orderModel.done();
-
-    paymentHistoryProcessor.add(payment, null);
+    PaymentStrategy strategy = paymentFactory.getStrategy(PaymentTool.valueOf(command.tool()));
+    PaymentModel payment = strategy.process(command);
 
     return PaymentInfo.builder()
         .userId(payment.getUserId())

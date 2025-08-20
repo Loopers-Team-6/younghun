@@ -1,8 +1,8 @@
 package com.loopers.interfaces.api.payment;
 
+import com.loopers.application.payment.PaymentCallBackCommand;
 import com.loopers.application.payment.PaymentCommand;
 import com.loopers.application.payment.PaymentInfo;
-import com.loopers.application.payment.callback.PaymentCallBackCommand;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigInteger;
 
@@ -29,11 +29,9 @@ public class PaymentV1Dto {
       @NotNull
       String orderNumber,
 
-      @NotNull
-      // 어떤 방법으로 결제 할지?
       String transactionKey,
       @NotNull
-      CardType cardType,
+      PaymentTool paymentTool,
 
       @NotNull
       BigInteger payment,
@@ -45,7 +43,7 @@ public class PaymentV1Dto {
           userId,
           orderNumber,
           transactionKey,
-          cardType.name(),
+          paymentTool.name(),
           payment,
           description
       );
@@ -58,10 +56,6 @@ public class PaymentV1Dto {
       @NotNull
       String orderId,
       @NotNull
-      CardType cardType,
-      @NotNull
-      String cardNo,
-      @NotNull
       Long amount,
       @NotNull
       TransactionStatus status,
@@ -72,8 +66,6 @@ public class PaymentV1Dto {
       return new PaymentCallBackCommand(
           transactionKey,
           orderId,
-          cardType.name(),
-          cardNo,
           amount,
           status.name(),
           reason
@@ -82,11 +74,12 @@ public class PaymentV1Dto {
 
   }
 
-  enum CardType {
-    SAMSUNG,
-    KB,
-    HYUNDAI,
+  enum PaymentTool {
+    CARD,
+    POINT,
   }
+
+
 
   enum TransactionStatus {
     PENDING, FAIL, SUCCESS
