@@ -6,9 +6,7 @@ import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
-import com.loopers.interfaces.api.ApiResponse;
 import jakarta.transaction.Transactional;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +28,6 @@ public class PaymentFacade {
     // 포인트 감소
     pointUseHandler.use(command.userId(), orderModel.getUsePoint());
 
-    CompletableFuture<ApiResponse<PaymentResponse>> send = gatewayProcessor.send(PaymentGatewayCommand.of(command));
     // 결제 처리
     PaymentModel payment = paymentRepository.save(PaymentModel.create()
         .userId(command.userId())
@@ -41,12 +38,14 @@ public class PaymentFacade {
         .build());
 
     // 재고 차감
-
     for (OrderItemModel orderItem : orderModel.getOrderItems()) {
       Long productId = orderItem.getProductId();
       Long quantity = orderItem.getQuantity();
       stockProcessor.decreaseStock(productId, quantity);
     }
+
+    // PG사 요청
+    gatewayProcessor.send(PaymentGatewayCommand.of(command));
 
     // 주문 완료
     orderModel.done();
