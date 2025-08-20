@@ -60,4 +60,8 @@ public class PaymentModel extends BaseEntity {
       this.paymentAmount = BigInteger.ZERO;
     }
   }
+
+  public void changeStatus(String status) {
+    this.status = PaymentStatus.valueOf(status);
+  }
 }

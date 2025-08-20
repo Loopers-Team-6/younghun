@@ -1,6 +1,7 @@
 package com.loopers.application.payment;
 
 
+import com.loopers.application.payment.callback.PaymentCallBackCommand;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PaymentFacade {
 
-  private final PaymentProcessor paymentHandler;
+  private final PaymentProcessor paymentProcessor;
   private final OrderRepository orderRepository;
   private final PointUseHandler pointUseHandler;
   private final StockProcessor stockProcessor;
@@ -30,7 +31,7 @@ public class PaymentFacade {
 
     // 결제 처리
 
-    PaymentModel payment = paymentHandler.create(new PaymentProcessorVo(
+    PaymentModel payment = paymentProcessor.create(new PaymentProcessorVo(
         command.userId(), orderNumber, command.description(),
         orderModel.getUsePoint().add(command.payment()),
         orderModel.getTotalPrice()
@@ -56,5 +57,11 @@ public class PaymentFacade {
         .paymentPrice(payment.getPaymentAmount())
         .description(payment.getDescription())
         .build();
+  }
+
+  @Transactional
+  public void callback(PaymentCallBackCommand command) {
+    PaymentModel paymentModel = paymentProcessor.get(command.orderId());
+    paymentModel.changeStatus(command.paymentStatus());
   }
 }
