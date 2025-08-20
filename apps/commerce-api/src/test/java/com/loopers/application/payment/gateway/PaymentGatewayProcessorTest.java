@@ -1,11 +1,11 @@
 package com.loopers.application.payment.gateway;
 
-import com.loopers.application.payment.CardType;
+import com.loopers.domain.payment.CardType;
 import com.loopers.application.payment.PaymentGatewayCommand;
 import com.loopers.application.payment.PaymentGatewayProcessor;
 import com.loopers.application.payment.PaymentRequest;
 import com.loopers.application.payment.PaymentResponse;
-import com.loopers.application.payment.TransactionStatusResponse;
+import com.loopers.domain.payment.TransactionStatusResponse;
 import com.loopers.domain.payment.PaymentGateway;
 import com.loopers.interfaces.api.ApiResponse;
 import java.math.BigInteger;
@@ -46,8 +46,7 @@ class PaymentGatewayProcessorTest {
     PaymentGatewayCommand command = new PaymentGatewayCommand(userId, orderId, cardType, cardNo, amount);
      ApiResponse<PaymentResponse> callback = sucessPaymentGateway.action(userId, new PaymentRequest(orderId, cardType, cardNo, amount.longValue(), "callback"));
     //when
-
-    CompletableFuture<ApiResponse<PaymentResponse>> response = paymentGatewayProcessor.send(command);
+    paymentGatewayProcessor.send(command);
     //then
   }
 
@@ -63,7 +62,7 @@ class PaymentGatewayProcessorTest {
     PaymentGatewayCommand command = new PaymentGatewayCommand(userId, orderId, cardType, cardNo, amount);
     ApiResponse<PaymentResponse> callback = failPaymentGateway.action(userId, new PaymentRequest(orderId, cardType, cardNo, amount.longValue(), "callback"));
     //when
-    CompletableFuture<ApiResponse<PaymentResponse>> response = paymentGatewayProcessor.send(command);
+    paymentGatewayProcessor.send(command);
     //then
 
   }

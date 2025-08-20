@@ -1,6 +1,7 @@
 package com.loopers.application.payment;
 
 import com.loopers.domain.payment.PaymentGateway;
+import com.loopers.domain.payment.TransactionStatusResponse;
 import com.loopers.interfaces.api.ApiResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
@@ -17,8 +18,8 @@ public class PaymentGatewayProcessor {
 
   @CircuitBreaker(name = "pg-payment", fallbackMethod = "handlePaymentFailure")
   @TimeLimiter(name = "pg-payment")
-  public CompletableFuture<ApiResponse<PaymentResponse>> send(PaymentGatewayCommand command) {
-    return CompletableFuture.supplyAsync(() -> paymentGateway.action(command.userId(),
+  public void send(PaymentGatewayCommand command) {
+    CompletableFuture.supplyAsync(() -> paymentGateway.action(command.userId(),
         new PaymentRequest(command, "http://localhost:8080/payment/callback")));
   }
 

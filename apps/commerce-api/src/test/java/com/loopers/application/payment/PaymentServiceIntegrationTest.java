@@ -11,6 +11,7 @@ import com.loopers.application.order.OrderCreateInfo;
 import com.loopers.application.point.PointFacade;
 import com.loopers.domain.catalog.product.stock.StockModel;
 import com.loopers.domain.catalog.product.stock.StockRepository;
+import com.loopers.domain.payment.CardType;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
 import com.loopers.domain.point.PointModel;

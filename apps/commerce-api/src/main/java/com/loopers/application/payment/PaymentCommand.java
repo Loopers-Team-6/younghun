@@ -1,5 +1,6 @@
 package com.loopers.application.payment;
 
+import com.loopers.domain.payment.CardType;
 import java.math.BigInteger;
 
 public record PaymentCommand(
