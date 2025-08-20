@@ -8,6 +8,7 @@ public record PaymentCommand(
     String orderNumber,
 
     // 어떤 방법으로 결제 할지?
+    String transactionKey,
     CardType cardType,
     String cardNo,
 

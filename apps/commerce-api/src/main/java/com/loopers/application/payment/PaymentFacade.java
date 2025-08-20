@@ -19,7 +19,7 @@ public class PaymentFacade {
   private final PointUseHandler pointUseHandler;
   private final StockProcessor stockProcessor;
 
-  private final PaymentGatewayProcessor gatewayProcessor;
+  private final PaymentGatewayPort gatewayProcessor;
 
   @Transactional
   public PaymentInfo payment(PaymentCommand command) {

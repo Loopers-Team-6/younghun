@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PaymentGatewayProcessor {
+public class PaymentGatewayPort {
   private final PaymentGateway paymentGateway;
 
   @CircuitBreaker(name = "pg-payment", fallbackMethod = "handlePaymentFailure")
   @TimeLimiter(name = "pg-payment")
   public void send(PaymentGatewayCommand command) {
     CompletableFuture.supplyAsync(() -> paymentGateway.action(command.userId(),
-        new PaymentRequest(command, "http://localhost:8080/payment/callback")));
+        new PaymentRequest(command, "http://localhost:8080/api/v1/payment/callback")));
   }
 
 
@@ -30,7 +30,7 @@ public class PaymentGatewayProcessor {
 
     // 사용자에게는 즉시 실패 응답 전달
     ApiResponse<PaymentResponse> fallbackResponse = ApiResponse.success(
-        new PaymentResponse("asa", TransactionStatusResponse.FAILED, "실패"));
+        new PaymentResponse(command.transactionKey(), TransactionStatusResponse.FAILED, "결제가 실패 하였습니다."));
     return CompletableFuture.completedFuture(fallbackResponse);
   }
 }

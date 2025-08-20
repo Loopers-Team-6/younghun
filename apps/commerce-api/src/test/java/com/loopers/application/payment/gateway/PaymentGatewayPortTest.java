@@ -1,7 +1,7 @@
 package com.loopers.application.payment.gateway;
 
 import com.loopers.application.payment.PaymentGatewayCommand;
-import com.loopers.application.payment.PaymentGatewayProcessor;
+import com.loopers.application.payment.PaymentGatewayPort;
 import com.loopers.application.payment.PaymentRequest;
 import com.loopers.application.payment.PaymentResponse;
 import com.loopers.domain.payment.CardType;
@@ -16,10 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @SpringBootTest
-class PaymentGatewayProcessorTest {
+class PaymentGatewayPortTest {
 
   @MockitoBean
-  private PaymentGatewayProcessor paymentGatewayProcessor;
+  private PaymentGatewayPort paymentGatewayPort;
 
   private PaymentGateway sucessPaymentGateway;
   private PaymentGateway failPaymentGateway;
@@ -39,13 +39,14 @@ class PaymentGatewayProcessorTest {
     //given
     String userId = "userId";
     String orderId = "ORD-0001";
+    String transactionId = "test1";
     CardType cardType = CardType.KB;
     String cardNo = "1234";
     BigInteger amount = BigInteger.valueOf(10000);
-    PaymentGatewayCommand command = new PaymentGatewayCommand(userId, orderId, cardType, cardNo, amount);
-     ApiResponse<PaymentResponse> callback = sucessPaymentGateway.action(userId, new PaymentRequest(orderId, cardType, cardNo, amount.longValue(), "callback"));
+    PaymentGatewayCommand command = new PaymentGatewayCommand(userId, orderId, transactionId, cardType, cardNo, amount);
+    ApiResponse<PaymentResponse> callback = sucessPaymentGateway.action(userId, new PaymentRequest(orderId, cardType, cardNo, amount.longValue(), "callback"));
     //when
-    paymentGatewayProcessor.send(command);
+    paymentGatewayPort.send(command);
     //then
   }
 
@@ -55,13 +56,14 @@ class PaymentGatewayProcessorTest {
     //given
     String userId = "userId";
     String orderId = "ORD-0001";
+    String transactionId = "test1";
     CardType cardType = CardType.KB;
     String cardNo = "1234";
     BigInteger amount = BigInteger.valueOf(500);
-    PaymentGatewayCommand command = new PaymentGatewayCommand(userId, orderId, cardType, cardNo, amount);
+    PaymentGatewayCommand command = new PaymentGatewayCommand(userId, orderId, transactionId, cardType, cardNo, amount);
     ApiResponse<PaymentResponse> callback = failPaymentGateway.action(userId, new PaymentRequest(orderId, cardType, cardNo, amount.longValue(), "callback"));
     //when
-    paymentGatewayProcessor.send(command);
+    paymentGatewayPort.send(command);
     //then
 
   }
