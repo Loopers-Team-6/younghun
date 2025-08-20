@@ -1,7 +1,5 @@
 package com.loopers.application.payment.gateway;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.loopers.application.payment.PaymentGatewayCommand;
 import com.loopers.application.payment.PaymentGatewayPort;
 import com.loopers.application.payment.PaymentRequest;
@@ -9,7 +7,6 @@ import com.loopers.application.payment.PaymentResponse;
 import com.loopers.domain.payment.CardType;
 import com.loopers.domain.payment.PaymentGateway;
 import com.loopers.domain.payment.PaymentModel;
-import com.loopers.domain.payment.PaymentStatus;
 import com.loopers.domain.payment.TransactionStatusResponse;
 import com.loopers.infrastructure.payment.PaymentJpaRepository;
 import com.loopers.interfaces.api.ApiResponse;
