@@ -2,6 +2,7 @@ package com.loopers.application.payment;
 
 
 import com.loopers.application.payment.callback.PaymentCallBackCommand;
+import com.loopers.application.payment.history.PaymentHistoryProcessor;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class PaymentFacade {
 
   private final PaymentProcessor paymentProcessor;
+  private final PaymentHistoryProcessor paymentHistoryProcessor;
   private final OrderRepository orderRepository;
   private final PointUseHandler pointUseHandler;
   private final StockProcessor stockProcessor;
@@ -30,7 +32,6 @@ public class PaymentFacade {
     pointUseHandler.use(command.userId(), orderModel.getUsePoint());
 
     // 결제 처리
-
     PaymentModel payment = paymentProcessor.create(new PaymentProcessorVo(
         command.userId(), orderNumber, command.description(),
         orderModel.getUsePoint().add(command.payment()),
@@ -50,6 +51,8 @@ public class PaymentFacade {
     // 주문 완료
     orderModel.done();
 
+    paymentHistoryProcessor.add(payment, null);
+
     return PaymentInfo.builder()
         .userId(payment.getUserId())
         .orderNumber(payment.getOrderNumber())
@@ -63,5 +66,7 @@ public class PaymentFacade {
   public void callback(PaymentCallBackCommand command) {
     PaymentModel paymentModel = paymentProcessor.get(command.orderId());
     paymentModel.changeStatus(command.paymentStatus());
+
+    paymentHistoryProcessor.add(paymentModel, command.reason());
   }
 }
