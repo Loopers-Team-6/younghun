@@ -1,7 +1,5 @@
-package com.loopers.application.order.processor;
+package com.loopers.application.order;
 
-import com.loopers.application.order.command.OrderCreateCommand;
-import com.loopers.application.order.command.OrderItemCommands;
 import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.order.OrderModel;

@@ -1,4 +1,4 @@
-package com.loopers.application.order.info;
+package com.loopers.application.order;
 
 import com.loopers.domain.order.OrderModel;
 import java.math.BigInteger;

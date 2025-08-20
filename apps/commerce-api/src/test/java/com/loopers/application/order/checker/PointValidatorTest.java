@@ -3,6 +3,7 @@ package com.loopers.application.order.checker;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import com.loopers.application.order.PointValidator;
 import com.loopers.domain.point.PointModel;
 import com.loopers.infrastructure.point.PointJpaRepository;
 import com.loopers.support.error.CoreException;

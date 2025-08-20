@@ -1,6 +1,5 @@
-package com.loopers.application.payment.gateway;
+package com.loopers.application.payment;
 
-import com.loopers.application.payment.command.PaymentCommand;
 import java.math.BigInteger;
 
 public record PaymentGatewayCommand(

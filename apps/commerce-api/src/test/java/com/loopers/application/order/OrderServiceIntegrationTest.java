@@ -4,10 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.loopers.application.order.command.OrderCreateCommand;
-import com.loopers.application.order.command.OrderItemCommands;
-import com.loopers.application.order.info.OrderCancelInfo;
-import com.loopers.application.order.info.OrderCreateInfo;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;

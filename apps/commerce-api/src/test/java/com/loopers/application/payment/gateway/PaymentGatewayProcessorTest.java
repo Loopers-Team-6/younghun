@@ -1,14 +1,18 @@
 package com.loopers.application.payment.gateway;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
+import com.loopers.application.payment.CardType;
+import com.loopers.application.payment.PaymentGatewayCommand;
+import com.loopers.application.payment.PaymentGatewayProcessor;
+import com.loopers.application.payment.PaymentRequest;
+import com.loopers.application.payment.PaymentResponse;
+import com.loopers.application.payment.TransactionStatusResponse;
+import com.loopers.domain.payment.PaymentGateway;
 import com.loopers.interfaces.api.ApiResponse;
 import java.math.BigInteger;
 import java.util.concurrent.CompletableFuture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 

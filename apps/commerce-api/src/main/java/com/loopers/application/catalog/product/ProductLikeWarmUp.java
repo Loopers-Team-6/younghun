@@ -1,4 +1,4 @@
-package com.loopers.application.catalog.product.warmup;
+package com.loopers.application.catalog.product;
 
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;

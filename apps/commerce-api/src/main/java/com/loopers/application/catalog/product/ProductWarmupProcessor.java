@@ -1,10 +1,8 @@
-package com.loopers.application.catalog.product.warmup;
+package com.loopers.application.catalog.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.loopers.application.catalog.product.ProductCommand;
-import com.loopers.application.catalog.product.SortOption;
 import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.catalog.product.cache.ProductCacheRepository;

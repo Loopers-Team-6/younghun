@@ -1,4 +1,4 @@
-package com.loopers.application.payment.gateway;
+package com.loopers.application.payment;
 
 public record PaymentRequest(
     String orderId,

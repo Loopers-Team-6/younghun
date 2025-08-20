@@ -1,4 +1,4 @@
-package com.loopers.application.order.command;
+package com.loopers.application.order;
 
 import java.math.BigInteger;
 import java.util.List;

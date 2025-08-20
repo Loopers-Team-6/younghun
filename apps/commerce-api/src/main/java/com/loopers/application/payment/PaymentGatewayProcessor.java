@@ -1,5 +1,6 @@
-package com.loopers.application.payment.gateway;
+package com.loopers.application.payment;
 
+import com.loopers.domain.payment.PaymentGateway;
 import com.loopers.interfaces.api.ApiResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;

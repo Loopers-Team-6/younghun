@@ -1,4 +1,4 @@
-package com.loopers.application.order.checker;
+package com.loopers.application.order;
 
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;
