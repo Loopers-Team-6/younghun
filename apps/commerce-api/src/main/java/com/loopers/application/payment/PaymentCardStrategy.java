@@ -20,15 +20,19 @@ public class PaymentCardStrategy implements PaymentStrategy {
   public PaymentModel process(PaymentCommand command) {
     OrderModel orderModel = orderRepository.ofOrderNumber(command.orderNumber());
 
+
+    // PG사 요청
+    PaymentResponse response = gatewayProcessor.send(PaymentGatewayCommand.of(command));
+
     PaymentModel payment = paymentProcessor.create(new PaymentProcessorVo(
-        command.userId(), command.orderNumber(), command.description(),
+        command.userId(),
+        command.orderNumber(),
+        command.description(),
+        response.transactionKey(),
         getType().name(),
         command.payment(),
         orderModel.getTotalPrice()
     ));
-
-    // PG사 요청
-    gatewayProcessor.send(PaymentGatewayCommand.of(command));
 
     paymentHistoryProcessor.add(payment, "결제 대기중입니다.");
     return payment;

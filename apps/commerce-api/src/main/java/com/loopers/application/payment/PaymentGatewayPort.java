@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 public class PaymentGatewayPort {
   private final PaymentGateway paymentGateway;
 
-  public void send(PaymentGatewayCommand command) {
-
-    paymentGateway.action(command.userId(),
-        new PaymentRequest(command, "http://localhost:8080/api/v1/payment/callback"));
+  public PaymentResponse send(PaymentGatewayCommand command) {
+    return paymentGateway.action(command.userId(),
+            new PaymentRequest(command, "http://localhost:8080/api/v1/payment/callback"))
+        .data();
 
   }
 

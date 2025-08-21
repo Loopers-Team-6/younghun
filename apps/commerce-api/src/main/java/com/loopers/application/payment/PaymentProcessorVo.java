@@ -7,6 +7,7 @@ public record PaymentProcessorVo(
     String userId,
     String orderNumber,
     String description,
+    String transactionKey,
     String paymentTool,
     BigInteger payment,
     BigInteger totalPrice

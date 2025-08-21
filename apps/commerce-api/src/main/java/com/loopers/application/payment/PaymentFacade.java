@@ -31,7 +31,7 @@ public class PaymentFacade {
 
   @Transactional
   public void callback(PaymentCallBackCommand command) {
-    PaymentModel paymentModel = paymentProcessor.get(command.orderId());
+    PaymentModel paymentModel = paymentProcessor.get(command.transactionKey());
     paymentModel.changeStatus(command.paymentStatus());
 
     paymentHistoryProcessor.add(paymentModel, command.reason());

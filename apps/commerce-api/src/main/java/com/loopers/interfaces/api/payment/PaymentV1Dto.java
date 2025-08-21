@@ -3,6 +3,8 @@ package com.loopers.interfaces.api.payment;
 import com.loopers.application.payment.PaymentCallBackCommand;
 import com.loopers.application.payment.PaymentCommand;
 import com.loopers.application.payment.PaymentInfo;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigInteger;
 
@@ -29,24 +31,45 @@ public class PaymentV1Dto {
       @NotNull
       String orderNumber,
 
-      String transactionKey,
       @NotNull
       PaymentTool paymentTool,
-
+      Card cardInfo,
       @NotNull
       BigInteger payment,
       String description
 
   ) {
+
+    public Create {
+      if(PaymentTool.CARD == paymentTool && cardInfo == null) {
+        throw new CoreException(ErrorType.BAD_REQUEST, "결제 타입이 카드인 경우에는 카드 정보를 입력해야 합니다.");
+      }
+
+    }
+
     public PaymentCommand toCommand(String userId) {
       return new PaymentCommand(
           userId,
           orderNumber,
-          transactionKey,
           paymentTool.name(),
+          cardInfo.cardType.name(),
+          cardInfo.cardNo,
           payment,
           description
       );
+    }
+
+    public record Card(
+        CardType cardType,
+        String cardNo
+    ) {
+
+      enum CardType {
+        SAMSUNG,
+        KB,
+        HYUNDAI,
+      }
+
     }
   }
 
@@ -78,7 +101,6 @@ public class PaymentV1Dto {
     CARD,
     POINT,
   }
-
 
 
   enum TransactionStatus {

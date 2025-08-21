@@ -31,6 +31,7 @@ public class PaymentPointStrategy implements PaymentStrategy {
     // 결제 처리
     PaymentModel payment = paymentProcessor.create(new PaymentProcessorVo(
         command.userId(), command.orderNumber(), command.description(),
+        null,
         getType().name(),
         command.payment(),
         orderModel.getTotalPrice()
