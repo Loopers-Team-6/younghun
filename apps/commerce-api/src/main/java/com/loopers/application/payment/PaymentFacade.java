@@ -1,7 +1,10 @@
 package com.loopers.application.payment;
 
 
+import com.loopers.domain.order.OrderModel;
+import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.payment.PaymentModel;
+import com.loopers.domain.payment.PaymentStatus;
 import com.loopers.domain.payment.PaymentTool;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +16,10 @@ public class PaymentFacade {
 
   private final PaymentProcessor paymentProcessor;
   private final PaymentHistoryProcessor paymentHistoryProcessor;
+  private final OrderRepository orderRepository;
   private final PaymentStrategyFactory paymentFactory;
+
+  private final StockProcessor stockProcessor;
 
   public PaymentInfo payment(PaymentCommand command) {
 
@@ -31,9 +37,26 @@ public class PaymentFacade {
 
   @Transactional
   public void callback(PaymentCallBackCommand command) {
+    PaymentStatus paymentStatus = PaymentStatus.valueOf(command.paymentStatus());
     PaymentModel paymentModel = paymentProcessor.get(command.transactionKey());
-    paymentModel.changeStatus(command.paymentStatus());
+    OrderModel orderModel = orderRepository.ofOrderNumber(paymentModel.getOrderNumber());
 
-    paymentHistoryProcessor.add(paymentModel, command.reason());
+    orderModel.paymentCheck();
+
+    // 실패인 경우
+    if (paymentStatus == PaymentStatus.FAILED) {
+      paymentModel.failed();
+      paymentHistoryProcessor.add(paymentModel, command.reason());
+      return;
+    }
+
+    // 성공인 경우
+    // 재고 차감
+    stockProcessor.decreaseStock(orderModel.getOrderItems());
+    orderModel.done();
+    paymentModel.done();
+    paymentHistoryProcessor.add(paymentModel, "결제가 완료되었습니다.");
+
+
   }
 }

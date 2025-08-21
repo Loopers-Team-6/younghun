@@ -2,7 +2,6 @@ package com.loopers.application.payment;
 
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
-import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentTool;
 import jakarta.transaction.Transactional;
@@ -38,16 +37,12 @@ public class PaymentPointStrategy implements PaymentStrategy {
     ));
 
     // 재고 차감
-    for (OrderItemModel orderItem : orderModel.getOrderItems()) {
-      Long productId = orderItem.getProductId();
-      Long quantity = orderItem.getQuantity();
-      stockProcessor.decreaseStock(productId, quantity);
-    }
+    stockProcessor.decreaseStock(orderModel.getOrderItems());
 
     orderModel.done();
     payment.done();
 
-    paymentHistoryProcessor.add(payment, null);
+    paymentHistoryProcessor.add(payment, "결제가 완료되었습니다.");
 
     return payment;
   }

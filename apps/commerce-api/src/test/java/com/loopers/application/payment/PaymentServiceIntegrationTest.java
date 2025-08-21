@@ -113,7 +113,7 @@ class PaymentServiceIntegrationTest {
     PointModel afterPoint = pointJpaRepository.findByUserId(userId).get();
     BigInteger totalPrice = BigInteger.valueOf(500);
     PaymentTool paymentTool = PaymentTool.POINT;
-    PaymentCommand command = new PaymentCommand(userId, orderNumber, paymentTool.name(), totalPrice, "shot");
+    PaymentCommand command = new PaymentCommand(userId, orderNumber, paymentTool.name(), userId, totalPrice, "shot");
     //when
     PaymentInfo payment = paymentFacade.payment(command);
     PointModel currentPoint = pointJpaRepository.findByUserId(userId).get();
@@ -130,7 +130,7 @@ class PaymentServiceIntegrationTest {
     StockModel afterStock = stockJpaRepository.findByProductId(1L).get();
     pointFacade.charge(userId, BigInteger.valueOf(500000));
     String paymentTool = "POINT";
-    PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), paymentTool, orderCreateInfo.totalPrice(), "shot");
+    PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), userId, paymentTool, orderCreateInfo.totalPrice(), "shot");
     //when
     //결제시
     paymentFacade.payment(command);
@@ -166,6 +166,7 @@ class PaymentServiceIntegrationTest {
       PaymentCommand payment = new PaymentCommand(
           userId,
           orderNumber,
+          userId,
           paymentTool.name(),
           BigInteger.valueOf(30000),
           "설명"
@@ -211,6 +212,7 @@ class PaymentServiceIntegrationTest {
       PaymentCommand payment = new PaymentCommand(
           userId,
           orderNumber,
+          userId,
           paymentTool.name(),
           BigInteger.valueOf(30000),
           "설명"

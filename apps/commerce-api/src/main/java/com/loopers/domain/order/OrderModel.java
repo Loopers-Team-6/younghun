@@ -104,5 +104,11 @@ public class OrderModel extends BaseEntity {
   public void forceChange(String state) {
     this.status = OrderStatus.valueOf(state);
   }
+
+  public void paymentCheck() {
+    if(status == OrderStatus.DONE) {
+      throw new IllegalArgumentException("이미 결제가 완료된 주문입니다.");
+    }
+  }
 }
 

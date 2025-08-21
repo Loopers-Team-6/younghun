@@ -1,9 +1,12 @@
 package com.loopers.application.payment;
 
 import com.loopers.domain.payment.PaymentGateway;
-import com.loopers.interfaces.api.ApiResponse;
+import com.loopers.domain.payment.TransactionStatusResponse;
+import com.loopers.infrastructure.payment.OrderResponse;
+import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
-import java.util.concurrent.CompletableFuture;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,17 +17,41 @@ import org.springframework.stereotype.Component;
 public class PaymentGatewayPort {
   private final PaymentGateway paymentGateway;
 
+  @Retry(name = "pg-payment", fallbackMethod = "handlePaymentFailure")
+  @CircuitBreaker(name = "pg-payment", fallbackMethod = "handlePaymentFailure")
   public PaymentResponse send(PaymentGatewayCommand command) {
-    return paymentGateway.action(command.userId(),
+    return paymentGateway.send(command.userId(),
             new PaymentRequest(command, "http://localhost:8080/api/v1/payment/callback"))
         .data();
 
   }
 
-
-  private CompletableFuture<ApiResponse<Object>> handlePaymentFailure(
-      PaymentGatewayCommand command, Throwable ex) {
-    return CompletableFuture.completedFuture(
-        ApiResponse.fail(ErrorType.INTERNAL_ERROR.getCode(), "PG 호출 실패: " + ex.getMessage()));
+  @Retry(name = "get-payment", fallbackMethod = "handlePaymentGetFailure")
+  @CircuitBreaker(name = "get-payment", fallbackMethod = "handlePaymentGetFailure")
+  public OrderResponse get(String orderId) {
+    return paymentGateway.get(orderId).data();
   }
+
+  @Retry(name = "get-payment", fallbackMethod = "handlePaymentFailureByOrder")
+  @CircuitBreaker(name = "get-payment", fallbackMethod = "handlePaymentFailureByOrder")
+  public OrderResponse get(String userId, String orderNumber) {
+    return paymentGateway.get(userId, orderNumber).data();
+  }
+
+
+  private PaymentResponse handlePaymentFailure(
+      PaymentGatewayCommand command, Throwable ex) {
+    return new PaymentResponse(null, TransactionStatusResponse.FAILED, ex.getMessage());
+  }
+
+  private OrderResponse handlePaymentGetFailure(Throwable ex) {
+    throw new CoreException(ErrorType.INTERNAL_ERROR, ex.getMessage());
+  }
+
+  private OrderResponse handlePaymentFailureByOrder(
+      String userId, String orderNumber, Throwable ex) {
+    throw new CoreException(ErrorType.INTERNAL_ERROR, ex.getMessage());
+  }
+
+
 }

@@ -10,7 +10,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${project.properties["springDocOpenApiVersion"]}")
+
     implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
+    implementation("io.github.resilience4j:resilience4j-circuitbreaker")
 
     // querydsl
     annotationProcessor("com.querydsl:querydsl-apt::jakarta")

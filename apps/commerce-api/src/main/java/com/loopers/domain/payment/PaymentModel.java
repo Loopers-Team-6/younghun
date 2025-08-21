@@ -37,6 +37,7 @@ public class PaymentModel extends BaseEntity {
 
   //상태값
   @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 20)
   private PaymentStatus status;
 
   @Enumerated(EnumType.STRING)
@@ -90,7 +91,12 @@ public class PaymentModel extends BaseEntity {
         .build();
   }
 
+  public void failed() {
+    this.status = PaymentStatus.FAILED;
+  }
+
   public void done() {
     this.status = PaymentStatus.SUCCESS;
   }
+
 }
