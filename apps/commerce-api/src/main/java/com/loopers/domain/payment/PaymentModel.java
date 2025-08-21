@@ -57,8 +57,8 @@ public class PaymentModel extends BaseEntity {
     this.orderNumber = orderNumber;
     this.userId = userId;
     this.paymentAmount = paymentAmount;
-    this.status = PaymentStatus.PENDING;
     this.paymentTool = PaymentTool.valueOf(paymentTool);
+    this.status = PaymentStatus.PENDING;
     this.orderAmount = orderAmount;
     this.description = description;
 

@@ -6,8 +6,8 @@ import java.math.BigInteger;
 public record PaymentProcessorVo(
     String userId,
     String orderNumber,
-    String paymentTool,
     String description,
+    String paymentTool,
     BigInteger payment,
     BigInteger totalPrice
 ) {

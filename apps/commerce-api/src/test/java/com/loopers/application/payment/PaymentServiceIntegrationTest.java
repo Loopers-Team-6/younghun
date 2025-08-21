@@ -131,7 +131,7 @@ class PaymentServiceIntegrationTest {
     String transactionId = "transactionId";
     StockModel afterStock = stockJpaRepository.findByProductId(1L).get();
     pointFacade.charge(userId, BigInteger.valueOf(500000));
-    PaymentTool paymentTool = PaymentTool.POINT;
+    String paymentTool = "POINT";
     PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), transactionId, paymentTool, orderCreateInfo.totalPrice(), "shot");
     //when
     //결제시

@@ -17,6 +17,7 @@ public class PaymentProcessor {
         .userId(vo.userId())
         .orderNumber(vo.orderNumber())
         .description(vo.description())
+        .paymentTool(vo.paymentTool())
         .orderAmount(vo.payment())
         .paymentAmount(vo.totalPrice())
         .build());
