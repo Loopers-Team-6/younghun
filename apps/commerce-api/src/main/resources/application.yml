@@ -53,17 +53,6 @@ resilience4j:
         sliding-window-type: time_based
         record-exceptions:
           - java.lang.Throwable
-
-      get-payment_by_order:
-        sliding-window-size: 20
-        failure-rate-threshold: 30
-        wait-duration-in-open-state: 5s
-        permitted-number-of-calls-in-half-open-state: 5
-        slow-call-duration-threshold: 2s
-        slow-call-rate-threshold: 50
-        sliding-window-type: time_based
-        record-exceptions:
-          - java.lang.Throwable
   retry:
     instances:
       pg-payment:
