@@ -45,7 +45,7 @@ resilience4j.timelimiter:
   instances:
     # 'pg-payment' 라는 이름의 타임아웃 설정
     pg-payment:
-      timeoutDuration: 2s              # PG 호출은 2초 안에 응답이 와야 한다
+      timeoutDuration: 10s              # PG 호출은 2초 안에 응답이 와야 한다
 
 ---
 spring:

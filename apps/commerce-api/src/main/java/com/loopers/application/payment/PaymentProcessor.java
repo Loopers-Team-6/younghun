@@ -16,14 +16,16 @@ public class PaymentProcessor {
     return paymentRepository.save(PaymentModel.create()
         .userId(vo.userId())
         .orderNumber(vo.orderNumber())
+        .transactionId(vo.transactionKey())
         .description(vo.description())
+        .paymentTool(vo.paymentTool())
         .orderAmount(vo.payment())
         .paymentAmount(vo.totalPrice())
         .build());
 
   }
 
-  public PaymentModel get(String orderNumber) {
-    return paymentRepository.get(orderNumber).orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "해당하는 결제는 존재하지 않습니다."));
+  public PaymentModel get(String transactionId) {
+    return paymentRepository.get(transactionId).orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "해당하는 결제는 존재하지 않습니다."));
   }
 }

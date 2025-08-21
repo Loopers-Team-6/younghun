@@ -1,8 +1,10 @@
 package com.loopers.interfaces.api.payment;
 
+import com.loopers.application.payment.PaymentCallBackCommand;
 import com.loopers.application.payment.PaymentCommand;
 import com.loopers.application.payment.PaymentInfo;
-import com.loopers.application.payment.callback.PaymentCallBackCommand;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigInteger;
 
@@ -30,25 +32,44 @@ public class PaymentV1Dto {
       String orderNumber,
 
       @NotNull
-      // 어떤 방법으로 결제 할지?
-      String transactionKey,
-      @NotNull
-      CardType cardType,
-
+      PaymentTool paymentTool,
+      Card cardInfo,
       @NotNull
       BigInteger payment,
       String description
 
   ) {
+
+    public Create {
+      if(PaymentTool.CARD == paymentTool && cardInfo == null) {
+        throw new CoreException(ErrorType.BAD_REQUEST, "결제 타입이 카드인 경우에는 카드 정보를 입력해야 합니다.");
+      }
+
+    }
+
     public PaymentCommand toCommand(String userId) {
       return new PaymentCommand(
           userId,
           orderNumber,
-          transactionKey,
-          cardType.name(),
+          paymentTool.name(),
+          cardInfo.cardType.name(),
+          cardInfo.cardNo,
           payment,
           description
       );
+    }
+
+    public record Card(
+        CardType cardType,
+        String cardNo
+    ) {
+
+      enum CardType {
+        SAMSUNG,
+        KB,
+        HYUNDAI,
+      }
+
     }
   }
 
@@ -57,10 +78,6 @@ public class PaymentV1Dto {
       String transactionKey,
       @NotNull
       String orderId,
-      @NotNull
-      CardType cardType,
-      @NotNull
-      String cardNo,
       @NotNull
       Long amount,
       @NotNull
@@ -72,8 +89,6 @@ public class PaymentV1Dto {
       return new PaymentCallBackCommand(
           transactionKey,
           orderId,
-          cardType.name(),
-          cardNo,
           amount,
           status.name(),
           reason
@@ -82,11 +97,11 @@ public class PaymentV1Dto {
 
   }
 
-  enum CardType {
-    SAMSUNG,
-    KB,
-    HYUNDAI,
+  enum PaymentTool {
+    CARD,
+    POINT,
   }
+
 
   enum TransactionStatus {
     PENDING, FAIL, SUCCESS

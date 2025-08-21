@@ -23,6 +23,9 @@ public class PaymentModel extends BaseEntity {
   @Column(nullable = false, length = 25)
   private String orderNumber;
 
+
+  private String transactionId;
+
   @Column(nullable = false, length = 25)
   private String userId;
 
@@ -36,11 +39,16 @@ public class PaymentModel extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private PaymentStatus status;
 
+  @Enumerated(EnumType.STRING)
+  private PaymentTool paymentTool;
+
   @Column(columnDefinition = "TEXT")
   private String description;
 
   @Builder(builderMethodName = "create")
   public PaymentModel(String orderNumber, String userId, BigInteger paymentAmount,
+                      String paymentTool,
+                      String transactionId,
                       BigInteger orderAmount, String description) {
     if (orderNumber == null) {
       throw new NoSuchElementException("결제 정보에는 주문 번호가 존재해야합니다.");
@@ -53,6 +61,8 @@ public class PaymentModel extends BaseEntity {
     this.orderNumber = orderNumber;
     this.userId = userId;
     this.paymentAmount = paymentAmount;
+    this.paymentTool = PaymentTool.valueOf(paymentTool);
+    this.transactionId = transactionId;
     this.status = PaymentStatus.PENDING;
     this.orderAmount = orderAmount;
     this.description = description;
@@ -73,9 +83,14 @@ public class PaymentModel extends BaseEntity {
         .orderNumber(orderNumber)
         .orderAmount(orderAmount)
         .paymentAmount(paymentAmount)
+        .paymentTool(paymentTool)
         .paymentStatus(status.name())
         .description(description)
         .reason(historyReason)
         .build();
+  }
+
+  public void done() {
+    this.status = PaymentStatus.SUCCESS;
   }
 }

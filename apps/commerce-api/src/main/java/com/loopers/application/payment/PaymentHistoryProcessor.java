@@ -1,4 +1,4 @@
-package com.loopers.application.payment.history;
+package com.loopers.application.payment;
 
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.paymentHistory.PaymentHistoryRepository;

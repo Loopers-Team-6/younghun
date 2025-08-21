@@ -17,7 +17,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
   }
 
   @Override
-  public Optional<PaymentModel> get(String orderNumber) {
-    return repository.findByOrderNumber(orderNumber);
+  public Optional<PaymentModel> get(String transactionId) {
+    return repository.findByTransactionId(transactionId);
   }
 }
