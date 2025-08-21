@@ -13,7 +13,17 @@ public class PaymentAdapter implements PaymentGateway {
   private final PaymentGatewayClient client;
 
   @Override
-  public ApiResponse<PaymentResponse> action(String userId, PaymentRequest paymentRequest) {
-    return client.action(userId, paymentRequest);
+  public ApiResponse<PaymentResponse> send(String userId, PaymentRequest paymentRequest) {
+    return client.send(userId, paymentRequest);
+  }
+
+  @Override
+  public ApiResponse<OrderResponse> get(String userId, String orderId) {
+    return client.get(userId, orderId);
+  }
+
+  @Override
+  public ApiResponse<OrderResponse> get(String orderId) {
+    return client.get("test", orderId);
   }
 }

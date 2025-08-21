@@ -2,6 +2,10 @@ package com.loopers.infrastructure.payment;
 
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
+import com.loopers.domain.payment.PaymentStatus;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,4 +24,11 @@ public class PaymentRepositoryImpl implements PaymentRepository {
   public Optional<PaymentModel> get(String transactionId) {
     return repository.findByTransactionId(transactionId);
   }
+
+  @Override
+  public List<PaymentModel> findPendingOlderThan(PaymentStatus status, ZonedDateTime threshold) {
+    return repository.findPendingOlderThan(status, threshold);
+  }
+
+
 }

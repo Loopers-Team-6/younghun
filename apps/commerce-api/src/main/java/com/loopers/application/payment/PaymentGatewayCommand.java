@@ -13,7 +13,7 @@ public record PaymentGatewayCommand(
     BigInteger amount) {
 
   private PaymentGatewayCommand(PaymentCommand command) {
-    this(command.userId(),
+    this(command.pgUserId(),
         command.orderNumber(),
         PaymentTool.valueOf(command.paymentTool().name()),
         CardType.valueOf(command.cardType().name()),

@@ -43,6 +43,27 @@ resilience4j:
         sliding-window-type: time_based
         record-exceptions:
           - java.lang.Throwable
+      get-payment:
+        sliding-window-size: 20
+        failure-rate-threshold: 30
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 5
+        slow-call-duration-threshold: 2s
+        slow-call-rate-threshold: 50
+        sliding-window-type: time_based
+        record-exceptions:
+          - java.lang.Throwable
+
+      get-payment_by_order:
+        sliding-window-size: 20
+        failure-rate-threshold: 30
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 5
+        slow-call-duration-threshold: 2s
+        slow-call-rate-threshold: 50
+        sliding-window-type: time_based
+        record-exceptions:
+          - java.lang.Throwable
   retry:
     instances:
       pg-payment:
@@ -54,7 +75,13 @@ resilience4j:
           - java.util.concurrent.TimeoutException
           - feign.RetryableException
           - java.lang.IllegalArgumentException
-
+      get-payment:
+        max-attempts: 1
+        wait-duration: 500ms
+        retry-exceptions:
+          - java.lang.RuntimeException
+          - java.util.concurrent.TimeoutException
+          - feign.RetryableException
 logging:
   level:
     io.github.resilience4j.circuitbreaker: TRACE

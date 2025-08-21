@@ -31,6 +31,8 @@ public class PaymentV1Dto {
       @NotNull
       String orderNumber,
 
+      String pgUserId,
+
       @NotNull
       PaymentTool paymentTool,
       Card cardInfo,
@@ -51,6 +53,7 @@ public class PaymentV1Dto {
       return new PaymentCommand(
           userId,
           orderNumber,
+          pgUserId,
           paymentTool.name(),
           cardInfo.cardType.name(),
           cardInfo.cardNo,

@@ -8,7 +8,7 @@ import lombok.Builder;
 public record PaymentCommand(
     String userId,
     String orderNumber,
-
+    String pgUserId,
     // 어떤 방법으로 결제 할지?
     PaymentTool paymentTool,
 
@@ -21,20 +21,22 @@ public record PaymentCommand(
 
   public PaymentCommand(String userId,
                         String orderNumber,
+                        String pgUserId,
                         String tool,
                         String cardType,
                         String cardNo,
                         BigInteger payment,
                         String description) {
-    this(userId, orderNumber, PaymentTool.valueOf(tool), CardType.valueOf(cardType), cardNo, payment, description);
+    this(userId, orderNumber, pgUserId, PaymentTool.valueOf(tool), CardType.valueOf(cardType), cardNo, payment, description);
   }
 
   public PaymentCommand(String userId,
                         String orderNumber,
+                        String pgUserId,
                         String tool,
                         BigInteger payment,
                         String description) {
-    this(userId, orderNumber, PaymentTool.valueOf(tool), null, null, payment, description);
+    this(userId, orderNumber, pgUserId, PaymentTool.valueOf(tool), null, null, payment, description);
   }
 
 
