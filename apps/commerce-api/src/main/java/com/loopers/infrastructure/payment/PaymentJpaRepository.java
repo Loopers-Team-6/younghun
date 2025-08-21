@@ -2,7 +2,6 @@ package com.loopers.infrastructure.payment;
 
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentStatus;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
