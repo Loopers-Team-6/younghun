@@ -29,5 +29,15 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     return repository.findPendingOlderThan(status, threshold);
   }
 
+  @Override
+  public void updateStatus(String orderId, PaymentStatus paymentStatus) {
+    repository.updateStatus(orderId, paymentStatus);
+  }
+
+  @Override
+  public List<PaymentModel> getAll(String orderId) {
+    return repository.findAllByOrderNumber(orderId);
+  }
+
 
 }
