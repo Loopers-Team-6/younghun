@@ -34,5 +34,10 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     repository.updateStatus(orderId, paymentStatus);
   }
 
+  @Override
+  public List<PaymentModel> getAll(String orderId) {
+    return repository.findAllByOrderNumber(orderId);
+  }
+
 
 }

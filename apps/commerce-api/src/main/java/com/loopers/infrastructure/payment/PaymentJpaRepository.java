@@ -24,4 +24,7 @@ public interface PaymentJpaRepository extends JpaRepository<PaymentModel, Long> 
   @Modifying
   @Query("update PaymentModel p set p.status = :paymentStatus where p.orderNumber = :orderId")
   void updateStatus(@Param("orderId") String orderId, @Param("paymentStatus") PaymentStatus paymentStatus);
+
+  @Query("SELECT p FROM PaymentModel p WHERE p.orderNumber = :orderNumber")
+  List<PaymentModel> findAllByOrderNumber(@Param("orderNumber") String orderNumber);
 }

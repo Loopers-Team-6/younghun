@@ -1,14 +1,14 @@
 package com.loopers.application.payment;
 
 import com.loopers.domain.payment.PaymentGateway;
+import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
 import com.loopers.domain.payment.PaymentStatus;
 import com.loopers.domain.payment.TransactionStatusResponse;
 import com.loopers.infrastructure.payment.OrderResponse;
-import com.loopers.support.error.CoreException;
-import com.loopers.support.error.ErrorType;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,8 +35,8 @@ public class PaymentGatewayPort {
     }
   }
 
-  @Retry(name = "get-payment", fallbackMethod = "handlePaymentGetFailure")
-  @CircuitBreaker(name = "get-payment", fallbackMethod = "handlePaymentGetFailure")
+  @Retry(name = "get-payment", fallbackMethod = "handlePaymentGetFallback")
+  @CircuitBreaker(name = "get-payment", fallbackMethod = "handlePaymentGetFallback")
   public OrderResponse get(String orderId) {
     return paymentGateway.get(orderId).data();
   }
@@ -49,13 +49,26 @@ public class PaymentGatewayPort {
     return new PaymentResponse(null, TransactionStatusResponse.FAILED, "결제 실패:" + ex.getMessage());
   }
 
-  private OrderResponse handlePaymentGetFailure(Throwable ex) {
-    throw new CoreException(ErrorType.INTERNAL_ERROR, ex.getMessage());
-  }
 
-  private OrderResponse handlePaymentFailureByOrder(
-      String userId, String orderNumber, Throwable ex) {
-    throw new CoreException(ErrorType.INTERNAL_ERROR, ex.getMessage());
+  private OrderResponse handlePaymentGetFallback(
+      String orderId, Throwable ex) {
+    List<PaymentModel> payments = paymentRepository.getAll(orderId);
+
+    if (payments.isEmpty()) {
+      // DB에도 없으면 최소한 빈 상태 반환
+      return new OrderResponse(orderId, List.of());
+    }
+
+    // DB 데이터를 OrderResponse로 변환
+    List<OrderResponse.TransactionResponse> transactions = payments.stream()
+        .map(p -> new OrderResponse.TransactionResponse(
+            p.getTransactionId(),
+            TransactionStatusResponse.valueOf(p.getStatus().name()),
+            "fallback DB 상태"
+        ))
+        .toList();
+
+    return new OrderResponse(orderId, transactions);
   }
 
 

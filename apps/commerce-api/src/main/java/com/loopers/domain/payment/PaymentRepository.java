@@ -12,4 +12,6 @@ public interface PaymentRepository {
   List<PaymentModel> findPendingOlderThan(PaymentStatus status, ZonedDateTime threshold);
 
   void updateStatus(String orderId, PaymentStatus paymentStatus);
+
+  List<PaymentModel> getAll(String orderId);
 }
