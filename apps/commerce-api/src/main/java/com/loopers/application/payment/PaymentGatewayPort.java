@@ -1,6 +1,8 @@
 package com.loopers.application.payment;
 
 import com.loopers.domain.payment.PaymentGateway;
+import com.loopers.domain.payment.PaymentRepository;
+import com.loopers.domain.payment.PaymentStatus;
 import com.loopers.domain.payment.TransactionStatusResponse;
 import com.loopers.infrastructure.payment.OrderResponse;
 import com.loopers.support.error.CoreException;
@@ -16,14 +18,21 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PaymentGatewayPort {
   private final PaymentGateway paymentGateway;
+  private final PaymentRepository paymentRepository;
 
   @Retry(name = "pg-payment", fallbackMethod = "handlePaymentFailure")
   @CircuitBreaker(name = "pg-payment", fallbackMethod = "handlePaymentFailure")
   public PaymentResponse send(PaymentGatewayCommand command) {
-    return paymentGateway.send(command.userId(),
-            new PaymentRequest(command, "http://localhost:8080/api/v1/payment/callback"))
-        .data();
-
+    try {
+      return paymentGateway.send(
+          command.userId(),
+          new PaymentRequest(command, "http://localhost:8080/api/v1/payment/callback")
+      ).data();
+    } catch (Exception ex) {
+      // 실제 예외는 fallback으로 넘어가므로 여기서는 선택적 로깅
+      log.error("send() 예외 발생", ex);
+      throw ex;
+    }
   }
 
   @Retry(name = "get-payment", fallbackMethod = "handlePaymentGetFailure")
@@ -32,16 +41,12 @@ public class PaymentGatewayPort {
     return paymentGateway.get(orderId).data();
   }
 
-  @Retry(name = "get-payment", fallbackMethod = "handlePaymentFailureByOrder")
-  @CircuitBreaker(name = "get-payment", fallbackMethod = "handlePaymentFailureByOrder")
-  public OrderResponse get(String userId, String orderNumber) {
-    return paymentGateway.get(userId, orderNumber).data();
-  }
+  private PaymentResponse handlePaymentFailure(PaymentGatewayCommand command, Throwable ex) {
+    log.error("PG 요청 실패: orderId={}, userId={}", command.orderId(), command.userId(), ex);
+    // DB 상태 업데이트
+    paymentRepository.updateStatus(command.orderId(), PaymentStatus.valueOf(TransactionStatusResponse.FAILED.name()));
 
-
-  private PaymentResponse handlePaymentFailure(
-      PaymentGatewayCommand command, Throwable ex) {
-    return new PaymentResponse(null, TransactionStatusResponse.FAILED, ex.getMessage());
+    return new PaymentResponse(null, TransactionStatusResponse.FAILED, "결제 실패:" + ex.getMessage());
   }
 
   private OrderResponse handlePaymentGetFailure(Throwable ex) {

@@ -10,4 +10,6 @@ public interface PaymentRepository {
   Optional<PaymentModel> get(String orderNumber);
 
   List<PaymentModel> findPendingOlderThan(PaymentStatus status, ZonedDateTime threshold);
+
+  void updateStatus(String orderId, PaymentStatus paymentStatus);
 }
