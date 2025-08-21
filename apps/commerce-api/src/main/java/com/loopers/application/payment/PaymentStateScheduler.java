@@ -27,7 +27,7 @@ public class PaymentStateScheduler {
 
 
   @Transactional
-  @Scheduled(cron = "* */10 * * * *")
+  @Scheduled(fixedRate = 10 * 60 * 1000)
   public void runTaskWithCron() {
     log.info("Cron 스케쥴 작업 실행: {}", LocalDateTime.now());
 
