@@ -4,6 +4,9 @@ import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentTool;
+import com.loopers.domain.payment.TransactionStatusResponse;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +23,12 @@ public class PaymentCardStrategy implements PaymentStrategy {
   public PaymentModel process(PaymentCommand command) {
     OrderModel orderModel = orderRepository.ofOrderNumber(command.orderNumber());
 
-
     // PG사 요청
     PaymentResponse response = gatewayProcessor.send(PaymentGatewayCommand.of(command));
+
+    if (response.statusResponse() == TransactionStatusResponse.FAILED) {
+      throw new CoreException(ErrorType.INTERNAL_ERROR, response.response());
+    }
 
     PaymentModel payment = paymentProcessor.create(new PaymentProcessorVo(
         command.userId(),

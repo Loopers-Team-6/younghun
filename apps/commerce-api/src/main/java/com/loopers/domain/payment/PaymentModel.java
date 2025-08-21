@@ -90,7 +90,12 @@ public class PaymentModel extends BaseEntity {
         .build();
   }
 
+  public void failed() {
+    this.status = PaymentStatus.FAILED;
+  }
+
   public void done() {
     this.status = PaymentStatus.SUCCESS;
   }
+
 }

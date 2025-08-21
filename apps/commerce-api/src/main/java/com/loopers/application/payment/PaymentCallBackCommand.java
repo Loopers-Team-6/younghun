@@ -21,5 +21,5 @@ public record PaymentCallBackCommand(
 
 
 enum TransactionStatus {
-  PENDING, FAIL, SUCCESS
+  PENDING, FAILED, SUCCESS
 }

@@ -1,9 +1,9 @@
 package com.loopers.application.payment;
 
 import com.loopers.domain.payment.PaymentGateway;
-import com.loopers.interfaces.api.ApiResponse;
-import com.loopers.support.error.ErrorType;
-import java.util.concurrent.CompletableFuture;
+import com.loopers.domain.payment.TransactionStatusResponse;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 public class PaymentGatewayPort {
   private final PaymentGateway paymentGateway;
 
+  @Retry(name = "pg-payment", fallbackMethod = "handlePaymentFailure")
+  @CircuitBreaker(name = "pg-payment", fallbackMethod = "handlePaymentFailure")
   public PaymentResponse send(PaymentGatewayCommand command) {
     return paymentGateway.action(command.userId(),
             new PaymentRequest(command, "http://localhost:8080/api/v1/payment/callback"))
@@ -22,9 +24,8 @@ public class PaymentGatewayPort {
   }
 
 
-  private CompletableFuture<ApiResponse<Object>> handlePaymentFailure(
+  private PaymentResponse handlePaymentFailure(
       PaymentGatewayCommand command, Throwable ex) {
-    return CompletableFuture.completedFuture(
-        ApiResponse.fail(ErrorType.INTERNAL_ERROR.getCode(), "PG 호출 실패: " + ex.getMessage()));
+    return new PaymentResponse(null, TransactionStatusResponse.FAILED, ex.getMessage());
   }
 }
