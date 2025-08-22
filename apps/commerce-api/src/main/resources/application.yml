@@ -35,21 +35,21 @@ resilience4j:
     # 'pg-payment' 라는 이름의 서킷 브레이커 설정
       pg-payment:
         sliding-window-size: 5
-        failure-rate-threshold: 1
-        wait-duration-in-open-state: 500ms
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 3s
         permitted-number-of-calls-in-half-open-state: 3
-        slow-call-duration-threshold: 10ms
-        slow-call-rate-threshold: 1
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
         sliding-window-type: time_based
         record-exceptions:
           - java.lang.Throwable
       get-payment:
-        sliding-window-size: 10
-        failure-rate-threshold: 1
-        wait-duration-in-open-state: 500ms
+        sliding-window-size: 20
+        failure-rate-threshold: 30
+        wait-duration-in-open-state: 1s
         permitted-number-of-calls-in-half-open-state: 5
-        slow-call-duration-threshold: 500ms
-        slow-call-rate-threshold: 1
+        slow-call-duration-threshold: 1s
+        slow-call-rate-threshold: 20
         sliding-window-type: time_based
         record-exceptions:
           - java.lang.Throwable
