@@ -43,9 +43,6 @@ public class PaymentGatewayPort {
 
   private PaymentResponse handlePaymentFailure(PaymentGatewayCommand command, Throwable ex) {
     log.error("PG 요청 실패: orderId={}, userId={}", command.orderId(), command.userId(), ex);
-    // DB 상태 업데이트
-    paymentRepository.updateStatus(command.orderId(), PaymentStatus.valueOf(TransactionStatusResponse.FAILED.name()));
-
     return new PaymentResponse(null, TransactionStatusResponse.FAILED, "결제 실패:" + ex.getMessage());
   }
 

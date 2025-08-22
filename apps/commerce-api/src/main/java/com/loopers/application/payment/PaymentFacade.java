@@ -41,7 +41,6 @@ public class PaymentFacade {
     PaymentModel paymentModel = paymentProcessor.get(command.transactionKey());
     OrderModel orderModel = orderRepository.ofOrderNumber(paymentModel.getOrderNumber());
 
-    orderModel.paymentCheck();
 
     // 실패인 경우
     if (paymentStatus == PaymentStatus.FAILED) {
