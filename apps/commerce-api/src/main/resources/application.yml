@@ -34,22 +34,22 @@ resilience4j:
     instances:
     # 'pg-payment' 라는 이름의 서킷 브레이커 설정
       pg-payment:
-        sliding-window-size: 10         # 최근 10번 호출 기록을 샘플로 사용
-        failure-rate-threshold: 50      # 실패율이 50% 이상이면 서킷 오픈
-        wait-duration-in-open-state: 10s  # 서킷 오픈 후, 다음 시도를 허용하기 전 대기 시간 10초
-        permitted-number-of-calls-in-half-open-state: 3  # half-open 상태에서 최대 3회 호출 허용
-        slow-call-duration-threshold: 10s  # 3초 이상 걸리면 느린 호출로 간주
-        slow-call-rate-threshold: 50      # 느린 호출 비율이 50% 이상이면 서킷 오픈 조건 포함
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 3s
+        permitted-number-of-calls-in-half-open-state: 3
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
         sliding-window-type: time_based
         record-exceptions:
           - java.lang.Throwable
       get-payment:
         sliding-window-size: 20
         failure-rate-threshold: 30
-        wait-duration-in-open-state: 5s
+        wait-duration-in-open-state: 1s
         permitted-number-of-calls-in-half-open-state: 5
-        slow-call-duration-threshold: 2s
-        slow-call-rate-threshold: 50
+        slow-call-duration-threshold: 1s
+        slow-call-rate-threshold: 20
         sliding-window-type: time_based
         record-exceptions:
           - java.lang.Throwable
@@ -71,9 +71,16 @@ resilience4j:
           - java.lang.RuntimeException
           - java.util.concurrent.TimeoutException
           - feign.RetryableException
-logging:
-  level:
-    io.github.resilience4j.circuitbreaker: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, prometheus, circuitbreakerevents
+
+  metrics:
+    enable:
+      all: true
 
 ---
 spring:

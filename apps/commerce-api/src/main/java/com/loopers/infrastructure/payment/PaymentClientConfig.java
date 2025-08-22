@@ -11,8 +11,8 @@ public class PaymentClientConfig {
   @Bean
   public Request.Options feignOptions() {
     return new Request.Options(
-        2000,  // connectTimeout (2초)
-        5000   // readTimeout (5초)
+        1000,  // connectTimeout (1초)
+        3000   // readTimeout (3초)
     );
   }
 
