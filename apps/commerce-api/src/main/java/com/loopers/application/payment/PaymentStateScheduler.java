@@ -1,5 +1,7 @@
 package com.loopers.application.payment;
 
+import com.loopers.domain.payment.OrderResponse;
+import com.loopers.domain.payment.OrderResponse.TransactionResponse;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
 import com.loopers.domain.payment.PaymentStatus;

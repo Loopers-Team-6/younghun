@@ -8,7 +8,7 @@ import com.loopers.application.order.OrderCreateCommand;
 import com.loopers.application.order.OrderCreateInfo;
 import com.loopers.application.order.OrderFacade;
 import com.loopers.application.order.OrderItemCommands;
-import com.loopers.application.payment.PaymentCommand.PaymentTool;
+import com.loopers.application.payment.PaymentCommand.PaymentMethod;
 import com.loopers.application.point.PointFacade;
 import com.loopers.domain.catalog.product.stock.StockModel;
 import com.loopers.domain.catalog.product.stock.StockRepository;
@@ -112,8 +112,8 @@ class PaymentServiceIntegrationTest {
     String orderNumber = orderCreateInfo.orderNumber();
     PointModel afterPoint = pointJpaRepository.findByUserId(userId).get();
     BigInteger totalPrice = BigInteger.valueOf(500);
-    PaymentTool paymentTool = PaymentTool.POINT;
-    PaymentCommand command = new PaymentCommand(userId, orderNumber, paymentTool.name(), userId, totalPrice, "shot");
+    PaymentMethod paymentMethod = PaymentMethod.POINT;
+    PaymentCommand command = new PaymentCommand(userId, orderNumber, paymentMethod.name(), totalPrice, "shot");
     //when
     PaymentInfo payment = paymentFacade.payment(command);
     PointModel currentPoint = pointJpaRepository.findByUserId(userId).get();
@@ -129,8 +129,8 @@ class PaymentServiceIntegrationTest {
     //given
     StockModel afterStock = stockJpaRepository.findByProductId(1L).get();
     pointFacade.charge(userId, BigInteger.valueOf(500000));
-    String paymentTool = "POINT";
-    PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), userId, paymentTool, orderCreateInfo.totalPrice(), "shot");
+    String paymentMethod = "POINT";
+    PaymentCommand command = new PaymentCommand(userId, orderCreateInfo.orderNumber(), paymentMethod, orderCreateInfo.totalPrice(), "shot");
     //when
     //결제시
     paymentFacade.payment(command);
@@ -158,7 +158,7 @@ class PaymentServiceIntegrationTest {
               StockModel::getProductId,
               StockModel::stock
           ));
-      PaymentTool paymentTool = PaymentTool.POINT;
+      PaymentMethod paymentMethod = PaymentMethod.POINT;
       // 포인트 1로 변환
       pointJpaRepository.deleteByUserIdForTest(userId);
       PointModel model = pointRepository.save(new PointModel(userId, BigInteger.valueOf(1)));
@@ -166,8 +166,7 @@ class PaymentServiceIntegrationTest {
       PaymentCommand payment = new PaymentCommand(
           userId,
           orderNumber,
-          userId,
-          paymentTool.name(),
+          paymentMethod.name(),
           BigInteger.valueOf(30000),
           "설명"
       );
@@ -201,7 +200,7 @@ class PaymentServiceIntegrationTest {
     @Test
     void shouldRollbackPayment_whenStocksIsInsufficient() {
       //given
-      PaymentTool paymentTool = PaymentTool.POINT;
+      PaymentMethod paymentMethod = PaymentMethod.POINT;
       String orderNumber = orderCreateInfo.orderNumber();
       // 기존 포인트
       PointModel hasPoint = pointJpaRepository.findByUserId(userId).get();
@@ -212,8 +211,7 @@ class PaymentServiceIntegrationTest {
       PaymentCommand payment = new PaymentCommand(
           userId,
           orderNumber,
-          userId,
-          paymentTool.name(),
+          paymentMethod.name(),
           BigInteger.valueOf(30000),
           "설명"
       );

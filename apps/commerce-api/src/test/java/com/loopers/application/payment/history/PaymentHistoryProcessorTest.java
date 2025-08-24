@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.loopers.application.payment.PaymentHistoryProcessor;
+import com.loopers.domain.payment.PaymentMethod;
 import com.loopers.domain.payment.PaymentModel;
-import com.loopers.domain.payment.PaymentTool;
 import com.loopers.domain.payment.paymentHistory.PaymentHistoryModel;
 import com.loopers.infrastructure.payment.PaymentJpaRepository;
 import com.loopers.infrastructure.payment.paymentHistory.PaymentHistoryJpaRepository;
@@ -44,7 +44,7 @@ class PaymentHistoryProcessorTest {
     PaymentModel paymentModel = paymentJpaRepository.save(PaymentModel.create()
         .orderNumber("주문번호")
         .userId("userId")
-        .paymentTool(PaymentTool.POINT.name())
+        .paymentMethod(PaymentMethod.POINT.name())
         .paymentAmount(BigInteger.TEN)
         .orderAmount(BigInteger.TEN)
         .description("이래서 결제함")

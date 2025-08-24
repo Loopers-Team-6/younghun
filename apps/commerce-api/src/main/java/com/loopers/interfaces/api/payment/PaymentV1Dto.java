@@ -34,7 +34,7 @@ public class PaymentV1Dto {
       String pgUserId,
 
       @NotNull
-      PaymentTool paymentTool,
+      PaymentMethod paymentMethod,
       Card cardInfo,
       @NotNull
       BigInteger payment,
@@ -43,7 +43,7 @@ public class PaymentV1Dto {
   ) {
 
     public Create {
-      if(PaymentTool.CARD == paymentTool && cardInfo == null) {
+      if(PaymentMethod.CARD == paymentMethod && cardInfo == null) {
         throw new CoreException(ErrorType.BAD_REQUEST, "결제 타입이 카드인 경우에는 카드 정보를 입력해야 합니다.");
       }
 
@@ -54,7 +54,7 @@ public class PaymentV1Dto {
           userId,
           orderNumber,
           pgUserId,
-          paymentTool.name(),
+          paymentMethod.name(),
           cardInfo.cardType.name(),
           cardInfo.cardNo,
           payment,
@@ -100,7 +100,7 @@ public class PaymentV1Dto {
 
   }
 
-  enum PaymentTool {
+  enum PaymentMethod {
     CARD,
     POINT,
   }

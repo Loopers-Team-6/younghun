@@ -2,8 +2,8 @@ package com.loopers.application.payment;
 
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
+import com.loopers.domain.payment.PaymentMethod;
 import com.loopers.domain.payment.PaymentModel;
-import com.loopers.domain.payment.PaymentTool;
 import com.loopers.domain.payment.TransactionStatusResponse;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
@@ -45,7 +45,7 @@ public class PaymentCardStrategy implements PaymentStrategy {
   }
 
   @Override
-  public PaymentTool getType() {
-    return PaymentTool.CARD;
+  public PaymentMethod getType() {
+    return PaymentMethod.CARD;
   }
 }

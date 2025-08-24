@@ -41,14 +41,14 @@ public class PaymentModel extends BaseEntity {
   private PaymentStatus status;
 
   @Enumerated(EnumType.STRING)
-  private PaymentTool paymentTool;
+  private PaymentMethod paymentMethod;
 
   @Column(columnDefinition = "TEXT")
   private String description;
 
   @Builder(builderMethodName = "create")
   public PaymentModel(String orderNumber, String userId, BigInteger paymentAmount,
-                      String paymentTool,
+                      String paymentMethod,
                       String transactionId,
                       BigInteger orderAmount, String description) {
     if (orderNumber == null) {
@@ -62,7 +62,7 @@ public class PaymentModel extends BaseEntity {
     this.orderNumber = orderNumber;
     this.userId = userId;
     this.paymentAmount = paymentAmount;
-    this.paymentTool = PaymentTool.valueOf(paymentTool);
+    this.paymentMethod = PaymentMethod.valueOf(paymentMethod);
     this.transactionId = transactionId;
     this.status = PaymentStatus.PENDING;
     this.orderAmount = orderAmount;
@@ -84,7 +84,7 @@ public class PaymentModel extends BaseEntity {
         .orderNumber(orderNumber)
         .orderAmount(orderAmount)
         .paymentAmount(paymentAmount)
-        .paymentTool(paymentTool)
+        .paymentMethod(paymentMethod)
         .paymentStatus(status.name())
         .description(description)
         .reason(historyReason)

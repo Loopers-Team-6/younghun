@@ -10,7 +10,7 @@ public record PaymentCommand(
     String orderNumber,
     String pgUserId,
     // 어떤 방법으로 결제 할지?
-    PaymentTool paymentTool,
+    PaymentMethod paymentMethod,
 
     CardType cardType,
     String cardNo,
@@ -22,30 +22,29 @@ public record PaymentCommand(
   public PaymentCommand(String userId,
                         String orderNumber,
                         String pgUserId,
-                        String tool,
+                        String method,
                         String cardType,
                         String cardNo,
                         BigInteger payment,
                         String description) {
-    this(userId, orderNumber, pgUserId, PaymentTool.valueOf(tool), CardType.valueOf(cardType), cardNo, payment, description);
+    this(userId, orderNumber, pgUserId, PaymentMethod.valueOf(method), CardType.valueOf(cardType), cardNo, payment, description);
   }
 
   public PaymentCommand(String userId,
                         String orderNumber,
-                        String pgUserId,
-                        String tool,
+                        String method,
                         BigInteger payment,
                         String description) {
-    this(userId, orderNumber, pgUserId, PaymentTool.valueOf(tool), null, null, payment, description);
+    this(userId, orderNumber, null, PaymentMethod.valueOf(method), null, null, payment, description);
   }
 
 
-  enum PaymentTool {
+  enum PaymentMethod {
     CARD,
     POINT,
   }
 
-  String tool() {
-    return paymentTool().name();
+  String method() {
+    return paymentMethod().name();
   }
 }

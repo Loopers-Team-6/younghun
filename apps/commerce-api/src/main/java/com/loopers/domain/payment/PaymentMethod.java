@@ -1,5 +1,5 @@
 package com.loopers.domain.payment;
 
-public enum PaymentTool {
+public enum PaymentMethod {
   POINT, CARD
 }

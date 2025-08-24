@@ -18,14 +18,14 @@ class PaymentModelTest {
     //given
     String orderNumber = null;
     String userId = "userId";
-    PaymentTool paymentTool = PaymentTool.CARD;
+    PaymentMethod paymentMethod = PaymentMethod.CARD;
     BigInteger paymentAmount = BigInteger.valueOf(2000);
     String description = "description";
     //when&then
     Exception result = assertThrows(NoSuchElementException.class, () -> PaymentModel.create()
         .orderNumber(orderNumber)
         .userId(userId)
-        .paymentTool(paymentTool.name())
+        .paymentMethod(paymentMethod.name())
         .paymentAmount(paymentAmount)
         .description(description)
         .build());
@@ -54,14 +54,14 @@ class PaymentModelTest {
     //given
     String orderNumber = "12354";
     String userId = "userId";
-    PaymentTool paymentTool = PaymentTool.CARD;
+    PaymentMethod paymentMethod = PaymentMethod.CARD;
     BigInteger paymentAmount = null;
     String description = "description";
     //when
     PaymentModel paymentModel = PaymentModel.create()
         .orderNumber(orderNumber)
         .userId(userId)
-        .paymentTool(paymentTool.name())
+        .paymentMethod(paymentMethod.name())
         .paymentAmount(paymentAmount)
         .description(description)
         .build();
@@ -75,14 +75,14 @@ class PaymentModelTest {
     //given
     String orderNumber = "12354";
     String userId = "userId";
-    PaymentTool paymentTool = PaymentTool.CARD;
+    PaymentMethod paymentMethod = PaymentMethod.CARD;
     BigInteger paymentAmount = BigInteger.valueOf(2000);
     String description = "description";
     //when
     PaymentModel paymentModel = PaymentModel.create()
         .orderNumber(orderNumber)
         .userId(userId)
-        .paymentTool(paymentTool.name())
+        .paymentMethod(paymentMethod.name())
         .paymentAmount(paymentAmount)
         .description(description)
         .build();

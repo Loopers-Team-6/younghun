@@ -4,20 +4,20 @@ import com.loopers.domain.payment.CardType;
 
 public record PaymentRequest(
     String orderId,
-    PaymentTool paymentTool,
+    PaymentMethod paymentMethod,
     CardType cardType,
     String cardNo,
     Long amount,
     String callbackUrl
 ) {
   public PaymentRequest(PaymentGatewayCommand command, String callbackUrl) {
-    this(command.orderId(), PaymentTool.valueOf(command.paymentTool().name()),
+    this(command.orderId(), PaymentMethod.valueOf(command.paymentMethod().name()),
         command.cardType(),
         command.cardNo(),
         command.amount().longValue(), callbackUrl);
   }
 
-  enum PaymentTool {
+  enum PaymentMethod {
     CARD,
     POINT,
   }

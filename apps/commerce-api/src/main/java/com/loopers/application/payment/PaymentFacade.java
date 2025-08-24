@@ -3,9 +3,10 @@ package com.loopers.application.payment;
 
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderRepository;
+import com.loopers.domain.order.orderItem.OrderItemModel;
+import com.loopers.domain.payment.PaymentMethod;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentStatus;
-import com.loopers.domain.payment.PaymentTool;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class PaymentFacade {
 
   public PaymentInfo payment(PaymentCommand command) {
 
-    PaymentStrategy strategy = paymentFactory.getStrategy(PaymentTool.valueOf(command.tool()));
+    PaymentStrategy strategy = paymentFactory.getStrategy(PaymentMethod.valueOf(command.method()));
     PaymentModel payment = strategy.process(command);
 
     return PaymentInfo.builder()
@@ -41,7 +42,6 @@ public class PaymentFacade {
     PaymentModel paymentModel = paymentProcessor.get(command.transactionKey());
     OrderModel orderModel = orderRepository.ofOrderNumber(paymentModel.getOrderNumber());
 
-
     // 실패인 경우
     if (paymentStatus == PaymentStatus.FAILED) {
       paymentModel.failed();
@@ -51,7 +51,11 @@ public class PaymentFacade {
 
     // 성공인 경우
     // 재고 차감
-    stockProcessor.decreaseStock(orderModel.getOrderItems());
+    for (OrderItemModel orderItem : orderModel.getOrderItems()) {
+      Long productId = orderItem.getProductId();
+      Long quantity = orderItem.getQuantity();
+      stockProcessor.decreaseStock(productId, quantity);
+    }
     orderModel.done();
     paymentModel.done();
     paymentHistoryProcessor.add(paymentModel, "결제가 완료되었습니다.");

@@ -1,7 +1,7 @@
 package com.loopers.domain.payment.paymentHistory;
 
 import com.loopers.domain.BaseEntity;
-import com.loopers.domain.payment.PaymentTool;
+import com.loopers.domain.payment.PaymentMethod;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,7 +36,7 @@ public class PaymentHistoryModel extends BaseEntity {
 
 
   @Enumerated(EnumType.STRING)
-  private PaymentTool paymentTool;
+  private PaymentMethod paymentMethod;
 
   @Column(nullable = false)
   private BigInteger paymentAmount;

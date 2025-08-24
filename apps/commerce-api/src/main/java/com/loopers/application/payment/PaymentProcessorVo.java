@@ -8,7 +8,7 @@ public record PaymentProcessorVo(
     String orderNumber,
     String description,
     String transactionKey,
-    String paymentTool,
+    String paymentMethod,
     BigInteger payment,
     BigInteger totalPrice
 ) {

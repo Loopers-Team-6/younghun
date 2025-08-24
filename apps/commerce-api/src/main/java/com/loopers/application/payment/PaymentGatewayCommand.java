@@ -1,13 +1,13 @@
 package com.loopers.application.payment;
 
 import com.loopers.domain.payment.CardType;
-import com.loopers.domain.payment.PaymentTool;
+import com.loopers.domain.payment.PaymentMethod;
 import java.math.BigInteger;
 
 public record PaymentGatewayCommand(
     String userId,
     String orderId,
-    PaymentTool paymentTool,
+    PaymentMethod paymentMethod,
     CardType cardType,
     String cardNo,
     BigInteger amount) {
@@ -15,7 +15,7 @@ public record PaymentGatewayCommand(
   private PaymentGatewayCommand(PaymentCommand command) {
     this(command.pgUserId(),
         command.orderNumber(),
-        PaymentTool.valueOf(command.paymentTool().name()),
+        PaymentMethod.valueOf(command.paymentMethod().name()),
         CardType.valueOf(command.cardType().name()),
         command.cardNo(),
         command.payment());

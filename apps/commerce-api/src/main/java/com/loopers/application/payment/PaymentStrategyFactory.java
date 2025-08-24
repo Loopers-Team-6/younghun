@@ -1,6 +1,6 @@
 package com.loopers.application.payment;
 
-import com.loopers.domain.payment.PaymentTool;
+import com.loopers.domain.payment.PaymentMethod;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentStrategyFactory {
-  private final Map<PaymentTool, PaymentStrategy> strategyMap = new HashMap<>();
+  private final Map<PaymentMethod, PaymentStrategy> strategyMap = new HashMap<>();
 
   public PaymentStrategyFactory(List<PaymentStrategy> strategies) {
     // Bean으로 등록된 모든 전략을 List로 받아서 Map으로 변환
@@ -17,7 +17,7 @@ public class PaymentStrategyFactory {
     }
   }
 
-  public PaymentStrategy getStrategy(PaymentTool type) {
+  public PaymentStrategy getStrategy(PaymentMethod type) {
     return strategyMap.get(type);
   }
 }
