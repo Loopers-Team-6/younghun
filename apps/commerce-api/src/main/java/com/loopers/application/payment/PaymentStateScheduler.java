@@ -3,8 +3,7 @@ package com.loopers.application.payment;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentRepository;
 import com.loopers.domain.payment.PaymentStatus;
-import com.loopers.infrastructure.payment.OrderResponse;
-import com.loopers.infrastructure.payment.OrderResponse.TransactionResponse;
+import com.loopers.infrastructure.payment.PaymentGatewayPortImpl;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -21,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class PaymentStateScheduler {
-  private final PaymentGatewayPort paymentGatewayPort;
+  private final PaymentGatewayPortImpl paymentGatewayPortImpl;
   private final PaymentRepository paymentRepository;
   private final PaymentHistoryProcessor paymentHistoryProcessor;
 
@@ -47,7 +46,7 @@ public class PaymentStateScheduler {
 
     for (Entry<String, List<PaymentModel>> entry : paymentsByOrderNumber.entrySet()) {
       String orderId = entry.getKey();
-      OrderResponse orderResponse = paymentGatewayPort.get(orderId);
+      OrderResponse orderResponse = paymentGatewayPortImpl.get(orderId);
       List<TransactionResponse> transactions = orderResponse.transactions();
       List<PaymentModel> paymentModels = entry.getValue();
       for (PaymentModel paymentModel : paymentModels) {

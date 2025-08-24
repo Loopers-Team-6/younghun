@@ -2,7 +2,6 @@ package com.loopers.domain.payment;
 
 import com.loopers.application.payment.PaymentRequest;
 import com.loopers.application.payment.PaymentResponse;
-import com.loopers.infrastructure.payment.OrderResponse;
 import com.loopers.interfaces.api.ApiResponse;
 
 public interface PaymentGateway {

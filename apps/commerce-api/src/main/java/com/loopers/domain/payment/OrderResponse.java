@@ -1,6 +1,5 @@
-package com.loopers.infrastructure.payment;
+package com.loopers.domain.payment;
 
-import com.loopers.domain.payment.TransactionStatusResponse;
 import java.util.List;
 
 public record OrderResponse(

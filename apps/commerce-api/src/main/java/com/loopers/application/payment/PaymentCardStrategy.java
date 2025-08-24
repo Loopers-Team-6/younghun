@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PaymentCardStrategy implements PaymentStrategy {
-  private final PaymentGatewayPort gatewayProcessor;
+  private final PaymentGatewayPort paymentGatewayPort;
   private final PaymentProcessor paymentProcessor;
   private final OrderRepository orderRepository;
 
@@ -24,7 +24,7 @@ public class PaymentCardStrategy implements PaymentStrategy {
     OrderModel orderModel = orderRepository.ofOrderNumber(command.orderNumber());
 
     // PG사 요청
-    PaymentResponse response = gatewayProcessor.send(PaymentGatewayCommand.of(command));
+    PaymentResponse response = paymentGatewayPort.send(PaymentGatewayCommand.of(command));
 
     if (response.statusResponse() == TransactionStatusResponse.FAILED) {
       throw new CoreException(ErrorType.INTERNAL_ERROR, response.response());
