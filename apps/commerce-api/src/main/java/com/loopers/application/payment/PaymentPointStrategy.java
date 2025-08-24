@@ -22,8 +22,7 @@ public class PaymentPointStrategy implements PaymentStrategy {
 
   @Override
   @Transactional
-  public PaymentModel process(PaymentCommand command) {
-    OrderModel orderModel = orderRepository.ofOrderNumber(command.orderNumber());
+  public PaymentModel process(PaymentCommand command, OrderModel orderModel) {
 
     // 포인트 감소
     pointUseHandler.use(command.userId(), command.payment());

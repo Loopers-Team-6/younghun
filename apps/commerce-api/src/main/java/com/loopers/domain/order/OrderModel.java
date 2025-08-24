@@ -106,8 +106,8 @@ public class OrderModel extends BaseEntity {
   }
 
   public void paymentCheck() {
-    if(status == OrderStatus.DONE) {
-      throw new IllegalArgumentException("이미 결제가 완료된 주문입니다.");
+    if(status != OrderStatus.ORDER) {
+      throw new IllegalArgumentException("주문 상태가 아닌 결제는 불가합니다.");
     }
   }
 }

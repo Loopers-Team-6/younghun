@@ -20,8 +20,7 @@ public class PaymentCardStrategy implements PaymentStrategy {
   private final PaymentHistoryProcessor paymentHistoryProcessor;
 
   @Override
-  public PaymentModel process(PaymentCommand command) {
-    OrderModel orderModel = orderRepository.ofOrderNumber(command.orderNumber());
+  public PaymentModel process(PaymentCommand command, OrderModel orderModel) {
 
     // PG사 요청
     PaymentResponse response = paymentGatewayPort.send(PaymentGatewayCommand.of(command));

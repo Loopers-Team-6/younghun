@@ -23,9 +23,12 @@ public class PaymentFacade {
   private final StockProcessor stockProcessor;
 
   public PaymentInfo payment(PaymentCommand command) {
+    OrderModel orderModel = orderRepository.ofOrderNumber(command.orderNumber());
+
+    orderModel.paymentCheck();
 
     PaymentStrategy strategy = paymentFactory.getStrategy(PaymentMethod.valueOf(command.method()));
-    PaymentModel payment = strategy.process(command);
+    PaymentModel payment = strategy.process(command, orderModel);
 
     return PaymentInfo.builder()
         .userId(payment.getUserId())
