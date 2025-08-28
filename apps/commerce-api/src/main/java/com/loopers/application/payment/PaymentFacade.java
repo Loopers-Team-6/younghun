@@ -2,11 +2,11 @@ package com.loopers.application.payment;
 
 
 import com.loopers.domain.order.OrderModel;
-import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentMethod;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentStatus;
+import com.loopers.infrastructure.payment.PaymentOrderProcessor;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,18 +17,19 @@ public class PaymentFacade {
 
   private final PaymentProcessor paymentProcessor;
   private final PaymentHistoryProcessor paymentHistoryProcessor;
-  private final OrderRepository orderRepository;
   private final PaymentStrategyFactory paymentFactory;
 
   private final StockProcessor stockProcessor;
 
-  public PaymentInfo payment(PaymentCommand command) {
-    OrderModel orderModel = orderRepository.ofOrderNumber(command.orderNumber());
+  private final PaymentPublisher publisher;
+  private final PaymentOrderProcessor processor;
 
-    orderModel.paymentCheck();
+  public PaymentInfo payment(PaymentCommand command) {
 
     PaymentStrategy strategy = paymentFactory.getStrategy(PaymentMethod.valueOf(command.method()));
-    PaymentModel payment = strategy.process(command, orderModel);
+    PaymentModel payment = strategy.process(command);
+
+    publisher.publish(payment.getId(), payment.toString());
 
     return PaymentInfo.builder()
         .userId(payment.getUserId())
@@ -43,7 +44,7 @@ public class PaymentFacade {
   public void callback(PaymentCallBackCommand command) {
     PaymentStatus paymentStatus = PaymentStatus.valueOf(command.paymentStatus());
     PaymentModel paymentModel = paymentProcessor.get(command.transactionKey());
-    OrderModel orderModel = orderRepository.ofOrderNumber(paymentModel.getOrderNumber());
+    OrderModel orderModel = processor.get(command.orderId());
 
     // 실패인 경우
     if (paymentStatus == PaymentStatus.FAILED) {
@@ -59,10 +60,9 @@ public class PaymentFacade {
       Long quantity = orderItem.getQuantity();
       stockProcessor.decreaseStock(productId, quantity);
     }
-    orderModel.done();
     paymentModel.done();
+    publisher.publish(paymentModel.getOrderNumber());
     paymentHistoryProcessor.add(paymentModel, "결제가 완료되었습니다.");
-
-
+    publisher.publish(paymentModel.getId(), paymentModel.toString());
   }
 }

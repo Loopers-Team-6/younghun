@@ -1,10 +1,10 @@
 package com.loopers.application.payment;
 
 import com.loopers.domain.order.OrderModel;
-import com.loopers.domain.order.OrderRepository;
 import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentMethod;
 import com.loopers.domain.payment.PaymentModel;
+import com.loopers.infrastructure.payment.PaymentOrderProcessor;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,14 +15,15 @@ public class PaymentPointStrategy implements PaymentStrategy {
   private final PointUseHandler pointUseHandler;
   private final PaymentProcessor paymentProcessor;
   private final StockProcessor stockProcessor;
-  private final OrderRepository orderRepository;
-
+  private final PaymentOrderProcessor processor;
+  private final PaymentPublisher publisher;
   private final PaymentHistoryProcessor paymentHistoryProcessor;
 
 
   @Override
   @Transactional
-  public PaymentModel process(PaymentCommand command, OrderModel orderModel) {
+  public PaymentModel process(PaymentCommand command) {
+    OrderModel orderModel = processor.get(command.orderNumber());
 
     // 포인트 감소
     pointUseHandler.use(command.userId(), command.payment());
@@ -43,8 +44,8 @@ public class PaymentPointStrategy implements PaymentStrategy {
       stockProcessor.decreaseStock(productId, quantity);
     }
 
-    orderModel.done();
     payment.done();
+    publisher.publish(command.orderNumber());
 
     paymentHistoryProcessor.add(payment, "결제가 완료되었습니다.");
 

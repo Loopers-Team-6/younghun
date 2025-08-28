@@ -1,5 +1,6 @@
 package com.loopers.infrastructure.order;
 
+import com.loopers.data_platform.PlatformSendEvent;
 import com.loopers.domain.order.OrderCouponRegisterCommand;
 import com.loopers.domain.order.OrderPublisher;
 import lombok.RequiredArgsConstructor;
@@ -17,4 +18,10 @@ public class OrderCorePublisher implements OrderPublisher {
     log.info("userId: {}가 orderId: {}에 couponId {}를 사용하였습니다.", userId, orderId, couponId);
     publisher.publishEvent(new OrderCouponRegisterCommand(userId, orderId, couponId));
   }
+
+  public void publish(Long orderId, String payload) {
+    log.info("주문 정보에서 데이터 플랫폼으로 데이터를 전송합니다.");
+    publisher.publishEvent(new PlatformSendEvent("주문", orderId, payload));
+  }
+
 }
