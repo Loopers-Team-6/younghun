@@ -10,7 +10,6 @@ import com.loopers.domain.coupon.CouponModel;
 import com.loopers.domain.coupon.issued.IssuedCouponRepository;
 import com.loopers.domain.order.OrderCouponRegisterCommand;
 import com.loopers.domain.order.OrderModel;
-import com.loopers.domain.order.OrderPublisher;
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;
 import com.loopers.infrastructure.coupon.CouponJpaRepository;
