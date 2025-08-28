@@ -84,7 +84,7 @@ class PaymentServiceIntegrationTest {
     OrderCreateCommand command =
         new OrderCreateCommand(userId,
             "서울시 송파구",
-            orderItemModels, "메모..");
+            orderItemModels, null,"메모..");
 
     pointRepository.save(new PointModel(userId, BigInteger.valueOf(50000000)));
 

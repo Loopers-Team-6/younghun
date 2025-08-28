@@ -44,6 +44,9 @@ public class OrderModel extends BaseEntity {
   private OrderStatus status;
 
 
+  // 할인 금액
+  private BigInteger discountPrice;
+
   @Column(columnDefinition = "TEXT")
   private String memo;
 
@@ -66,6 +69,7 @@ public class OrderModel extends BaseEntity {
     this.totalPrice = BigInteger.ZERO;
     this.address = address;
     this.status = OrderStatus.ORDER;
+    this.discountPrice = BigInteger.ZERO; // 할인 금액은 초기에는 0으로 설정
     this.memo = memo;
   }
 
@@ -106,9 +110,13 @@ public class OrderModel extends BaseEntity {
   }
 
   public void paymentCheck() {
-    if(status != OrderStatus.ORDER) {
+    if (status != OrderStatus.ORDER) {
       throw new IllegalArgumentException("주문 상태가 아닌 결제는 불가합니다.");
     }
+  }
+
+  public void addDiscountValue(BigInteger discount) {
+    this.discountPrice = discount;
   }
 }
 

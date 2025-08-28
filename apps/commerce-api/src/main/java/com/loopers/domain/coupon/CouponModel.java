@@ -3,7 +3,10 @@ package com.loopers.domain.coupon;
 import com.loopers.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import java.math.BigInteger;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "coupon")
 public class CouponModel extends BaseEntity {
 
+  @Enumerated(EnumType.STRING)
   private CouponMethod method;
 
 
@@ -49,6 +53,16 @@ public class CouponModel extends BaseEntity {
     }
   }
 
+  public BigInteger calculate(BigInteger price) {
+    return switch (method) {
+      case FIXED -> price.subtract(BigInteger.valueOf(discountValue));
+      case PERCENT -> price.multiply(BigInteger.valueOf(100 - discountValue)).divide(BigInteger.valueOf(100));
+    };
+  }
+
+  public void used() {
+    this.count -= 1;
+  }
 }
 
 enum CouponMethod {
