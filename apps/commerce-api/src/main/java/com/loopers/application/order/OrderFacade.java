@@ -30,6 +30,7 @@ public class OrderFacade {
     BigInteger discount = couponProcessor.discount(orderModel.sumPrice(), command.couponId());
     orderModel.addDiscountValue(discount);
 
+    publisher.publish(orderModel.getId(), orderModel.toString());
     //결과 리턴
     return OrderCreateInfo.from(orderModel);
   }
