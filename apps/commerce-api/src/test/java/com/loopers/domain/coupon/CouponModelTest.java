@@ -3,10 +3,40 @@ package com.loopers.domain.coupon;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import java.math.BigInteger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class CouponModelTest {
+
+  @Test
+  @DisplayName("쿠폰 메소드 타입이 FIXED인 경우 할인 금액 계산")
+  void returnDiscountPrice_whenCouponMethodIsFixed() {
+    // given
+    int count = 1;
+    CouponMethod method = CouponMethod.FIXED;
+    CouponModel coupon = new CouponModel(method.name(), count, 1000, "-1000원 할인 쿠폰");
+
+    // when
+    BigInteger result = coupon.calculate(BigInteger.valueOf(2000));
+
+    assertThat(result).isEqualTo(BigInteger.valueOf(1000));
+  }
+
+  @Test
+  @DisplayName("쿠폰 메소드 타입이 PERCENT인 경우 할인 금액 계산")
+  void returnDiscountPrice_whenCouponMethodIsPERCENT() {
+    // given
+    int count = 1;
+    CouponMethod method = CouponMethod.PERCENT;
+    CouponModel coupon = new CouponModel(method.name(), count, 10, "10% 할인 쿠폰");
+
+    // when
+    BigInteger result = coupon.calculate(BigInteger.valueOf(1000));
+
+    assertThat(result).isEqualTo(BigInteger.valueOf(900));
+  }
+
 
   @Test
   @DisplayName("쿠폰 생성 테스트")

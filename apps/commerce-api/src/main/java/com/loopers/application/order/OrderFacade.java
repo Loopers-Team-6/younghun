@@ -1,6 +1,8 @@
 package com.loopers.application.order;
 
 import com.loopers.domain.order.OrderModel;
+import com.loopers.domain.order.OrderPublisher;
+import java.math.BigInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class OrderFacade {
+  private final OrderPublisher publisher;
   private final OrderProcessor orderProcessor;
+  private final CouponProcessor couponProcessor;
   private final OrderHistoryHandler orderHistoryHandler;
 
   // 주문 생성
@@ -19,6 +23,12 @@ public class OrderFacade {
 
     //히스토리 저장
     orderHistoryHandler.create(orderModel);
+
+    // 쿠폰을 등록한다.
+    publisher.publish(command.userId(), orderModel.getId(), command.couponId());
+
+    BigInteger discount = couponProcessor.discount(orderModel.sumPrice(), command.couponId());
+    orderModel.addDiscountValue(discount);
 
     //결과 리턴
     return OrderCreateInfo.from(orderModel);

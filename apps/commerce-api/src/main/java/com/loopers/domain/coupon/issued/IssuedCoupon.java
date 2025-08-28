@@ -25,6 +25,13 @@ public class IssuedCoupon extends BaseEntity {
   @Column(columnDefinition = "TEXT")
   private String memo;
 
+  public IssuedCoupon(String userId, Long orderId, Long couponId) {
+    this.userId = userId;
+    this.orderId = orderId;
+    this.couponId = couponId;
+    this.used = true;
+  }
+
   public IssuedCoupon(String userId, Long orderId, Long couponId, String memo) {
     this.userId = userId;
     this.orderId = orderId;
