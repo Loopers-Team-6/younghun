@@ -1,5 +1,6 @@
 package com.loopers.application.like;
 
+import com.loopers.application.catalog.product.LikeEventPublisher;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.catalog.product.status.ProductStatus;
 import com.loopers.domain.like.LikeModel;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LikeFacade {
   private final ProductRepository productRepository;
   private final LikeRepository likeRepository;
+  private final LikeEventPublisher publisher;
 
   @Transactional
   public void like(String userId, Long productId) {
@@ -31,7 +33,9 @@ public class LikeFacade {
 
     //좋아요
     likeRepository.like(userId, productId);
-    productStatus.increase();
+
+    // 좋아요 증가
+    publisher.increase(userId, productId);
   }
 
   @Transactional
@@ -48,6 +52,8 @@ public class LikeFacade {
     }
 
     likeRepository.unlike(userId, productId);
-    productStatus.decrease();
+
+    // 좋아요 감소
+    publisher.decrease(userId, productId);
   }
 }
