@@ -1,6 +1,5 @@
 package com.loopers.application.like;
 
-import com.loopers.application.catalog.product.LikeEventPublisher;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.catalog.product.status.ProductStatus;
 import com.loopers.domain.like.LikeModel;

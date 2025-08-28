@@ -1,6 +1,6 @@
 package com.loopers.infrastructure.like;
 
-import com.loopers.application.catalog.product.LikeEventPublisher;
+import com.loopers.application.like.LikeEventPublisher;
 import com.loopers.domain.like.LikeDecreaseEvent;
 import com.loopers.domain.like.LikeIncreaseEvent;
 import lombok.RequiredArgsConstructor;
