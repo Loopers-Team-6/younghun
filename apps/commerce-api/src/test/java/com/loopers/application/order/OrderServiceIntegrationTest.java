@@ -4,9 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.loopers.domain.coupon.CouponModel;
+import com.loopers.domain.coupon.issued.IssuedCouponRepository;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;
+import com.loopers.infrastructure.coupon.CouponJpaRepository;
 import com.loopers.infrastructure.order.OrderJpaRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
@@ -32,6 +35,14 @@ class OrderServiceIntegrationTest {
 
   @Autowired
   private PointRepository pointRepository;
+
+  @Autowired
+  private CouponJpaRepository couponJpaRepository;
+
+  @Autowired
+  private IssuedCouponRepository issuedCouponRepository;
+
+
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
 
@@ -73,6 +84,39 @@ class OrderServiceIntegrationTest {
     );
 
     System.out.println(orderCreateInfo);
+
+  }
+
+  @DisplayName("주문 생성 시, 쿠폰이 사용이 되어지면, 주문 정보가 반환된다")
+  @Test
+  void returnOrderInfo_whenCreateOrderAddCoupon() {
+    //given
+    List<OrderItemCommands> orderItemModels = new ArrayList<>();
+
+    orderItemModels.add(new OrderItemCommands(
+        1L, 1L
+    ));
+
+    orderItemModels.add(new OrderItemCommands(
+        2L, 2L
+    ));
+
+    CouponModel coupon = couponJpaRepository.save(new CouponModel("FIXED", 100, 10, "설명"));
+
+    OrderCreateCommand command =
+        new OrderCreateCommand("userId",
+            "서울시 송파구",
+            orderItemModels, coupon.getId(), "메모..");
+    pointRepository.save(new PointModel("userId", BigInteger.valueOf(500000000)));
+    //when
+    OrderCreateInfo orderCreateInfo = orderFacade.create(command);
+
+    CouponModel afterCoupon = couponJpaRepository.findById(coupon.getId()).get();
+
+    //then
+    assertThat(issuedCouponRepository.exists("userId", orderCreateInfo.orderId(), coupon.getId())).isTrue();
+    assertThat(afterCoupon.getCount()).isEqualTo(coupon.getCount() - 1);
+    assertThat(orderCreateInfo.discountPrice()).isEqualTo(orderCreateInfo.totalPrice().subtract(BigInteger.valueOf(coupon.getDiscountValue())));
 
   }
 

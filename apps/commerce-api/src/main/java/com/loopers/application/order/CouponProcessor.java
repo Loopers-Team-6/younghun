@@ -5,8 +5,6 @@ import com.loopers.domain.coupon.CouponRepository;
 import com.loopers.domain.coupon.issued.IssuedCoupon;
 import com.loopers.domain.coupon.issued.IssuedCouponRepository;
 import com.loopers.domain.order.OrderCouponRegisterCommand;
-import com.loopers.support.error.CoreException;
-import com.loopers.support.error.ErrorType;
 import java.math.BigInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,8 +23,7 @@ public class CouponProcessor {
       return BigInteger.ZERO;
     }
 
-    CouponModel couponModel = repository.get(couponId)
-        .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "해당하는 쿠폰은 존재하지 않습니다."));
+    CouponModel couponModel = repository.get(couponId);
 
     return couponModel.calculate(currentOrderPrice);
   }

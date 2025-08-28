@@ -2,7 +2,8 @@ package com.loopers.infrastructure.coupon;
 
 import com.loopers.domain.coupon.CouponModel;
 import com.loopers.domain.coupon.CouponRepository;
-import java.util.Optional;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +13,9 @@ public class CouponRepositoryImpl implements CouponRepository {
   private final CouponJpaRepository repository;
 
   @Override
-  public Optional<CouponModel> get(Long couponId) {
-    return repository.findById(couponId);
+  public CouponModel get(Long couponId) {
+    return repository.findById(couponId)
+        .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "해당하는 쿠폰은 존재하지 않습니다."));
   }
 
   @Override
