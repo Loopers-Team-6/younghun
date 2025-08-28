@@ -23,4 +23,9 @@ public class CouponRepositoryImpl implements CouponRepository {
     repository.decreaseCouponCount(couponId);
   }
 
+  @Override
+  public void unUsed(Long couponId) {
+    repository.increaseCouponCount(couponId);
+  }
+
 }

@@ -6,6 +6,7 @@ import com.loopers.domain.order.OrderCouponRegisterCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
@@ -14,6 +15,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class CouponRegisterListener {
   private final IssuedCouponRepository issuedCouponRepository;
   private final CouponProcessor processor;
+  private final CouponPublisher publisher;
 
 
   @TransactionalEventListener
@@ -26,6 +28,14 @@ public class CouponRegisterListener {
 
     log.info("쿠폰 사용 등록을 시작합니다. Order ID: {}, Coupon ID: {}", command.orderId(), command.couponId());
 
-   processor.register(command);
+    processor.register(command);
+    publisher.rollback(command.userId(), command.orderId(), command.couponId());
   }
+
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
+  public void rollback(OrderCouponRegisterCommand command) {
+    log.info("쿠폰 사용 등록이 롤백이 되었습니다. Order ID: {}, Coupon ID: {}", command.orderId(), command.couponId());
+  }
+
+
 }

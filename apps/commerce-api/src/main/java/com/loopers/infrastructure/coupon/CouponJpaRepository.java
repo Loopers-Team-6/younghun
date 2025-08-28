@@ -16,4 +16,11 @@ public interface CouponJpaRepository extends JpaRepository<CouponModel, Long> {
         """)
   void decreaseCouponCount(@Param("couponId") Long couponId);
 
+  @Modifying
+  @Query("""
+      UPDATE CouponModel c
+      SET c.count = c.count + 1
+      WHERE c.id = :couponId
+      """)
+  void increaseCouponCount(@Param("couponId")Long couponId);
 }

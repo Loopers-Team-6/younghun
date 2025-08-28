@@ -20,4 +20,9 @@ public class IssuedCouponRepositoryImpl implements IssuedCouponRepository {
     return repository.existsByUserIdAndOrderIdAndCouponId(userId, orderId, couponId);
   }
 
+  @Override
+  public void removeCoupon(String userId, Long orderId, Long couponId) {
+    repository.deleteByOrderIdAndCouponId(userId, orderId, couponId);
+  }
+
 }

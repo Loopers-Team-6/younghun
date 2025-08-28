@@ -3,10 +3,14 @@ package com.loopers.application.order;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 
 import com.loopers.domain.coupon.CouponModel;
 import com.loopers.domain.coupon.issued.IssuedCouponRepository;
+import com.loopers.domain.order.OrderCouponRegisterCommand;
 import com.loopers.domain.order.OrderModel;
+import com.loopers.domain.order.OrderPublisher;
 import com.loopers.domain.point.PointModel;
 import com.loopers.domain.point.PointRepository;
 import com.loopers.infrastructure.coupon.CouponJpaRepository;
@@ -22,6 +26,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest
@@ -45,6 +50,9 @@ class OrderServiceIntegrationTest {
 
   @Autowired
   private DatabaseCleanUp databaseCleanUp;
+
+  @MockitoBean
+  private CouponProcessor processor;
 
   @AfterEach
   void tearDown() {
@@ -117,6 +125,42 @@ class OrderServiceIntegrationTest {
     assertThat(issuedCouponRepository.exists("userId", orderCreateInfo.orderId(), coupon.getId())).isTrue();
     assertThat(afterCoupon.getCount()).isEqualTo(coupon.getCount() - 1);
     assertThat(orderCreateInfo.discountPrice()).isEqualTo(orderCreateInfo.totalPrice().subtract(BigInteger.valueOf(coupon.getDiscountValue())));
+
+  }
+
+
+  @DisplayName("쿠폰 등록시, 예외가 발생하면 쿠폰은 생성되지 않는다.")
+  @Test
+  void returnOrderInfo_whenThrows_thenNotCreatedCoupon() {
+    //given
+    List<OrderItemCommands> orderItemModels = new ArrayList<>();
+
+    orderItemModels.add(new OrderItemCommands(
+        1L, 1L
+    ));
+
+    orderItemModels.add(new OrderItemCommands(
+        2L, 2L
+    ));
+
+    CouponModel coupon = couponJpaRepository.save(new CouponModel("FIXED", 100, 10, "설명"));
+
+    OrderCreateCommand command =
+        new OrderCreateCommand("userId",
+            "서울시 송파구",
+            orderItemModels, coupon.getId(), "메모..");
+    pointRepository.save(new PointModel("userId", BigInteger.valueOf(500000000)));
+    //when
+    OrderCreateInfo orderCreateInfo = orderFacade.create(command);
+
+    doThrow(new RuntimeException("강제 예외")).when(processor)
+        .register(any(OrderCouponRegisterCommand.class));
+
+    CouponModel afterCoupon = couponJpaRepository.findById(coupon.getId()).get();
+
+    //then
+    assertThat(issuedCouponRepository.exists("userId", orderCreateInfo.orderId(), coupon.getId())).isFalse();
+    assertThat(afterCoupon.getCount()).isEqualTo(coupon.getCount());
 
   }
 
