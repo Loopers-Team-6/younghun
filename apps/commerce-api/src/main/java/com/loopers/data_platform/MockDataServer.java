@@ -24,7 +24,7 @@ public class MockDataServer {
   public void send(UserTrackingData event) {
 
     if (!event.status()) {
-      log.info("데이터 실패 사유 : {}", event.failReason());
+      log.error("데이터 실패 사유 : {}", event.failReason());
       return;
     }
     log.info("데이터 전송 : {}", event);
