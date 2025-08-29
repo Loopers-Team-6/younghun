@@ -54,6 +54,8 @@ public class ProductFacade {
           .description(productProjection.getDescription())
           .likedCount(productProjection.getLikedCount())
           .build();
+    }catch (CoreException e) {
+      throw e;
     } catch (Exception e) {
       publisher.fail(userId, e.getMessage());
       throw new CoreException(ErrorType.INTERNAL_ERROR, e.getMessage());
