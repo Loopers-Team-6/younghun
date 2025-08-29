@@ -1,7 +1,7 @@
 package com.loopers.application.payment;
 
+import com.loopers.application.catalog.product.StockProcessor;
 import com.loopers.domain.order.OrderModel;
-import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentMethod;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.infrastructure.payment.PaymentOrderProcessor;
@@ -26,8 +26,7 @@ public class PaymentPointStrategy implements PaymentStrategy {
     OrderModel orderModel = processor.get(command.orderNumber());
 
     // 포인트 감소
-    pointUseHandler.use(command.userId(), command.payment());
-
+    publisher.publish(command.userId(), command.payment());
     // 결제 처리
     PaymentModel payment = paymentProcessor.create(new PaymentProcessorVo(
         command.userId(), command.orderNumber(), command.description(),
@@ -38,11 +37,7 @@ public class PaymentPointStrategy implements PaymentStrategy {
     ));
 
     // 재고 차감
-    for (OrderItemModel orderItem : orderModel.getOrderItems()) {
-      Long productId = orderItem.getProductId();
-      Long quantity = orderItem.getQuantity();
-      stockProcessor.decreaseStock(productId, quantity);
-    }
+    publisher.publish(orderModel.getOrderItems());
 
     payment.done();
     publisher.publish(command.orderNumber());
