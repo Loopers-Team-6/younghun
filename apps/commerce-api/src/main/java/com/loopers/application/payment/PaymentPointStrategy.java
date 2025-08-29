@@ -1,6 +1,5 @@
 package com.loopers.application.payment;
 
-import com.loopers.application.catalog.product.StockProcessor;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.payment.PaymentMethod;
 import com.loopers.domain.payment.PaymentModel;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PaymentPointStrategy implements PaymentStrategy {
-  private final PointUseHandler pointUseHandler;
   private final PaymentProcessor paymentProcessor;
-  private final StockProcessor stockProcessor;
   private final PaymentOrderProcessor processor;
   private final PaymentPublisher publisher;
   private final PaymentHistoryProcessor paymentHistoryProcessor;

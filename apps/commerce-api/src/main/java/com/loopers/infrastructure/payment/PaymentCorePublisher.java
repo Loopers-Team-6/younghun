@@ -3,7 +3,7 @@ package com.loopers.infrastructure.payment;
 import com.loopers.application.payment.PaymentPublisher;
 import com.loopers.data_platform.PlatformSendEvent;
 import com.loopers.data_platform.UserTrackingData;
-import com.loopers.domain.catalog.product.stock.StockDecreaseEvent;
+import com.loopers.domain.catalog.product.stock.StockDecreaseCommand;
 import com.loopers.domain.order.orderItem.OrderItemModel;
 import com.loopers.domain.payment.PaymentOrderConfirmCommand;
 import com.loopers.domain.point.PointUseCommand;
@@ -41,7 +41,7 @@ public class PaymentCorePublisher implements PaymentPublisher {
   // 재고
   @Override
   public void publish(List<OrderItemModel> orderItems) {
-    publisher.publishEvent(new StockDecreaseEvent(orderItems));
+    publisher.publishEvent(new StockDecreaseCommand(orderItems));
   }
 
   @Override
