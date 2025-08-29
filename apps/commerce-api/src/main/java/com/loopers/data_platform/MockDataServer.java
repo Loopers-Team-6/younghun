@@ -1,6 +1,7 @@
 package com.loopers.data_platform;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -19,7 +20,7 @@ public class MockDataServer {
   }
 
   @Async
-  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  @EventListener
   public void send(UserTrackingData event) {
 
     if (!event.status()) {
