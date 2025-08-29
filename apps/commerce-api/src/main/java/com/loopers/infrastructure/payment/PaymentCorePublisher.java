@@ -2,7 +2,9 @@ package com.loopers.infrastructure.payment;
 
 import com.loopers.application.payment.PaymentPublisher;
 import com.loopers.data_platform.PlatformSendEvent;
+import com.loopers.data_platform.UserTrackingData;
 import com.loopers.domain.payment.PaymentOrderConfirmCommand;
+import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,6 +25,32 @@ public class PaymentCorePublisher implements PaymentPublisher {
     publisher.publishEvent(new PlatformSendEvent(
         "결제", paymentId, result
     ));
+  }
+
+  @Override
+  public void send(String userId, String message) {
+    publisher.publishEvent(
+        new UserTrackingData(
+            userId,
+            "PAYMENT_CREATE",
+            message,
+            true,
+            ZonedDateTime.now()
+        )
+    );
+  }
+
+  @Override
+  public void fail(String userId, String failMessage) {
+    publisher.publishEvent(
+        new UserTrackingData(
+            userId,
+            "PAYMENT_CREATE",
+            false,
+            failMessage,
+            ZonedDateTime.now()
+        )
+    );
   }
 
 }

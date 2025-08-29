@@ -1,8 +1,10 @@
 package com.loopers.infrastructure.order;
 
 import com.loopers.data_platform.PlatformSendEvent;
+import com.loopers.data_platform.UserTrackingData;
 import com.loopers.domain.order.OrderCouponRegisterCommand;
 import com.loopers.domain.order.OrderPublisher;
+import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,5 +25,32 @@ public class OrderCorePublisher implements OrderPublisher {
     log.info("주문 정보에서 데이터 플랫폼으로 데이터를 전송합니다.");
     publisher.publishEvent(new PlatformSendEvent("주문", orderId, payload));
   }
+
+  @Override
+  public void send(String userId, String message) {
+    publisher.publishEvent(
+        new UserTrackingData(
+            userId,
+            "ORDER_CREATE",
+            message,
+            true,
+            ZonedDateTime.now()
+        )
+    );
+  }
+
+  @Override
+  public void fail(String userId, String failMessage) {
+    publisher.publishEvent(
+        new UserTrackingData(
+            userId,
+            "ORDER_CREATE",
+            false,
+            failMessage,
+            ZonedDateTime.now()
+        )
+    );
+  }
+
 
 }

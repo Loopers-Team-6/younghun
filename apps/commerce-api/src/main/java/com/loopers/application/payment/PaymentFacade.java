@@ -7,6 +7,8 @@ import com.loopers.domain.payment.PaymentMethod;
 import com.loopers.domain.payment.PaymentModel;
 import com.loopers.domain.payment.PaymentStatus;
 import com.loopers.infrastructure.payment.PaymentOrderProcessor;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,19 +27,24 @@ public class PaymentFacade {
   private final PaymentOrderProcessor processor;
 
   public PaymentInfo payment(PaymentCommand command) {
+    try {
+      PaymentStrategy strategy = paymentFactory.getStrategy(PaymentMethod.valueOf(command.method()));
+      PaymentModel payment = strategy.process(command);
 
-    PaymentStrategy strategy = paymentFactory.getStrategy(PaymentMethod.valueOf(command.method()));
-    PaymentModel payment = strategy.process(command);
+      publisher.publish(payment.getId(), payment.toString());
+      publisher.send(command.userId(), "결제가 생성되었습니다.");
+      return PaymentInfo.builder()
+          .userId(payment.getUserId())
+          .orderNumber(payment.getOrderNumber())
+          .orderPrice(payment.getOrderAmount())
+          .paymentPrice(payment.getPaymentAmount())
+          .description(payment.getDescription())
+          .build();
+    } catch (Exception e) {
+      publisher.fail(command.userId(), e.getMessage());
+      throw new CoreException(ErrorType.INTERNAL_ERROR, e.getMessage());
+    }
 
-    publisher.publish(payment.getId(), payment.toString());
-
-    return PaymentInfo.builder()
-        .userId(payment.getUserId())
-        .orderNumber(payment.getOrderNumber())
-        .orderPrice(payment.getOrderAmount())
-        .paymentPrice(payment.getPaymentAmount())
-        .description(payment.getDescription())
-        .build();
   }
 
   @Transactional
