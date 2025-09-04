@@ -17,14 +17,17 @@ public class MetricsRepositoryImpl implements MetricsRepository {
 
   @Transactional
   public void upsertLikes(Long productId, long value) {
-    Optional<MetricsModel> metricsModel = metricsJpaRepository.findByProductId(productId);
+    LocalDate now = LocalDate.now();
+    Optional<MetricsModel> metricsModel = metricsJpaRepository.findByProductId(productId)
+        .stream().filter(p -> p.getDate().equals(now)).findFirst();
+
     if (metricsModel.isEmpty()) {
-      metricsJpaRepository.save(new MetricsModel(productId, 0L, value, 0L, LocalDate.now()));
+      metricsJpaRepository.save(new MetricsModel(productId, 0L, value, 0L, now));
       return;
     }
 
     MetricsModel metrics = metricsModel.get();
-    metrics.updateLikes();
+    metrics.updateLikes(value);
 
     if (metrics.getLikes() < 0) {
       throw new IllegalArgumentException("좋아요는 0보다 작을 수 없습니다.");
@@ -33,7 +36,10 @@ public class MetricsRepositoryImpl implements MetricsRepository {
 
   @Transactional
   public void upsertViews(Long productId, long value) {
-    Optional<MetricsModel> metricsModel = metricsJpaRepository.findByProductId(productId);
+    LocalDate now = LocalDate.now();
+    Optional<MetricsModel> metricsModel = metricsJpaRepository.findByProductId(productId)
+        .stream().filter(p -> p.getDate().equals(now)).findFirst();
+
     if (metricsModel.isEmpty()) {
       metricsJpaRepository.save(new MetricsModel(productId, value, 0L, 0L, LocalDate.now()));
       return;
@@ -45,7 +51,9 @@ public class MetricsRepositoryImpl implements MetricsRepository {
 
   @Transactional
   public void upsertSales(Long productId, long value) {
-    Optional<MetricsModel> metricsModel = metricsJpaRepository.findByProductId(productId);
+    LocalDate now = LocalDate.now();
+    Optional<MetricsModel> metricsModel = metricsJpaRepository.findByProductId(productId)
+        .stream().filter(p -> p.getDate().equals(now)).findFirst();
     if (metricsModel.isEmpty()) {
       metricsJpaRepository.save(new MetricsModel(productId, 0L, 0L, value, LocalDate.now()));
       return;

@@ -29,8 +29,8 @@ public class MetricsModel extends BaseEntity {
     this.views++;
   }
 
-  public void updateLikes() {
-    this.likes++;
+  public void updateLikes(long like) {
+    this.likes += like;
   }
 
   public void updateSales(Long sales) {

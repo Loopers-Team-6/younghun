@@ -26,6 +26,6 @@ public class StockEventListener {
     }
     repository.decrease(event.productId(), event.quantity());
     //집계
-    stockPublisher.aggregate(event.productId());
+    stockPublisher.aggregate(event.productId(), event.quantity());
   }
 }

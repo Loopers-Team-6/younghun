@@ -13,7 +13,7 @@ public class EventLogRepositoryImpl implements EventLogRepository {
   }
 
   @Override
-  public void insert(String userId, String message) {
-    repository.save(new EventLog(userId, message));
+  public void insert(EventLog eventLog) {
+    repository.save(eventLog);
   }
 }

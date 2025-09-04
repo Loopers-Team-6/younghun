@@ -10,7 +10,6 @@ public interface MetricsJpaRepository extends JpaRepository<MetricsModel, Long>{
   @Query("""
         SELECT m FROM MetricsModel m
         WHERE m.productId = :productId
-         AND m.date = CURRENT_DATE
         """)
   Optional<MetricsModel> findByProductId(Long productId);
 

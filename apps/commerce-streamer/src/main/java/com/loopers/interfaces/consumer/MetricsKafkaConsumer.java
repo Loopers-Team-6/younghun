@@ -30,7 +30,7 @@ public class MetricsKafkaConsumer {
   ) {
 
     for (ConsumerRecord<String, String> message : messages) {
-      factory.getStrategy(MetricsMethod.LIKES).process(Long.parseLong(message.key()), Integer.parseInt(message.value()));
+      factory.getStrategy(MetricsMethod.LIKES).process(message.value());
     }
 
     acknowledgment.acknowledge();
@@ -49,7 +49,7 @@ public class MetricsKafkaConsumer {
   ) {
 
     for (ConsumerRecord<String, String> message : messages) {
-      factory.getStrategy(MetricsMethod.SALES).process(Long.parseLong(message.key()), Integer.parseInt(message.value()));
+      factory.getStrategy(MetricsMethod.SALES).process(message.value());
     }
     acknowledgment.acknowledge();
   }
@@ -66,7 +66,7 @@ public class MetricsKafkaConsumer {
       Acknowledgment acknowledgment
   ) {
     for (ConsumerRecord<String, String> message : messages) {
-      factory.getStrategy(MetricsMethod.VIEWS).process(Long.parseLong(message.key()), Integer.parseInt(message.value()));
+      factory.getStrategy(MetricsMethod.VIEWS).process(message.value());
     }
     acknowledgment.acknowledge();
   }

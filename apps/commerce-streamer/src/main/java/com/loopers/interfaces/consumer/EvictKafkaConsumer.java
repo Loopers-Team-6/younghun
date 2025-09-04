@@ -1,6 +1,6 @@
 package com.loopers.interfaces.consumer;
 
-import com.loopers.application.evict.EvictCacheRepository;
+import com.loopers.application.evict.EvictService;
 import com.loopers.config.kafka.KafkaConfig;
 import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EvictKafkaConsumer {
-  private final EvictCacheRepository repository;
+  private final EvictService service;
 
-  public EvictKafkaConsumer(EvictCacheRepository repository) {
-    this.repository = repository;
+  public EvictKafkaConsumer(EvictService service) {
+    this.service = service;
   }
 
   @KafkaListener(
@@ -28,7 +28,7 @@ public class EvictKafkaConsumer {
       Acknowledgment acknowledgment
   ) {
     for (ConsumerRecord<String, String> message : messages) {
-      repository.evict(message.value());
+      service.evict(message.value());
     }
 
     acknowledgment.acknowledge();
