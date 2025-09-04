@@ -21,9 +21,9 @@ public class LikeCoreEventPublisher implements LikeEventPublisher {
     publisher.publishEvent(new LikeIncreaseEvent(userId, productId));
   }
 
-  public void decrease(String userId, Long productId) {
+  public void decrease(String userId, Long productId, int current) {
     log.info("userId : {}가 productId :{}에 좋아요를 감소시켰습니다.", userId, productId);
-    publisher.publishEvent(new LikeDecreaseEvent(userId, productId));
+    publisher.publishEvent(new LikeDecreaseEvent(userId, productId, current));
   }
 
 
