@@ -1,16 +1,21 @@
 package com.loopers.interfaces.consumer;
 
+import com.loopers.application.log.EventLogService;
 import com.loopers.config.kafka.KafkaConfig;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class LogKafkaConsumer {
+  private final EventLogService service;
+
+  public LogKafkaConsumer(EventLogService service) {
+    this.service = service;
+  }
+
   @KafkaListener(
       topics = "${logging-kafka.like.topic-name}",
       groupId = "${logging-kafka.group-id}",
@@ -20,9 +25,11 @@ public class LogKafkaConsumer {
       List<ConsumerRecord<String, String>> messages,
       Acknowledgment acknowledgment
   ) {
-    System.out.println("Received batch: " + messages);
 
-    System.out.println(acknowledgment);
+    for (ConsumerRecord<String, String> message : messages) {
+      service.insert(message.key(), message.value());
+    }
+
     acknowledgment.acknowledge();
   }
 }

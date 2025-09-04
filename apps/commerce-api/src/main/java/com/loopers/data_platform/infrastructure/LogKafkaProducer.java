@@ -12,7 +12,7 @@ public class LogKafkaProducer implements LogProducer {
 
   private final static String TOPIC = "LOGGING_V1";
 
-  public void send(String message) {
-    kafkaTemplate.send(TOPIC, message);
+  public void send(String userid, String message) {
+    kafkaTemplate.send(TOPIC, userid, message);
   }
 }
