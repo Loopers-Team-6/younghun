@@ -29,6 +29,21 @@ demo-kafka:
   test:
     topic-name: demo.internal.topic-v1
 
+evict-kafka:
+  group-id: EVICT_GROUP_ID
+  like:
+    topic-name: PRODUCT_LIKE_EVICT_V1
+
+aggregate-kafka:
+  group-id: AGGREGATE_GROUP_ID
+  like:
+    topic-name: PRODUCT_LIKE_CHANGED_V1
+
+logging-kafka:
+  group-id: LOGGING_GROUP_ID
+  like:
+    topic-name: LOGGING_V1
+
 ---
 spring:
   config:
