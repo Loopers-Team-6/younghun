@@ -33,6 +33,8 @@ evict-kafka:
   group-id: EVICT_GROUP_ID
   like:
     topic-name: PRODUCT_LIKE_EVICT_V1
+  stock:
+    topic-name: PRODUCT_STOCK_EVICT_V1
 
 aggregate-kafka:
   group-id: AGGREGATE_GROUP_ID

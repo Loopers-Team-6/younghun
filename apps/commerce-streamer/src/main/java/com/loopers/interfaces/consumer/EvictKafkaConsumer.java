@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class EvictKafkaConsumer {
   @KafkaListener(
-      topics = "${evict-kafka.like.topic-name}",
+      topics = {"${evict-kafka.like.topic-name}"
+      , "${evict-kafka.stock.topic-name}"
+      },
       groupId = "${evict-kafka.group-id}",
       containerFactory = KafkaConfig.BATCH_LISTENER
   )
