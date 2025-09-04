@@ -14,7 +14,7 @@ public class EvictKafkaConsumer {
       groupId = "${evict-kafka.group-id}",
       containerFactory = KafkaConfig.BATCH_LISTENER
   )
-  public void demoListener(
+  public void evictListener(
       List<ConsumerRecord<String, String>> messages,
       Acknowledgment acknowledgment
   ) {

@@ -14,7 +14,7 @@ public class AggregateKafkaConsumer {
       groupId = "${aggregate-kafka.group-id}",
       containerFactory = KafkaConfig.BATCH_LISTENER
   )
-  public void demoListener(
+  public void aggregateListener(
       List<ConsumerRecord<String, String>> messages,
       Acknowledgment acknowledgment
   ) {
