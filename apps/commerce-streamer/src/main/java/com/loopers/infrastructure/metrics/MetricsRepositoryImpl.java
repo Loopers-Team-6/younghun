@@ -24,7 +24,7 @@ public class MetricsRepositoryImpl implements MetricsRepository {
     }
 
     MetricsModel metrics = metricsModel.get();
-    metrics.setLikes(value);
+    metrics.updateLikes();
 
     if (metrics.getLikes() < 0) {
       throw new IllegalArgumentException("좋아요는 0보다 작을 수 없습니다.");
@@ -40,7 +40,7 @@ public class MetricsRepositoryImpl implements MetricsRepository {
     }
 
     MetricsModel metrics = metricsModel.get();
-    metrics.setViews(value);
+    metrics.updateViews();
   }
 
   @Transactional
@@ -52,7 +52,7 @@ public class MetricsRepositoryImpl implements MetricsRepository {
     }
 
     MetricsModel metrics = metricsModel.get();
-    metrics.setSales(value);
+    metrics.updateSales(value);
 
     if (metrics.getSales() < 0) {
       throw new IllegalArgumentException("판매량은 0보다 작을 수 없습니다.");

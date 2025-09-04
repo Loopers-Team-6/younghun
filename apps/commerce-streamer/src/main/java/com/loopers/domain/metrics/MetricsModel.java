@@ -25,6 +25,19 @@ public class MetricsModel extends BaseEntity {
     this.date = date;
   }
 
+  public void updateViews() {
+    this.views++;
+  }
+
+  public void updateLikes() {
+    this.likes++;
+  }
+
+  public void updateSales(Long sales) {
+    this.sales += sales;
+  }
+
+
   public Long getProductId() {
     return productId;
   }
