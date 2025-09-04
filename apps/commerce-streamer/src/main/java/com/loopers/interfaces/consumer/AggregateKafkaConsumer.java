@@ -10,7 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class AggregateKafkaConsumer {
   @KafkaListener(
-      topics = "${aggregate-kafka.like.topic-name}",
+      topics = {
+          "${aggregate-kafka.like.topic-name}",
+          "${aggregate-kafka.stock.topic-name}",
+          "${aggregate-kafka.views.topic-name}"
+      },
       groupId = "${aggregate-kafka.group-id}",
       containerFactory = KafkaConfig.BATCH_LISTENER
   )
