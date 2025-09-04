@@ -42,6 +42,8 @@ aggregate-kafka:
     topic-name: PRODUCT_LIKE_CHANGED_V1
   stock:
     topic-name: PRODUCT_STOCK_CHANGED_V1
+  views:
+    topic-name: PRODUCT_VIEWS_CHANGED_V1
 
 logging-kafka:
   group-id: LOGGING_GROUP_ID
