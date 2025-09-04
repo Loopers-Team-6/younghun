@@ -28,11 +28,11 @@ public class MockDataServer {
 
     if (!event.status()) {
       log.error("데이터 실패 사유 : {}", event.failReason());
-      logProducer.send("데이터 실패 사유 :" + event.failReason());
+      logProducer.send(event.userId(), "데이터 실패 사유 :" + event.failReason());
       return;
     }
     log.info("데이터 전송 : {}", event);
-    logProducer.send("데이터 전송 :" + event.message());
+    logProducer.send(event.userId(), "데이터 전송 :" + event.message());
   }
 
 
