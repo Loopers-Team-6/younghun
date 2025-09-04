@@ -27,7 +27,7 @@ public class LogKafkaConsumer {
   ) {
 
     for (ConsumerRecord<String, String> message : messages) {
-      service.insert(message.key(), message.value());
+      service.insert(message.value());
     }
 
     acknowledgment.acknowledge();

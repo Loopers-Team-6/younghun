@@ -30,7 +30,7 @@ public class ProductLikeListener {
     publisher.aggregate(event.productId(), -1);
 
     if (event.current() == 0) {
-      publisher.evict(event.productId(), "like:product:" + event.productId());
+      publisher.evict(event.productId());
     }
   }
 

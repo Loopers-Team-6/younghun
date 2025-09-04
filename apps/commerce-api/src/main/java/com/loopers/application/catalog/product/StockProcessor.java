@@ -21,7 +21,7 @@ public class StockProcessor {
     stockModel.decrease(quantity);
 
     if (stockModel.stock() == 0L) {
-      stockPublisher.evict("stock:product:", productId);
+      stockPublisher.evict(productId);
     }
   }
 }

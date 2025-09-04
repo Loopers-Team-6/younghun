@@ -76,4 +76,20 @@ public class KafkaConfig {
 
     return factory;
   }
+
+  @Bean
+  public ConcurrentKafkaListenerContainerFactory<Object, Object> defaultSingleListenerContainerFactory(
+      KafkaProperties kafkaProperties,
+      ByteArrayJsonMessageConverter converter) {
+
+    Map<String, Object> consumerConfig = new HashMap<>(kafkaProperties.buildConsumerProperties());
+
+    ConcurrentKafkaListenerContainerFactory<Object, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(consumerConfig));
+    factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
+    factory.setRecordMessageConverter(converter);
+    factory.setBatchListener(false);
+
+    return factory;
+  }
 }
