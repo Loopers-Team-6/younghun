@@ -1,7 +1,7 @@
 package com.loopers.infrastructure.like;
 
 import com.loopers.application.like.LikeEventPublisher;
-import com.loopers.data_platform.UserTrackingData;
+import com.loopers.data_platform.application.UserTrackingData;
 import com.loopers.domain.like.LikeDecreaseEvent;
 import com.loopers.domain.like.LikeIncreaseEvent;
 import java.time.ZonedDateTime;

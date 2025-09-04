@@ -1,7 +1,7 @@
 package com.loopers.infrastructure.catalog.product;
 
 import com.loopers.application.catalog.product.ProductPublisher;
-import com.loopers.data_platform.UserTrackingData;
+import com.loopers.data_platform.application.UserTrackingData;
 import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

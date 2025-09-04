@@ -39,6 +39,11 @@ aggregate-kafka:
   like:
     topic-name: PRODUCT_LIKE_CHANGED_V1
 
+logging-kafka:
+  group-id: LOGGING_GROUP_ID
+  like:
+    topic-name: LOGGING_V1
+
 ---
 spring:
   config:
