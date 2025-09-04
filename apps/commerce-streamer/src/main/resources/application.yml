@@ -40,6 +40,8 @@ aggregate-kafka:
   group-id: AGGREGATE_GROUP_ID
   like:
     topic-name: PRODUCT_LIKE_CHANGED_V1
+  stock:
+    topic-name: PRODUCT_STOCK_CHANGED_V1
 
 logging-kafka:
   group-id: LOGGING_GROUP_ID
