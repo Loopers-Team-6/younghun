@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class LikeKafkaEventPublisher implements LikePublisher {
-  private final KafkaTemplate<Object, Object> kafkaTemplate;
   private final KafkaTemplate<Object, Object> kafkaAtLeastTemplate;
 
   private final MessageConverter converter;
@@ -33,6 +32,6 @@ public class LikeKafkaEventPublisher implements LikePublisher {
   public void evict(Long productId) {
     log.debug("카프카를 통해 {}의 좋아요 캐시 제거 요청을 하였습니다.", productId);
     String message = converter.convert(new Message("METRICS", converter.convert(new LikeEvictMessage(productId))));
-    kafkaTemplate.send(EVICT_TOPIC, String.valueOf(productId), message);
+    kafkaAtLeastTemplate.send(EVICT_TOPIC, String.valueOf(productId), message);
   }
 }
