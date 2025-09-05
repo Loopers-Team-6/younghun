@@ -29,9 +29,6 @@ public class MetricsRepositoryImpl implements MetricsRepository {
     MetricsModel metrics = metricsModel.get();
     metrics.updateLikes(value);
 
-    if (metrics.getLikes() < 0) {
-      throw new IllegalArgumentException("좋아요는 0보다 작을 수 없습니다.");
-    }
   }
 
   @Transactional
@@ -62,9 +59,6 @@ public class MetricsRepositoryImpl implements MetricsRepository {
     MetricsModel metrics = metricsModel.get();
     metrics.updateSales(value);
 
-    if (metrics.getSales() < 0) {
-      throw new IllegalArgumentException("판매량은 0보다 작을 수 없습니다.");
-    }
   }
 
 }

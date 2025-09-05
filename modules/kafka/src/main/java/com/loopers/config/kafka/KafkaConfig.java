@@ -2,6 +2,7 @@ package com.loopers.config.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +41,14 @@ public class KafkaConfig {
 
   @Bean
   public KafkaTemplate<Object, Object> kafkaTemplate(ProducerFactory<Object, Object> producerFactory) {
+    return new KafkaTemplate<>(producerFactory);
+  }
+
+  @Bean
+  public KafkaTemplate<Object, Object> kafkaAtLeastTemplate(KafkaProperties kafkaProperties) {
+    Map<String, Object> props = new HashMap<>(kafkaProperties.buildProducerProperties());
+    props.put(ProducerConfig.ACKS_CONFIG, "all"); // 덮어쓰기
+    ProducerFactory<Object, Object> producerFactory = new DefaultKafkaProducerFactory<>(props);
     return new KafkaTemplate<>(producerFactory);
   }
 

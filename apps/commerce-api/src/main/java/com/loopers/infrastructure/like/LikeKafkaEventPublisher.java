@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LikeKafkaEventPublisher implements LikePublisher {
   private final KafkaTemplate<Object, Object> kafkaTemplate;
+  private final KafkaTemplate<Object, Object> kafkaAtLeastTemplate;
+
   private final MessageConverter converter;
   private final static String AGGREGATE_TOPIC = "PRODUCT_LIKE_CHANGED_V1";
   private final static String EVICT_TOPIC = "PRODUCT_LIKE_EVICT_V1";
@@ -24,7 +26,7 @@ public class LikeKafkaEventPublisher implements LikePublisher {
     log.info(" productId: {}, data: {}", productId, data);
     String key = LocalDate.now().toEpochDay() + ":" + productId;
     String message = converter.convert(new Message("METRICS", converter.convert(new LikeMetricsMessage(productId, data))));
-    kafkaTemplate.send(AGGREGATE_TOPIC, key, message);
+    kafkaAtLeastTemplate.send(AGGREGATE_TOPIC, key, message);
   }
 
 
