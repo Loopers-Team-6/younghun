@@ -26,10 +26,10 @@ public class LogKafkaConsumer {
       Acknowledgment acknowledgment
   ) {
 
+    acknowledgment.acknowledge();
     for (ConsumerRecord<String, String> message : messages) {
       service.insert(message.value());
     }
 
-    acknowledgment.acknowledge();
   }
 }
