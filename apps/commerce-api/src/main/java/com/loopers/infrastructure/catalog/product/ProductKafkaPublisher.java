@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ProductKafkaPublisher implements ProductPublisher {
-  private final KafkaTemplate<Object, Object> kafkaTemplate;
+  private final KafkaTemplate<Object, Object> kafkaAtLeastTemplate;
   private final MessageConverter messageConverter;
   private final static String AGGREGATE_TOPIC = "PRODUCT_VIEWS_CHANGED_V1";
 
@@ -19,6 +19,6 @@ public class ProductKafkaPublisher implements ProductPublisher {
   public void aggregate(Long productId) {
     String message = messageConverter.convert(new Message("METRICS", String.valueOf(productId)));
     String key = LocalDate.now().toEpochDay() + ":" + productId;
-    kafkaTemplate.send(AGGREGATE_TOPIC, key, message);
+    kafkaAtLeastTemplate.send(AGGREGATE_TOPIC, key, message);
   }
 }

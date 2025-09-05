@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StockKafkaPublisher implements StockPublisher {
-  private final KafkaTemplate<Object, Object> kafkaTemplate;
+  private final KafkaTemplate<Object, Object> kafkaAtLeastTemplate;
   private final MessageConverter converter;
   private final static String EVICT_TOPIC = "PRODUCT_STOCK_EVICT_V1";
   private final static String AGGREGATE_TOPIC = "PRODUCT_STOCK_CHANGED_V1";
@@ -30,7 +30,7 @@ public class StockKafkaPublisher implements StockPublisher {
         )
     );
     String key = LocalDate.now().toEpochDay() + ":" + productId;
-    kafkaTemplate.send(AGGREGATE_TOPIC, key, message);
+    kafkaAtLeastTemplate.send(AGGREGATE_TOPIC, key, message);
   }
 
   @Override
@@ -44,7 +44,7 @@ public class StockKafkaPublisher implements StockPublisher {
         )
     );
 
-    kafkaTemplate.send(EVICT_TOPIC, String.valueOf(productId), message);
+    kafkaAtLeastTemplate.send(EVICT_TOPIC, String.valueOf(productId), message);
   }
 
 
