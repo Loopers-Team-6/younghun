@@ -1,5 +1,6 @@
 package com.loopers.application.metrics;
 
+import com.loopers.domain.event.EventHandledRepository;
 import com.loopers.domain.metrics.MetricsRepository;
 import com.loopers.domain.metrics.ViewsMetricsMessage;
 import com.loopers.support.shared.Message;
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class MetricsViewsStrategy implements MetricsStrategy {
   private final MessageConvert convert;
+  private final EventHandledRepository eventHandledRepository;
   private final MetricsRepository repository;
 
-  public MetricsViewsStrategy(MessageConvert convert, MetricsRepository repository) {
+  public MetricsViewsStrategy(MessageConvert convert, EventHandledRepository eventHandledRepository, MetricsRepository repository) {
     this.convert = convert;
+    this.eventHandledRepository = eventHandledRepository;
     this.repository = repository;
   }
 
@@ -21,6 +24,7 @@ public class MetricsViewsStrategy implements MetricsStrategy {
     Message convertMessage = convert.convert(message, Message.class);
     ViewsMetricsMessage result = convert.convert(convertMessage.getPayload(), ViewsMetricsMessage.class);
     repository.upsertViews(result.productId(), result.value());
+    eventHandledRepository.save(convertMessage.getEventId());
   }
 
   @Override
