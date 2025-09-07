@@ -17,7 +17,7 @@ public class ProductKafkaPublisher implements ProductPublisher {
 
   @Override
   public void aggregate(Long productId) {
-    String message = messageConverter.convert(new Message("METRICS", String.valueOf(productId)));
+    String message = messageConverter.convert(new Message(String.valueOf(productId)));
     String key = LocalDate.now().toEpochDay() + ":" + productId;
     kafkaAtLeastTemplate.send(AGGREGATE_TOPIC, key, message);
   }

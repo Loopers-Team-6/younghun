@@ -18,7 +18,7 @@ public class LogKafkaProducer implements LogProducer {
 
   public void send(String userid, String message) {
     kafkaTemplate.send(TOPIC, userid, converter.convert(
-        new Message("LOG", converter.convert(new LogMessage(userid, message)))
+        new Message(converter.convert(new LogMessage(userid, message)))
     ));
   }
 }

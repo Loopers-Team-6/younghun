@@ -25,7 +25,6 @@ public class StockKafkaPublisher implements StockPublisher {
     log.info("카프카를 통해 재고정보가 전송이 되었습니다.");
     String message = converter.convert(
         new Message(
-            "METRICS",
             converter.convert(new StockMetricsMessage(productId, quantity))
         )
     );
@@ -39,7 +38,6 @@ public class StockKafkaPublisher implements StockPublisher {
 
     String message = converter.convert(
         new Message(
-            "EVICT",
             converter.convert(new StockEvictMessage(productId))
         )
     );
