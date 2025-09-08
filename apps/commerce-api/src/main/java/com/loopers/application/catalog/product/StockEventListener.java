@@ -1,7 +1,10 @@
 package com.loopers.application.catalog.product;
 
 import com.loopers.domain.catalog.product.stock.StockDecreaseEvent;
+import com.loopers.domain.catalog.product.stock.StockMetricsMessage;
 import com.loopers.domain.catalog.product.stock.StockPublisher;
+import com.loopers.support.shared.Message;
+import com.loopers.support.shared.MessageConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class StockEventListener {
   private final StockCacheRepository repository;
+  private final MessageConverter converter;
   private final StockPublisher stockPublisher;
 
   @Async
@@ -26,6 +30,9 @@ public class StockEventListener {
     }
     repository.decrease(event.productId(), event.quantity());
     //집계
-    stockPublisher.aggregate(event.productId(), event.quantity());
+
+    Message message = new Message(converter.convert(new StockMetricsMessage(event.productId(), event.quantity())));
+
+    stockPublisher.aggregate(message, event.productId());
   }
 }

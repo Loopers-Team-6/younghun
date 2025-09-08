@@ -1,7 +1,6 @@
 package com.loopers.infrastructure.catalog.product.stock;
 
 import com.loopers.domain.catalog.product.stock.StockEvictMessage;
-import com.loopers.domain.catalog.product.stock.StockMetricsMessage;
 import com.loopers.domain.catalog.product.stock.StockPublisher;
 import com.loopers.support.shared.Message;
 import com.loopers.support.shared.MessageConverter;
@@ -9,6 +8,7 @@ import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -21,13 +21,10 @@ public class StockKafkaPublisher implements StockPublisher {
   private final static String AGGREGATE_TOPIC = "PRODUCT_STOCK_CHANGED_V1";
 
   @Override
-  public void aggregate(Long productId, Long quantity) {
+  public void aggregate(@Payload Message message, Long productId) {
     log.info("카프카를 통해 재고정보가 전송이 되었습니다.");
-    String message = converter.convert(
-        new Message(
-            converter.convert(new StockMetricsMessage(productId, quantity))
-        )
-    );
+
+
     String key = LocalDate.now().toEpochDay() + ":" + productId;
     kafkaAtLeastTemplate.send(AGGREGATE_TOPIC, key, message);
   }
@@ -43,6 +40,11 @@ public class StockKafkaPublisher implements StockPublisher {
     );
 
     kafkaAtLeastTemplate.send(EVICT_TOPIC, String.valueOf(productId), message);
+  }
+
+  @Override
+  public void aggregate(Long productId, Long quantity) {
+    return;
   }
 
 
