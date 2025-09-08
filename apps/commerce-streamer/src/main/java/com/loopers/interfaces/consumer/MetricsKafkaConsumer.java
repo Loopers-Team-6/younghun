@@ -3,6 +3,8 @@ package com.loopers.interfaces.consumer;
 import com.loopers.application.metrics.MetricsMethod;
 import com.loopers.application.metrics.MetricsStrategyFactory;
 import com.loopers.config.kafka.KafkaConfig;
+import com.loopers.support.shared.Message;
+import com.loopers.support.shared.MessageConvert;
 import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -11,9 +13,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MetricsKafkaConsumer {
+  private final MessageConvert convert;
   private final MetricsStrategyFactory factory;
 
-  public MetricsKafkaConsumer(MetricsStrategyFactory factory) {
+  public MetricsKafkaConsumer(MessageConvert convert, MetricsStrategyFactory factory) {
+    this.convert = convert;
     this.factory = factory;
   }
 
