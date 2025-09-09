@@ -31,7 +31,8 @@ public class StockEventListener {
     repository.decrease(event.productId(), event.quantity());
     //집계
 
-    Message message = new Message(converter.convert(new StockMetricsMessage(event.productId(), event.quantity())));
+    Message message = new Message(
+        converter.convert(new StockMetricsMessage(event.productId(), event.unitPrice(), event.quantity())));
 
     stockPublisher.aggregate(message, event.productId());
   }

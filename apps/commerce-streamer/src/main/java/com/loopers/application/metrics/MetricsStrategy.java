@@ -1,8 +1,20 @@
 package com.loopers.application.metrics;
 
-public interface MetricsStrategy {
+import org.springframework.stereotype.Component;
 
-  void process(String message);
+@Component
+public abstract class MetricsStrategy {
+  private final RankingRepository rankingRepository;
 
-  MetricsMethod method();
+  protected MetricsStrategy(RankingRepository rankingRepository) {
+    this.rankingRepository = rankingRepository;
+  }
+
+  abstract public void process(String message);
+
+  abstract MetricsMethod method();
+
+  public void increment(Long productId, double weight, long value) {
+    rankingRepository.increment(productId, weight * value);
+  }
 }
