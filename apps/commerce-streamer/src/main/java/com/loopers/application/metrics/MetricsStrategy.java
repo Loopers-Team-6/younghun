@@ -14,7 +14,7 @@ public abstract class MetricsStrategy {
 
   abstract MetricsMethod method();
 
-  public void increment(Long productId, double weight, int value) {
+  public void increment(Long productId, double weight, long value) {
     rankingRepository.increment(productId, weight * value);
   }
 }
