@@ -2,6 +2,7 @@ package com.loopers.application.catalog.product;
 
 import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.domain.rank.RankingRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProductFacade {
   private final ProductRepository productRepository;
+  private final RankingRepository rankingRepository;
   private final ProductWarmupProcessor warmupProcessor;
   private final ProductEventPublisher publisher;
   private final ProductPublisher productPublisher;
@@ -48,8 +50,10 @@ public class ProductFacade {
       ProductProjection productProjection = productRepository.get(id);
       publisher.send(userId, userId + "가 productId : " + id + "를 조회 했습니다.");
       productPublisher.aggregate(id);
+      Long rank = rankingRepository.getRank(productProjection.getId());
       return ProductGetInfo.builder()
           .productId(productProjection.getId())
+          .rank(rank)
           .productName(productProjection.getName())
           .brandName(productProjection.getBrandName())
           .price(productProjection.getPrice())

@@ -1,6 +1,5 @@
 package com.loopers.application.rank;
 
-import com.loopers.domain.catalog.product.ProductModel;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.rank.RankingRepository;
 import com.loopers.interfaces.api.rank.RankV1Dto.RankCondition;
