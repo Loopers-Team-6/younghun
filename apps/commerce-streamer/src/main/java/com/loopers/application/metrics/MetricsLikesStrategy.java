@@ -8,13 +8,15 @@ import com.loopers.support.shared.MessageConvert;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MetricsLikesStrategy implements MetricsStrategy {
+public class MetricsLikesStrategy extends MetricsStrategy {
   private final MetricsRepository repository;
   private final EventHandledRepository eventHandledRepository;
   private final MessageConvert convert;
 
-  public MetricsLikesStrategy(MetricsRepository repository, EventHandledRepository eventHandledRepository,
+  public MetricsLikesStrategy(MetricsRepository repository, RankingRepository rankingRepository,
+                              EventHandledRepository eventHandledRepository,
                               MessageConvert convert) {
+    super(rankingRepository);
     this.repository = repository;
     this.eventHandledRepository = eventHandledRepository;
     this.convert = convert;
@@ -27,6 +29,7 @@ public class MetricsLikesStrategy implements MetricsStrategy {
     String payload = convertMessage.getPayload();
     LikeMetricsMessage result = convert.convert(payload, LikeMetricsMessage.class);
     repository.upsertLikes(result.productId(), result.data());
+    increment(result.productId(), 0.3, result.data());
     eventHandledRepository.save(convertMessage.getEventId());
   }
 

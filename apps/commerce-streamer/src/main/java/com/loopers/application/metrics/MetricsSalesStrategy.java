@@ -8,15 +8,18 @@ import com.loopers.support.shared.MessageConvert;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MetricsSalesStrategy implements MetricsStrategy {
+public class MetricsSalesStrategy extends MetricsStrategy {
   private final MessageConvert convert;
   private final EventHandledRepository eventHandledRepository;
   private final MetricsRepository repository;
 
-  public MetricsSalesStrategy(MessageConvert convert, EventHandledRepository eventHandledRepository, MetricsRepository repository) {
-    this.convert = convert;
-    this.eventHandledRepository = eventHandledRepository;
+  public MetricsSalesStrategy(MetricsRepository repository, RankingRepository rankingRepository,
+                              EventHandledRepository eventHandledRepository,
+                              MessageConvert convert) {
+    super(rankingRepository);
     this.repository = repository;
+    this.eventHandledRepository = eventHandledRepository;
+    this.convert = convert;
   }
 
   @Override
@@ -25,6 +28,7 @@ public class MetricsSalesStrategy implements MetricsStrategy {
     SalesMetricsMessage result = convert.convert(convertMessage.getPayload(), SalesMetricsMessage.class);
     repository.upsertSales(result.productId(), result.quantity());
     eventHandledRepository.save(convertMessage.getEventId());
+    increment(result.productId(), 0.7, result.quantity());
   }
 
   @Override
