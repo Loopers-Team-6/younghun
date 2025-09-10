@@ -5,6 +5,8 @@ import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.rank.RankingRepository;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
+import com.loopers.support.shared.Message;
+import com.loopers.support.shared.MessageConverter;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class ProductFacade {
   private final ProductRepository productRepository;
   private final RankingRepository rankingRepository;
+  private final MessageConverter converter;
   private final ProductWarmupProcessor warmupProcessor;
   private final ProductEventPublisher publisher;
   private final ProductPublisher productPublisher;
@@ -49,7 +52,9 @@ public class ProductFacade {
     try {
       ProductProjection productProjection = productRepository.get(id);
       publisher.send(userId, userId + "가 productId : " + id + "를 조회 했습니다.");
-      productPublisher.aggregate(id);
+
+      Message message = new Message(converter.convert(id));
+      productPublisher.aggregate(message, id);
       Long rank = rankingRepository.getRank(productProjection.getId());
       return ProductGetInfo.builder()
           .productId(productProjection.getId())
