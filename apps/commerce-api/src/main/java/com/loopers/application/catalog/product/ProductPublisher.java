@@ -1,7 +1,7 @@
 package com.loopers.application.catalog.product;
 
-import com.loopers.support.shared.Message;
+import com.loopers.domain.RootMessage;
 
 public interface ProductPublisher {
-  void aggregate(Message message, Long productId);
+  void aggregate(RootMessage message, Long productId);
 }

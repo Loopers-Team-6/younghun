@@ -1,10 +1,15 @@
 package com.loopers.application.metrics;
 
+import static java.util.stream.Collectors.groupingBy;
+
+import com.loopers.domain.LikeMetricsMessage;
 import com.loopers.domain.event.EventHandledRepository;
 import com.loopers.domain.metrics.MetricsRepository;
-import com.loopers.domain.metrics.LikeMetricsMessage;
-import com.loopers.support.shared.Message;
 import com.loopers.support.shared.MessageConvert;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,7 +21,7 @@ public class MetricsLikesStrategy extends MetricsStrategy {
   public MetricsLikesStrategy(MetricsRepository repository, RankingRepository rankingRepository,
                               EventHandledRepository eventHandledRepository,
                               MessageConvert convert) {
-    super(rankingRepository);
+    super(rankingRepository, eventHandledRepository, convert);
     this.repository = repository;
     this.eventHandledRepository = eventHandledRepository;
     this.convert = convert;
@@ -25,16 +30,27 @@ public class MetricsLikesStrategy extends MetricsStrategy {
 
   @Override
   public void process(String message) {
-    Message convertMessage = convert.convert(message, Message.class);
-    String payload = convertMessage.getPayload();
-    LikeMetricsMessage result = convert.convert(payload, LikeMetricsMessage.class);
-    repository.upsertLikes(result.productId(), result.data());
-    increment(result.productId(), 0.3, result.data());
-    eventHandledRepository.save(convertMessage.getEventId());
+
   }
 
   @Override
   public MetricsMethod method() {
     return MetricsMethod.LIKES;
+  }
+
+  @Override
+  public void sum(List<String> values) {
+    Map<Long, Long> map = process(values).stream()
+        .filter(LikeMetricsMessage.class::isInstance)  // BaseMessage 중 LikeMetricsMessage 선택
+        .map(LikeMetricsMessage.class::cast)
+        .collect(groupingBy(LikeMetricsMessage::productId, Collectors.summingLong(LikeMetricsMessage::data)));
+
+    // 파티션별로
+    for (Entry<Long, Long> entry : map.entrySet()) {
+      Long productId = entry.getKey();
+      Long sum = entry.getValue();
+      repository.upsertSales(productId, sum);
+      increment(productId, 0.3, sum);
+    }
   }
 }

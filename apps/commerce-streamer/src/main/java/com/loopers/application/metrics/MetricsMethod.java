@@ -8,7 +8,7 @@ public enum MetricsMethod {
     if (topic.contains("VIEWS")) {
       return VIEWS;
     }
-    if (topic.contains("LIKES")) {
+    if (topic.contains("LIKE")) {
       return LIKES;
     }
     if (topic.contains("STOCK")) {

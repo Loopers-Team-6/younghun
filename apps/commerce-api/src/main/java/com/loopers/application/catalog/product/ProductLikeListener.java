@@ -1,11 +1,12 @@
 package com.loopers.application.catalog.product;
 
 import com.loopers.application.like.LikePublisher;
+import com.loopers.domain.LikeMetricsMessage;
+import com.loopers.domain.RootMessage;
+import com.loopers.domain.RootMeticsMessage;
 import com.loopers.domain.catalog.product.status.ProductStatusRepository;
 import com.loopers.domain.like.LikeDecreaseEvent;
 import com.loopers.domain.like.LikeIncreaseEvent;
-import com.loopers.domain.like.LikeMetricsMessage;
-import com.loopers.support.shared.Message;
 import com.loopers.support.shared.MessageConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -37,8 +38,8 @@ public class ProductLikeListener {
     }
   }
 
-  private Message generate(Long productId, Integer data) {
-    return new Message(converter.convert(new LikeMetricsMessage(productId, data)));
+  private RootMessage generate(Long productId, Integer data) {
+    return new RootMeticsMessage(new LikeMetricsMessage(productId, data));
   }
 
 }

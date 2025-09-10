@@ -1,8 +1,8 @@
 package com.loopers.application.like;
 
-import com.loopers.support.shared.Message;
+import com.loopers.domain.RootMessage;
 
 public interface LikePublisher {
-  void aggregate(Message message, Long productId);
+  void aggregate(RootMessage message, Long productId);
   void evict(Long productId);
 }

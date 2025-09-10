@@ -1,6 +1,7 @@
 package com.loopers.infrastructure.like;
 
 import com.loopers.application.like.LikePublisher;
+import com.loopers.domain.RootMessage;
 import com.loopers.domain.like.LikeEvictMessage;
 import com.loopers.support.shared.Message;
 import com.loopers.support.shared.MessageConverter;
@@ -21,7 +22,7 @@ public class LikeKafkaEventPublisher implements LikePublisher {
   private final static String AGGREGATE_TOPIC = "PRODUCT_LIKE_CHANGED_V1";
   private final static String EVICT_TOPIC = "PRODUCT_LIKE_EVICT_V1";
 
-  public void aggregate(@Payload Message message, Long productId) {
+  public void aggregate(@Payload RootMessage message, Long productId) {
     log.info(" productId: {}, data: {}", productId, productId);
     String key = LocalDate.now().toEpochDay() + ":" + productId;
    kafkaAtLeastTemplate.send(AGGREGATE_TOPIC, key, message);
