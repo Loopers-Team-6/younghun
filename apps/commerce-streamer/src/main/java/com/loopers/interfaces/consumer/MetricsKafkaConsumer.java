@@ -1,12 +1,8 @@
 package com.loopers.interfaces.consumer;
 
-import com.loopers.application.metrics.MetricsMethod;
-import com.loopers.application.metrics.MetricsStrategyFactory;
 import com.loopers.application.metrics.RankingService;
 import com.loopers.config.kafka.KafkaConfig;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
