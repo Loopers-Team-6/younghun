@@ -46,7 +46,7 @@ public class MetricsViewsStrategy extends MetricsStrategy {
     for (Entry<Long, Long> entry : map.entrySet()) {
       Long productId = entry.getKey();
       Long sum = entry.getValue();
-      repository.upsertSales(productId, sum);
+      repository.upsertViews(productId, sum);
       increment(productId, 0.1, sum);
     }
   }

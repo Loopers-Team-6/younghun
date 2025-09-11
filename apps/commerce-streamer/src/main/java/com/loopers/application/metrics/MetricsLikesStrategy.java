@@ -49,7 +49,7 @@ public class MetricsLikesStrategy extends MetricsStrategy {
     for (Entry<Long, Long> entry : map.entrySet()) {
       Long productId = entry.getKey();
       Long sum = entry.getValue();
-      repository.upsertSales(productId, sum);
+      repository.upsertLikes(productId, sum);
       increment(productId, 0.3, sum);
     }
   }
