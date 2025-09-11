@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.groupingBy;
 import com.loopers.domain.LikeMetricsMessage;
 import com.loopers.domain.event.EventHandledRepository;
 import com.loopers.domain.metrics.MetricsRepository;
+import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
 import java.util.List;
 import java.util.Map;
@@ -15,23 +16,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class MetricsLikesStrategy extends MetricsStrategy {
   private final MetricsRepository repository;
-  private final EventHandledRepository eventHandledRepository;
-  private final MessageConvert convert;
 
   public MetricsLikesStrategy(MetricsRepository repository, RankingRepository rankingRepository,
                               EventHandledRepository eventHandledRepository,
+                              WeightRepository weightRepository,
                               MessageConvert convert) {
-    super(rankingRepository, eventHandledRepository, convert);
+    super(rankingRepository, eventHandledRepository, weightRepository, convert);
     this.repository = repository;
-    this.eventHandledRepository = eventHandledRepository;
-    this.convert = convert;
   }
 
 
-  @Override
-  public void process(String message) {
-
-  }
 
   @Override
   public MetricsMethod method() {
@@ -50,7 +44,7 @@ public class MetricsLikesStrategy extends MetricsStrategy {
       Long productId = entry.getKey();
       Long sum = entry.getValue();
       repository.upsertLikes(productId, sum);
-      increment(productId, 0.3, sum);
+      increment(productId, weight().getLikes(), sum);
     }
   }
 }

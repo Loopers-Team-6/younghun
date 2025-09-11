@@ -36,6 +36,11 @@ evict-kafka:
   stock:
     topic-name: PRODUCT_STOCK_EVICT_V1
 
+weight:
+  views: 0.1
+  likes: 0.3
+  sales: 0.7
+
 aggregate-kafka:
   group-id: AGGREGATE_GROUP_ID
   like:
