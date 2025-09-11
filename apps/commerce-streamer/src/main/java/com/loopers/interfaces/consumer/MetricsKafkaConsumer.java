@@ -2,6 +2,7 @@ package com.loopers.interfaces.consumer;
 
 import com.loopers.application.metrics.MetricsMethod;
 import com.loopers.application.metrics.MetricsStrategyFactory;
+import com.loopers.application.metrics.RankingService;
 import com.loopers.config.kafka.KafkaConfig;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +15,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MetricsKafkaConsumer {
-  private final MetricsStrategyFactory factory;
+  private final RankingService service;
 
-  public MetricsKafkaConsumer(MetricsStrategyFactory factory) {
-    this.factory = factory;
+  public MetricsKafkaConsumer(RankingService service) {
+    this.service = service;
   }
+
 
   @KafkaListener(
       topics = {
@@ -33,18 +35,11 @@ public class MetricsKafkaConsumer {
       List<ConsumerRecord<String, String>> messages,
       Acknowledgment acknowledgment
   ) {
-
-    Map<String, List<String>> collected = messages.stream()
-        .collect(Collectors.groupingBy(ConsumerRecord::topic, Collectors.mapping(ConsumerRecord::value, Collectors.toList())));
-
-    for (Entry<String, List<String>> entry : collected.entrySet()) {
-      String topic = entry.getKey();
-      List<String> values = entry.getValue();
-      factory.getStrategy(MetricsMethod.find(topic)).sum(values);
-    }
-
-//    for (ConsumerRecord<String, String> message : messages) {
-//    }
+    service.metics(messages.stream()
+           .collect(Collectors
+           .groupingBy(ConsumerRecord::topic,
+                      Collectors.mapping(ConsumerRecord::value,
+                      Collectors.toList()))));
 
     acknowledgment.acknowledge();
   }
