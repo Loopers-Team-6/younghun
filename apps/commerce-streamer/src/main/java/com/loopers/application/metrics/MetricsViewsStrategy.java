@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.groupingBy;
 import com.loopers.domain.ViewMetricsMessage;
 import com.loopers.domain.event.EventHandledRepository;
 import com.loopers.domain.metrics.MetricsRepository;
+import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
 import java.util.List;
 import java.util.Map;
@@ -14,21 +15,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MetricsViewsStrategy extends MetricsStrategy {
-  private final MessageConvert convert;
-  private final EventHandledRepository eventHandledRepository;
   private final MetricsRepository repository;
 
   public MetricsViewsStrategy(RankingRepository rankingRepository, MessageConvert convert,
-                              EventHandledRepository eventHandledRepository, MetricsRepository repository) {
-    super(rankingRepository, eventHandledRepository, convert);
+                              EventHandledRepository eventHandledRepository,
+                              WeightRepository weightRepository,
+                              MetricsRepository repository) {
+    super(rankingRepository, eventHandledRepository, weightRepository, convert);
     this.repository = repository;
-    this.eventHandledRepository = eventHandledRepository;
-    this.convert = convert;
   }
 
-  @Override
-  public void process(String message) {
-  }
 
   @Override
   public MetricsMethod method() {
@@ -47,7 +43,7 @@ public class MetricsViewsStrategy extends MetricsStrategy {
       Long productId = entry.getKey();
       Long sum = entry.getValue();
       repository.upsertViews(productId, sum);
-      increment(productId, 0.1, sum);
+      increment(productId, weight().getViews(), sum);
     }
   }
 }
