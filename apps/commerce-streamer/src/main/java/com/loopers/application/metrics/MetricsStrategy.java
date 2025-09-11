@@ -7,6 +7,7 @@ import com.loopers.domain.weight.Weight;
 import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -54,4 +55,10 @@ public abstract class MetricsStrategy {
   public void increment(Long productId, double weight, long value) {
     rankingRepository.increment(productId, weight * value);
   }
+
+  public void increment(Map<Long, Long> aggregate, double weight) {
+    rankingRepository.increment(aggregate, weight);
+  }
+
+
 }
