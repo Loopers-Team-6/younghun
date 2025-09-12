@@ -5,11 +5,11 @@ import static java.util.stream.Collectors.groupingBy;
 import com.loopers.domain.StockMetricsMessage;
 import com.loopers.domain.event.EventHandledRepository;
 import com.loopers.domain.metrics.MetricsRepository;
+import com.loopers.domain.rank.RankRepository;
 import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +20,8 @@ public class MetricsSalesStrategy extends MetricsStrategy {
   public MetricsSalesStrategy(MetricsRepository repository, RankingRepository rankingRepository,
                               EventHandledRepository eventHandledRepository,
                               WeightRepository weightRepository,
-                              MessageConvert convert) {
-    super(rankingRepository, eventHandledRepository, weightRepository, convert);
+                              MessageConvert convert, RankRepository rankRepository) {
+    super(rankingRepository, eventHandledRepository, weightRepository, convert, rankRepository);
     this.repository = repository;
   }
 
@@ -32,12 +32,12 @@ public class MetricsSalesStrategy extends MetricsStrategy {
         .collect(groupingBy(StockMetricsMessage::productId, Collectors.summingLong(StockMetricsMessage::quantity)));
 
     // 파티션별로
-    for (Entry<Long, Long> entry : map.entrySet()) {
-      Long productId = entry.getKey();
-      Long sum = entry.getValue();
-      repository.upsertSales(productId, sum);
-      increment(productId, weight().getSales(), sum);
-    }
+//    for (Entry<Long, Long> entry : map.entrySet()) {
+//      Long productId = entry.getKey();
+//      Long sum = entry.getValue();
+//      repository.upsertSales(productId, sum);
+//    }
+    increment(map, weight().getSales());
   }
 
 

@@ -1,8 +1,6 @@
 package com.loopers.interfaces.api.rank;
 
 import com.loopers.application.rank.ProductInfo;
-import com.loopers.support.error.CoreException;
-import com.loopers.support.error.ErrorType;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,9 +17,9 @@ public class RankV1Dto {
       start = start == null ? 0 : start;
       end = end == null ? 10 : end;
 
-      if (end > 20) {
-        throw new CoreException(ErrorType.CONFLICT, "사이즈는 20개를 넘어설수 없습니다.");
-      }
+//      if (end > 20) {
+//        throw new CoreException(ErrorType.CONFLICT, "사이즈는 20개를 넘어설수 없습니다.");
+//      }
     }
   }
 
