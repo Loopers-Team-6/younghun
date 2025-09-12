@@ -3,13 +3,17 @@ package com.loopers.application.metrics;
 import com.loopers.domain.BaseMessage;
 import com.loopers.domain.RootMeticsMessage;
 import com.loopers.domain.event.EventHandledRepository;
+import com.loopers.domain.rank.Rank;
+import com.loopers.domain.rank.RankRepository;
 import com.loopers.domain.weight.Weight;
 import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public abstract class MetricsStrategy {
@@ -17,6 +21,9 @@ public abstract class MetricsStrategy {
   private final EventHandledRepository eventHandledRepository;
   private final WeightRepository weightRepository;
   private final MessageConvert convert;
+
+
+  private final RankRepository rankRepository;
 
   @Value("${weight.views}")
   private double views;
@@ -27,11 +34,12 @@ public abstract class MetricsStrategy {
 
 
   protected MetricsStrategy(RankingRepository rankingRepository, EventHandledRepository eventHandledRepository,
-                            WeightRepository weightRepository, MessageConvert convert) {
+                            WeightRepository weightRepository, MessageConvert convert, RankRepository rankRepository) {
     this.rankingRepository = rankingRepository;
     this.eventHandledRepository = eventHandledRepository;
     this.weightRepository = weightRepository;
     this.convert = convert;
+    this.rankRepository = rankRepository;
   }
 
   abstract MetricsMethod method();
@@ -58,6 +66,19 @@ public abstract class MetricsStrategy {
 
   public void increment(Map<Long, Long> aggregate, double weight) {
     rankingRepository.increment(aggregate, weight);
+  }
+
+  @Transactional
+  public void increment(Long productId, double value) {
+    Optional<Rank> rankOptional = rankRepository.get(productId);
+
+    if (rankOptional.isEmpty()) {
+      rankRepository.save(new Rank(productId,value));
+      return;
+    }
+
+    Rank rank = rankOptional.get();
+    rank.increase(value);
   }
 
 
