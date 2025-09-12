@@ -44,6 +44,7 @@ public class RedisRankingRepository implements RankingRepository {
         double score = sum * weight;
         redisConnection.zIncrBy(newKey, score, productId.toString());
       }
+      redisConnection.expire(newKey, Duration.ofDays(2).getSeconds());
       return null;
     });
 
