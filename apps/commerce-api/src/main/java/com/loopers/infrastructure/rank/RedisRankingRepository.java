@@ -17,9 +17,16 @@ public class RedisRankingRepository implements RankingRepository {
   private final RedisTemplate<String, String> redisTemplate;
 
   @Override
-  public List<Long> range(int start, int end) {
+  public List<Long> range(int page, int size) {
+    long start = ((long) page * size) + page;       // start
+    long end = start + size - 1;           // end
     return Objects.requireNonNull(redisTemplate.opsForZSet().reverseRange(generateKey(), start, end))
         .stream().map(Long::parseLong).collect(Collectors.toList());
+  }
+
+  @Override
+  public int total() {
+    return Objects.requireNonNull(redisTemplate.opsForZSet().zCard(generateKey())).intValue();
   }
 
   @Override
