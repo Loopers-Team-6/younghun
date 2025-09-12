@@ -34,7 +34,7 @@ public class RankV1Dto {
     public static RankResponse from(ProductInfo info) {
       return new RankResponse(
           info.contents().stream().map(
-              a -> new Contents(a.brandId(), a.brandName(), a.productId(), a.productName(), a.todayRank(),
+              a -> new Contents(a.todayRank(), a.brandId(), a.brandName(), a.productId(), a.productName(),
                   a.diff(), a.status())
           ).toList(),
           info.page(), info.size(), info.total());
@@ -42,11 +42,11 @@ public class RankV1Dto {
   }
 
   public record Contents(
+      Integer rank,
       Long brandId,
       String brandName,
       Long productId,
       String productName,
-      Integer todayRank,
       Integer diff,     // 순위 변화량 (양수=상승, 음수=하락)
       String status     // "UP", "DOWN", "SAME", "NEW"
   ) {
