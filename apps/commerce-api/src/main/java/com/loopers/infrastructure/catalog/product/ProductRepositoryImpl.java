@@ -126,6 +126,19 @@ public class ProductRepositoryImpl implements ProductRepository {
         .where(product.id.in(productIds))
         .fetch();
   }
+  @Override
+  public List<ProductProjection> getProductInfos(List<Long> productIds) {
+    return query.select(new QProductProjection
+            (product.id,
+            brand.id,
+            brand.name.name,
+            product.name.name))
+        .from(product)
+        .leftJoin(brand).on(product.brandId.eq(brand.id))
+        .where(product.id.in(productIds))
+        .fetch();
+  }
+
 
   @Override
   public Optional<ProductStatus> has(Long productId) {

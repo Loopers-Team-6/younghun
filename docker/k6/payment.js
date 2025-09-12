@@ -1,5 +1,5 @@
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+import {check, sleep} from 'k6';
 
 // 테스트 옵션: 5명의 가상 사용자가 30초 동안 테스트를 진행
 export const options = {

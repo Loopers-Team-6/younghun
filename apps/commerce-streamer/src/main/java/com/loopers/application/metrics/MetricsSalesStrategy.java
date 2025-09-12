@@ -1,31 +1,39 @@
 package com.loopers.application.metrics;
 
+import static java.util.stream.Collectors.groupingBy;
+
+import com.loopers.domain.StockMetricsMessage;
 import com.loopers.domain.event.EventHandledRepository;
-import com.loopers.domain.metrics.MetricsRepository;
-import com.loopers.domain.metrics.SalesMetricsMessage;
-import com.loopers.support.shared.Message;
+import com.loopers.domain.rank.RankRepository;
+import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MetricsSalesStrategy implements MetricsStrategy {
-  private final MessageConvert convert;
-  private final EventHandledRepository eventHandledRepository;
-  private final MetricsRepository repository;
+public class MetricsSalesStrategy extends MetricsStrategy {
+  private final MetricsPublisher publisher;
 
-  public MetricsSalesStrategy(MessageConvert convert, EventHandledRepository eventHandledRepository, MetricsRepository repository) {
-    this.convert = convert;
-    this.eventHandledRepository = eventHandledRepository;
-    this.repository = repository;
+  public MetricsSalesStrategy(RankingRepository rankingRepository,
+                              EventHandledRepository eventHandledRepository,
+                              WeightRepository weightRepository,
+                              MessageConvert convert, RankRepository rankRepository, MetricsPublisher publisher) {
+    super(rankingRepository, eventHandledRepository, weightRepository, convert, rankRepository);
+    this.publisher = publisher;
   }
 
-  @Override
-  public void process(String message) {
-    Message convertMessage = convert.convert(message, Message.class);
-    SalesMetricsMessage result = convert.convert(convertMessage.getPayload(), SalesMetricsMessage.class);
-    repository.upsertSales(result.productId(), result.quantity());
-    eventHandledRepository.save(convertMessage.getEventId());
+  public void sum(List<String> values) {
+    Map<Long, Long> map = process(values).stream()
+        .filter(StockMetricsMessage.class::isInstance)  // BaseMessage 중 StockMetricsMessage만 선택
+        .map(StockMetricsMessage.class::cast)
+        .collect(groupingBy(StockMetricsMessage::productId, Collectors.summingLong(StockMetricsMessage::quantity)));
+
+    publisher.sales(map);
+    increment(map, weight().getSales());
   }
+
 
   @Override
   public MetricsMethod method() {

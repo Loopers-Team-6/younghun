@@ -1,34 +1,43 @@
 package com.loopers.application.metrics;
 
+import static java.util.stream.Collectors.groupingBy;
+
+import com.loopers.domain.ViewMetricsMessage;
 import com.loopers.domain.event.EventHandledRepository;
-import com.loopers.domain.metrics.MetricsRepository;
-import com.loopers.domain.metrics.ViewsMetricsMessage;
-import com.loopers.support.shared.Message;
+import com.loopers.domain.rank.RankRepository;
+import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MetricsViewsStrategy implements MetricsStrategy {
-  private final MessageConvert convert;
-  private final EventHandledRepository eventHandledRepository;
-  private final MetricsRepository repository;
+public class MetricsViewsStrategy extends MetricsStrategy {
+  private final MetricsPublisher publisher;
 
-  public MetricsViewsStrategy(MessageConvert convert, EventHandledRepository eventHandledRepository, MetricsRepository repository) {
-    this.convert = convert;
-    this.eventHandledRepository = eventHandledRepository;
-    this.repository = repository;
+  public MetricsViewsStrategy(RankingRepository rankingRepository, MessageConvert convert,
+                              EventHandledRepository eventHandledRepository,
+                              WeightRepository weightRepository,
+                              RankRepository rankRepository, MetricsPublisher publisher) {
+    super(rankingRepository, eventHandledRepository, weightRepository, convert, rankRepository);
+    this.publisher = publisher;
   }
 
-  @Override
-  public void process(String message) {
-    Message convertMessage = convert.convert(message, Message.class);
-    ViewsMetricsMessage result = convert.convert(convertMessage.getPayload(), ViewsMetricsMessage.class);
-    repository.upsertViews(result.productId(), result.value());
-    eventHandledRepository.save(convertMessage.getEventId());
-  }
 
   @Override
   public MetricsMethod method() {
     return MetricsMethod.VIEWS;
+  }
+
+  @Override
+  public void sum(List<String> values) {
+    Map<Long, Long> map = process(values).stream()
+        .filter(ViewMetricsMessage.class::isInstance)  // BaseMessage 중 LikeMetricsMessage 선택
+        .map(ViewMetricsMessage.class::cast)
+        .collect(groupingBy(ViewMetricsMessage::productId, Collectors.summingLong(ViewMetricsMessage::data)));
+
+    publisher.views(map);
+    increment(map, weight().getViews());
   }
 }
