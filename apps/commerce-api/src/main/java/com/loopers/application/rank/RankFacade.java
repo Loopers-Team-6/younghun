@@ -16,10 +16,11 @@ public class RankFacade {
 
 
   public ProductInfo rank(RankCondition condition) {
-    List<Long> rankingIds = rankingRepository.range(condition.page(), condition.size());
+    int totalSize = rankingRepository.total(condition.date());
+    List<Long> rankingIds = rankingRepository.range(condition.date(), condition.page(), condition.size());
 
     List<ProductProjection> models = productRepository.getProductInfos(rankingIds);
 
-    return ProductInfo.from(models, condition.page(), condition.size(), rankingRepository.total());
+    return ProductInfo.from(models, condition.page(), condition.size(), totalSize);
   }
 }
