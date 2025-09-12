@@ -30,4 +30,12 @@ public class ProductProjection {
     this.description = description;
     this.likedCount = likedCount;
   }
+
+  @QueryProjection
+  public ProductProjection(Long id, Long brandId, String brandName, String name) {
+    this.id = id;
+    this.brandId = brandId;
+    this.brandName = brandName;
+    this.name = name;
+  }
 }

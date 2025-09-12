@@ -17,18 +17,25 @@ public class RedisRankingRepository implements RankingRepository {
   private final RedisTemplate<String, String> redisTemplate;
 
   @Override
-  public List<Long> range(int start, int end) {
-    return Objects.requireNonNull(redisTemplate.opsForZSet().reverseRange(generateKey(), start, end))
+  public List<Long> range(LocalDate date, int page, int size) {
+    long start = ((long) page * size) + page;       // start
+    long end = start + size - 1;           // end
+    return Objects.requireNonNull(redisTemplate.opsForZSet().reverseRange(generateKey(date), start, end))
         .stream().map(Long::parseLong).collect(Collectors.toList());
   }
 
   @Override
-  public Long getRank(Long productId) {
-    return redisTemplate.opsForZSet().reverseRank(generateKey(), String.valueOf(productId));
+  public int total(LocalDate date) {
+    return Objects.requireNonNull(redisTemplate.opsForZSet().zCard(generateKey(date))).intValue();
   }
 
-  private String generateKey() {
-    return KEY + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+  @Override
+  public Long getRank(Long productId) {
+    return redisTemplate.opsForZSet().reverseRank(generateKey(LocalDate.now()), String.valueOf(productId));
+  }
+
+  private String generateKey(LocalDate date) {
+    return KEY + date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
   }
 
 
