@@ -1,8 +1,6 @@
 package com.loopers.application.rank;
 
 import com.loopers.domain.catalog.product.ProductRepository;
-import com.loopers.domain.rank.Rank;
-import com.loopers.domain.rank.RankRepository;
 import com.loopers.domain.rank.RankingRepository;
 import com.loopers.interfaces.api.rank.RankV1Dto.RankCondition;
 import java.util.List;
@@ -14,14 +12,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class RankFacade {
-  private final RankRepository rankRepository;
   private final RankingRepository rankingRepository;
   private final ProductRepository productRepository;
 
 
   public List<ProductInfo> rank(RankCondition condition) {
     List<Long> rankingIds = rankingRepository.range(condition.start(), condition.end());
-//    List<Long> rankingIds = rankRepository.rankList(condition.end()).stream().map(Rank::getProductId).toList();
     List<ProductInfo> products = productRepository.getIn(rankingIds)
         .stream().map(p -> new ProductInfo(p.getId(), p.getName())).toList();
 
