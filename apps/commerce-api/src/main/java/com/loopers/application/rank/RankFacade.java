@@ -1,6 +1,6 @@
 package com.loopers.application.rank;
 
-import com.loopers.domain.catalog.product.ProductModel;
+import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
 import com.loopers.domain.rank.RankingRepository;
 import com.loopers.interfaces.api.rank.RankV1Dto.RankCondition;
@@ -18,7 +18,7 @@ public class RankFacade {
   public ProductInfo rank(RankCondition condition) {
     List<Long> rankingIds = rankingRepository.range(condition.page(), condition.size());
 
-    List<ProductModel> models = productRepository.getIn(rankingIds);
+    List<ProductProjection> models = productRepository.getProductInfos(rankingIds);
 
     return ProductInfo.from(models, condition.page(), condition.size(), rankingRepository.total());
   }

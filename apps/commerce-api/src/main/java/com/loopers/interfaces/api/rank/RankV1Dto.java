@@ -34,15 +34,14 @@ public class RankV1Dto {
     public static RankResponse from(ProductInfo info) {
       return new RankResponse(
           info.contents().stream().map(
-              a -> new Contents(a.productId(), a.productName())
+              a -> new Contents(a.brandId(), a.brandName(), a.productId(), a.productName())
           ).toList(),
           info.page(), info.size(), info.total());
     }
   }
 
   public record Contents(
-      Long productId,
-      String productName
+      Long brandId, String brandName, Long productId, String productName
   ) {
   }
 }
