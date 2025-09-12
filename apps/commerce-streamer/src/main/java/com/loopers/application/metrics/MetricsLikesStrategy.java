@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.groupingBy;
 
 import com.loopers.domain.LikeMetricsMessage;
 import com.loopers.domain.event.EventHandledRepository;
-import com.loopers.domain.metrics.MetricsRepository;
 import com.loopers.domain.rank.RankRepository;
 import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
@@ -15,14 +14,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MetricsLikesStrategy extends MetricsStrategy {
-  private final MetricsRepository repository;
+  private final MetricsPublisher publisher;
 
-  public MetricsLikesStrategy(MetricsRepository repository, RankingRepository rankingRepository,
+  public MetricsLikesStrategy(RankingRepository rankingRepository,
                               EventHandledRepository eventHandledRepository,
                               WeightRepository weightRepository,
-                              MessageConvert convert, RankRepository rankRepository) {
+                              MessageConvert convert, RankRepository rankRepository, MetricsPublisher publisher) {
     super(rankingRepository, eventHandledRepository, weightRepository, convert, rankRepository);
-    this.repository = repository;
+    this.publisher = publisher;
   }
 
 
@@ -38,13 +37,7 @@ public class MetricsLikesStrategy extends MetricsStrategy {
         .map(LikeMetricsMessage.class::cast)
         .collect(groupingBy(LikeMetricsMessage::productId, Collectors.summingLong(LikeMetricsMessage::data)));
 
-    // 파티션별로
-//    for (Entry<Long, Long> entry : map.entrySet()) {
-//      Long productId = entry.getKey();
-//      Long sum = entry.getValue();
-//      repository.upsertLikes(productId, sum);
-//    }
-
+    publisher.likes(map);
     increment(map, weight().getLikes());
   }
 }

@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.groupingBy;
 
 import com.loopers.domain.StockMetricsMessage;
 import com.loopers.domain.event.EventHandledRepository;
-import com.loopers.domain.metrics.MetricsRepository;
 import com.loopers.domain.rank.RankRepository;
 import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
@@ -15,14 +14,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MetricsSalesStrategy extends MetricsStrategy {
-  private final MetricsRepository repository;
+  private final MetricsPublisher publisher;
 
-  public MetricsSalesStrategy(MetricsRepository repository, RankingRepository rankingRepository,
+  public MetricsSalesStrategy(RankingRepository rankingRepository,
                               EventHandledRepository eventHandledRepository,
                               WeightRepository weightRepository,
-                              MessageConvert convert, RankRepository rankRepository) {
+                              MessageConvert convert, RankRepository rankRepository, MetricsPublisher publisher) {
     super(rankingRepository, eventHandledRepository, weightRepository, convert, rankRepository);
-    this.repository = repository;
+    this.publisher = publisher;
   }
 
   public void sum(List<String> values) {
@@ -31,12 +30,7 @@ public class MetricsSalesStrategy extends MetricsStrategy {
         .map(StockMetricsMessage.class::cast)
         .collect(groupingBy(StockMetricsMessage::productId, Collectors.summingLong(StockMetricsMessage::quantity)));
 
-    // 파티션별로
-//    for (Entry<Long, Long> entry : map.entrySet()) {
-//      Long productId = entry.getKey();
-//      Long sum = entry.getValue();
-//      repository.upsertSales(productId, sum);
-//    }
+    publisher.sales(map);
     increment(map, weight().getSales());
   }
 

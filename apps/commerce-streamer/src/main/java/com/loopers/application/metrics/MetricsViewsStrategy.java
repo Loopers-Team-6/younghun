@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.groupingBy;
 
 import com.loopers.domain.ViewMetricsMessage;
 import com.loopers.domain.event.EventHandledRepository;
-import com.loopers.domain.metrics.MetricsRepository;
 import com.loopers.domain.rank.RankRepository;
 import com.loopers.domain.weight.WeightRepository;
 import com.loopers.support.shared.MessageConvert;
@@ -15,14 +14,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MetricsViewsStrategy extends MetricsStrategy {
-  private final MetricsRepository repository;
+  private final MetricsPublisher publisher;
 
   public MetricsViewsStrategy(RankingRepository rankingRepository, MessageConvert convert,
                               EventHandledRepository eventHandledRepository,
                               WeightRepository weightRepository,
-                              MetricsRepository repository, RankRepository rankRepository) {
+                              RankRepository rankRepository, MetricsPublisher publisher) {
     super(rankingRepository, eventHandledRepository, weightRepository, convert, rankRepository);
-    this.repository = repository;
+    this.publisher = publisher;
   }
 
 
@@ -38,12 +37,7 @@ public class MetricsViewsStrategy extends MetricsStrategy {
         .map(ViewMetricsMessage.class::cast)
         .collect(groupingBy(ViewMetricsMessage::productId, Collectors.summingLong(ViewMetricsMessage::data)));
 
-    // 파티션별로
-//    for (Entry<Long, Long> entry : map.entrySet()) {
-//      Long productId = entry.getKey();
-//      Long sum = entry.getValue();
-//      repository.upsertViews(productId, sum);
-//    }
+    publisher.views(map);
     increment(map, weight().getViews());
   }
 }
