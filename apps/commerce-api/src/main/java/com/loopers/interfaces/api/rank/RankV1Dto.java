@@ -34,14 +34,21 @@ public class RankV1Dto {
     public static RankResponse from(ProductInfo info) {
       return new RankResponse(
           info.contents().stream().map(
-              a -> new Contents(a.brandId(), a.brandName(), a.productId(), a.productName())
+              a -> new Contents(a.brandId(), a.brandName(), a.productId(), a.productName(), a.todayRank(),
+                  a.diff(), a.status())
           ).toList(),
           info.page(), info.size(), info.total());
     }
   }
 
   public record Contents(
-      Long brandId, String brandName, Long productId, String productName
+      Long brandId,
+      String brandName,
+      Long productId,
+      String productName,
+      Integer todayRank,
+      Integer diff,     // 순위 변화량 (양수=상승, 음수=하락)
+      String status     // "UP", "DOWN", "SAME", "NEW"
   ) {
   }
 }

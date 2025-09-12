@@ -1,6 +1,6 @@
 package com.loopers.application.rank;
 
-import com.loopers.domain.catalog.product.ProductProjection;
+import com.loopers.domain.rank.ProductWithTrend;
 import java.util.List;
 
 public record ProductInfo(
@@ -10,9 +10,17 @@ public record ProductInfo(
     int total
 ) {
 
-  public static ProductInfo from(List<ProductProjection> productModels, int page, int size, int total) {
-    List<Contents> list = productModels.stream()
-        .map(a -> new Contents(a.getBrandId(), a.getBrandName(), a.getId(), a.getName()))
+  public static ProductInfo from(List<ProductWithTrend> productsWithTrend, int page, int size, int total) {
+    List<Contents> list = productsWithTrend.stream()
+        .map(p -> new Contents(
+            p.product().getBrandId(),
+            p.product().getBrandName(),
+            p.product().getId(),
+            p.product().getName(),
+            p.todayRank(),
+            p.diff(),
+            p.status()
+        ))
         .toList();
     return new ProductInfo(list, page, size, total);
   }
