@@ -37,7 +37,7 @@ public class MetricsViewsStrategy extends MetricsStrategy {
         .map(ViewMetricsMessage.class::cast)
         .collect(groupingBy(ViewMetricsMessage::productId, Collectors.summingLong(ViewMetricsMessage::data)));
 
-//    publisher.views(map);
     increment(map, weight().getViews());
+    publisher.views(map);
   }
 }
