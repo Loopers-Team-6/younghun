@@ -3,6 +3,7 @@ package com.loopers.application.catalog.product;
 import com.loopers.domain.catalog.product.stock.StockModel;
 import com.loopers.domain.catalog.product.stock.StockPublisher;
 import com.loopers.domain.catalog.product.stock.StockRepository;
+import java.math.BigInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +16,9 @@ public class StockProcessor {
   private final StockPublisher stockPublisher;
 
   @Transactional
-  public void decreaseStock(Long productId, Long quantity) {
+  public void decreaseStock(Long productId, BigInteger unitPrice, Long quantity) {
     StockModel stockModel = stockRepository.get(productId);
-    eventPublisher.decrease(productId, quantity, stockModel.stock());
+    eventPublisher.decrease(productId, unitPrice, quantity, stockModel.stock());
     stockModel.decrease(quantity);
 
     if (stockModel.stock() == 0L) {

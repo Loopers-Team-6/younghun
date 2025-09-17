@@ -12,6 +12,7 @@ public interface ProductRepository {
   ProductProjection get(Long productId);
 
   List<ProductModel> getIn(List<Long> productIds);
+  List<ProductProjection> getProductInfos(List<Long> productIds);
 
   Optional<ProductStatus> has(Long productId);
 

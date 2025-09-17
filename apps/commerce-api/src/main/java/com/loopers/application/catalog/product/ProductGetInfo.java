@@ -7,6 +7,7 @@ import lombok.Builder;
 @Builder
 public record ProductGetInfo(
     Long productId,
+    Long rank,
     String brandName,
     String productName,
     BigInteger price,

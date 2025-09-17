@@ -1,5 +1,6 @@
 package com.loopers.infrastructure.catalog.product.stock;
 
+import com.loopers.domain.RootMessage;
 import com.loopers.domain.catalog.product.stock.StockEvictMessage;
 import com.loopers.domain.catalog.product.stock.StockPublisher;
 import com.loopers.support.shared.Message;
@@ -21,10 +22,8 @@ public class StockKafkaPublisher implements StockPublisher {
   private final static String AGGREGATE_TOPIC = "PRODUCT_STOCK_CHANGED_V1";
 
   @Override
-  public void aggregate(@Payload Message message, Long productId) {
+  public void aggregate(@Payload RootMessage message, Long productId) {
     log.info("카프카를 통해 재고정보가 전송이 되었습니다.");
-
-
     String key = LocalDate.now().toEpochDay() + ":" + productId;
     kafkaAtLeastTemplate.send(AGGREGATE_TOPIC, key, message);
   }

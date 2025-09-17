@@ -2,6 +2,7 @@ package com.loopers.application.catalog.product;
 
 import com.loopers.domain.catalog.product.stock.StockDecreaseCommand;
 import com.loopers.domain.order.orderItem.OrderItemModel;
+import java.math.BigInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,8 @@ public class ProductStockProcessor {
     for (OrderItemModel orderItem : command.orderItems()) {
       Long productId = orderItem.getProductId();
       Long quantity = orderItem.getQuantity();
-      stockProcessor.decreaseStock(productId, quantity);
+      BigInteger unitPrice = orderItem.getUnitPrice();
+      stockProcessor.decreaseStock(productId, unitPrice, quantity);
     }
   }
 }

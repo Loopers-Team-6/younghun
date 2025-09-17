@@ -8,6 +8,7 @@ import com.loopers.domain.catalog.product.stock.StockRepository;
 import com.loopers.infrastructure.catalog.product.ProductJpaRepository;
 import com.loopers.infrastructure.catalog.product.stock.StockJpaRepository;
 import com.loopers.utils.DatabaseCleanUp;
+import java.math.BigInteger;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,7 +53,7 @@ public class OrderStockProcessorTest {
       executor.submit(() -> {
         try {
           stockProcessor.decreaseStock(
-              7L, 1L);
+              7L, BigInteger.TEN,1L);
         } catch (Exception e) {
           System.out.println("실패: " + e.getMessage());
         } finally {

@@ -13,10 +13,10 @@ public class ProductV1Dto {
   public static class Search {
     @Builder
     public record Response(List<Contents> contents,
-                    int page,
-                    int size,
-                    long totalElements,
-                    int totalPages) {
+                           int page,
+                           int size,
+                           long totalElements,
+                           int totalPages) {
 
       public static Response from(ProductSearchInfo search) {
 
@@ -45,16 +45,19 @@ public class ProductV1Dto {
 
   public static class Get {
     public record Response(Long productId,
-                    String brandName,
-                    String productName,
-                    BigInteger price,
-                    int likedCount,
-                    String description,
-                    ZonedDateTime createdAt,
-                    ZonedDateTime updatedAt) {
+                           Long rank,
+                           String brandName,
+                           String productName,
+                           BigInteger price,
+                           int likedCount,
+                           String description,
+                           ZonedDateTime createdAt,
+                           ZonedDateTime updatedAt) {
 
       public static Response from(ProductGetInfo productGetInfo) {
-        return new Response(productGetInfo.productId(), productGetInfo.brandName(), productGetInfo.productName(),
+        return new Response(productGetInfo.productId(),
+            productGetInfo.rank() == null ? null : productGetInfo.rank() + 1,
+            productGetInfo.brandName(), productGetInfo.productName(),
             productGetInfo.price(),
             productGetInfo.likedCount(), productGetInfo.description(), productGetInfo.createdAt(), productGetInfo.updatedAt());
       }
