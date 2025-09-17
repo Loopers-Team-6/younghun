@@ -53,4 +53,15 @@ public class ProductMetrics extends BaseEntity {
   public void setLikes(Long likes) {
     this.likes = likes;
   }
+
+  @Override
+  public String toString() {
+    return "ProductMetrics{" +
+        "productId=" + productId +
+        ", date=" + date +
+        ", views=" + views +
+        ", sales=" + sales +
+        ", likes=" + likes +
+        '}';
+  }
 }
