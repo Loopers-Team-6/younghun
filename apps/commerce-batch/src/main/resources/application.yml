@@ -13,6 +13,9 @@ server:
 spring:
   main:
     web-application-type: servlet
+  batch:
+    jdbc:
+      initialize-schema: always
   application:
     name: commerce-streamer
   profiles:
