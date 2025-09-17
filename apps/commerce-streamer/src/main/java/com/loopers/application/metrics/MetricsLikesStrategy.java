@@ -38,6 +38,6 @@ public class MetricsLikesStrategy extends MetricsStrategy {
         .collect(groupingBy(LikeMetricsMessage::productId, Collectors.summingLong(LikeMetricsMessage::data)));
 
     increment(map, weight().getLikes());
-    publisher.likes(map);
+    publisher.likes(map, weight().getLikes());
   }
 }

@@ -15,16 +15,16 @@ public class MetricsPublisher {
     this.publisher = publisher;
   }
 
-  public void sales(Map<Long, Long> map) {
-    publisher.publishEvent(new MetricsSalesEvent(map));
+  public void sales(Map<Long, Long> map, double weight) {
+    publisher.publishEvent(new MetricsSalesEvent(map, weight));
   }
 
-  public void views(Map<Long, Long> map) {
-    publisher.publishEvent(new MetricsViewsEvent(map));
+  public void views(Map<Long, Long> map, double weight) {
+    publisher.publishEvent(new MetricsViewsEvent(map, weight));
   }
 
-  public void likes(Map<Long, Long> map) {
-    publisher.publishEvent(new MetricsLikesEvent(map));
+  public void likes(Map<Long, Long> map, double weight) {
+    publisher.publishEvent(new MetricsLikesEvent(map, weight));
   }
 
 }

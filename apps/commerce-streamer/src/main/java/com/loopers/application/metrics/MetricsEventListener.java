@@ -23,7 +23,7 @@ public class MetricsEventListener {
     for (Entry<Long, Long> entry : event.map().entrySet()) {
       Long productId = entry.getKey();
       Long sum = entry.getValue();
-      repository.upsertSales(productId, sum);
+      repository.upsertSales(productId, sum,event.weight());
     }
   }
 
@@ -33,7 +33,7 @@ public class MetricsEventListener {
     for (Entry<Long, Long> entry : event.map().entrySet()) {
       Long productId = entry.getKey();
       Long sum = entry.getValue();
-      repository.upsertViews(productId, sum);
+      repository.upsertViews(productId, sum, event.weight());
     }
   }
 
@@ -43,7 +43,7 @@ public class MetricsEventListener {
     for (Entry<Long, Long> entry : event.map().entrySet()) {
       Long productId = entry.getKey();
       Long sum = entry.getValue();
-      repository.upsertLikes(productId, sum);
+      repository.upsertLikes(productId, sum, event.weight());
     }
   }
 

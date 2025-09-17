@@ -38,6 +38,6 @@ public class MetricsViewsStrategy extends MetricsStrategy {
         .collect(groupingBy(ViewMetricsMessage::productId, Collectors.summingLong(ViewMetricsMessage::data)));
 
     increment(map, weight().getViews());
-    publisher.views(map);
+    publisher.views(map,weight().getViews());
   }
 }
