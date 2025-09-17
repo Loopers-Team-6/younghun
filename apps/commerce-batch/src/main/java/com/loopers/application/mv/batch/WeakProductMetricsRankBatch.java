@@ -1,4 +1,4 @@
-package com.loopers.application.mv;
+package com.loopers.application.mv.batch;
 
 
 import com.loopers.domain.metrics.ProductMetrics;

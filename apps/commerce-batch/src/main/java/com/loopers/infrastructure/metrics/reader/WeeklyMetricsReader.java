@@ -1,6 +1,7 @@
-package com.loopers.infrastructure.metrics;
+package com.loopers.infrastructure.metrics.reader;
 
 import com.loopers.domain.metrics.ProductMetrics;
+import com.loopers.infrastructure.metrics.ProductMetricsJpaRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
