@@ -19,12 +19,15 @@ public class WeakProductMetricsRankBatch {
   private final PlatformTransactionManager transactionManager;
   private final JobRepository jobRepository;
   private final ItemReader<ProductMetrics> metricsReader;
+  private final ItemProcessor<ProductMetrics, String> weaklyAggregateProcessor;
 
   public WeakProductMetricsRankBatch(PlatformTransactionManager transactionManager, JobRepository jobRepository,
-                                     ItemReader<ProductMetrics> metricsReader) {
+                                     ItemReader<ProductMetrics> metricsReader,
+                                     ItemProcessor<ProductMetrics, String> weaklyAggregateProcessor) {
     this.transactionManager = transactionManager;
     this.jobRepository = jobRepository;
     this.metricsReader = metricsReader;
+    this.weaklyAggregateProcessor = weaklyAggregateProcessor;
   }
 
 
@@ -36,21 +39,16 @@ public class WeakProductMetricsRankBatch {
   }
 
   @Bean
-  public Step aggregateStep(ItemProcessor<ProductMetrics, String> processor,
-                            ItemWriter<String> writer) {
+  public Step aggregateStep(ItemWriter<String> writer) {
     return new StepBuilder("step1", jobRepository)
-        .<ProductMetrics, String>chunk(10, transactionManager)
+        .<ProductMetrics, String>chunk(1000, transactionManager)
         .reader(metricsReader)
-        .processor(processor)
+        .processor(weaklyAggregateProcessor)
         .writer(writer)
         .build();
   }
 
 
-  @Bean
-  public ItemProcessor<ProductMetrics, String> processor() {
-    return item -> item.toString(); // 단순 변환
-  }
 
   @Bean
   public ItemWriter<String> writer() {
