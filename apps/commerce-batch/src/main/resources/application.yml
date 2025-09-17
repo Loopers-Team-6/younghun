@@ -13,6 +13,9 @@ server:
 spring:
   main:
     web-application-type: servlet
+  batch:
+    jdbc:
+      initialize-schema: always
   application:
     name: commerce-streamer
   profiles:
@@ -32,11 +35,11 @@ spring:
       on-profile: local, test
 
 server:
-  port: 8084
+  port: 8088
 
 management:
   server:
-    port: 8085
+    port: 8089
 
 ---
 spring:
