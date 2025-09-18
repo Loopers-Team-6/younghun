@@ -14,22 +14,22 @@ import org.springframework.data.domain.Sort.Direction;
 
 
 @Configuration
-public class WeeklyMetricsReader {
+public class MonthlyMetricsReader {
   private final ProductMetricsJpaRepository productMetricsRepository;
 
-  public WeeklyMetricsReader(ProductMetricsJpaRepository productMetricsRepository) {
+  public MonthlyMetricsReader(ProductMetricsJpaRepository productMetricsRepository) {
     this.productMetricsRepository = productMetricsRepository;
   }
 
   @Bean
   @StepScope
-  public ItemReader<ProductAggregate> weaklyAggregateReader(@Value("#{jobParameters['date']}") String date) {
+  public ItemReader<ProductAggregate> monthlyAggregateReader(@Value("#{jobParameters['date']}") String date) {
 
     LocalDate endDate = LocalDate.parse(date);                       // 선택한 날짜
-    LocalDate startDate = endDate.minusDays(7);        // 7일 전
+    LocalDate startDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), 1);
 
     return new RepositoryItemReaderBuilder<ProductAggregate>()
-        .name("weaklyAggregateReader")
+        .name("monthlyAggregateReader")
         .repository(productMetricsRepository)
         .methodName("findByDateRange")
         .arguments(startDate, endDate)

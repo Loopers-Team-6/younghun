@@ -7,8 +7,8 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "mv_weekly_product_rank")
-public class WeeklyProductRank{
+@Table(name = "mv_monthly_product_rank")
+public class MonthlyProductRank {
 
   @EmbeddedId
   private RankId rankId;
@@ -18,10 +18,10 @@ public class WeeklyProductRank{
   private Long views;
   private Long likes;
 
-  protected WeeklyProductRank() {
+  protected MonthlyProductRank() {
   }
 
-  public WeeklyProductRank(ProductAggregate item, String date, int rank) {
+  public MonthlyProductRank(ProductAggregate item, String date, int rank) {
 
 
     this.ranking = rank;

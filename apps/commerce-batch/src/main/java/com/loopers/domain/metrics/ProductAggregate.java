@@ -1,14 +1,14 @@
 package com.loopers.domain.metrics;
 
-public class WeeklyProductAggregate {
+public class ProductAggregate {
   private Long productId;
   private Double totalScore;
   private Long totalViews;
   private Long totalLikes;
   private Long totalSales;
 
-  public WeeklyProductAggregate(Long productId, Double totalScore, Long totalViews,
-                             Long totalLikes, Long totalSales) {
+  public ProductAggregate(Long productId, Double totalScore, Long totalViews,
+                          Long totalLikes, Long totalSales) {
     this.productId = productId;
     this.totalScore = totalScore;
     this.totalViews = totalViews;
