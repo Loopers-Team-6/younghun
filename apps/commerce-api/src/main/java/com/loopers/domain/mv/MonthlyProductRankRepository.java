@@ -4,5 +4,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface MonthlyProductRankRepository {
-  List<MonthlyProductRank> get(LocalDate date);
+  List<MonthlyProductRank> get(LocalDate date, int page, int size);
 }

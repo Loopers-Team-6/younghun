@@ -22,7 +22,7 @@ public class RankV1Controller {
   @GetMapping
   public ApiResponse<RankResponse> rank(
       @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyyMMdd") LocalDate date,
-      @RequestParam(value = "dateType", required = false) String type,
+      @RequestParam(value = "dateType",defaultValue = "DAILY") String type,
       @RequestParam(value = "size", required = false) Integer size,
       @RequestParam(value = "page", required = false) Integer page
   ) {
