@@ -16,4 +16,11 @@ public interface WeeklyProductRankJpaRepository extends JpaRepository<WeeklyProd
          order by p.ranking ASC
          """)
   List<WeeklyProductRank> findByDate(LocalDate date, Pageable pageable);
+
+  @Query("""
+        SELECT count(w)
+        FROM WeeklyProductRank w
+        WHERE w.rankId.criteriaData = :date
+        """)
+  int total(LocalDate date);
 }

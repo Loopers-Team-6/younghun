@@ -1,7 +1,7 @@
 package com.loopers.application.rank;
 
-import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.domain.catalog.product.RankProjectionQuery;
 import com.loopers.domain.mv.MonthlyProductRank;
 import com.loopers.domain.mv.MonthlyProductRankRepository;
 import com.loopers.domain.mv.RankId;
@@ -13,15 +13,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class MonthStrategy implements DateStrategy{
+public class MonthStrategy implements DateStrategy {
   private final MonthlyProductRankRepository monthlyProductRankRepository;
   private final ProductRepository productRepository;
 
   @Override
-  public List<ProductProjection> process(LocalDate date, int page, int size) {
+  public RankProjectionQuery process(LocalDate date, int page, int size) {
+    int total = monthlyProductRankRepository.total(date);
+
     List<Long> rakingIds = monthlyProductRankRepository.get(date, page, size).stream().map(MonthlyProductRank::getRankId)
         .map(RankId::getProductId).toList();
-    return productRepository.getProductInfos(rakingIds);
+    return new RankProjectionQuery(productRepository.getProductInfos(rakingIds), total);
   }
 
   @Override

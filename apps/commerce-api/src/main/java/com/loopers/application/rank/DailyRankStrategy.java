@@ -1,7 +1,7 @@
 package com.loopers.application.rank;
 
-import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.domain.catalog.product.RankProjectionQuery;
 import com.loopers.domain.rank.RankingRepository;
 import com.loopers.infrastructure.mv.DateType;
 import java.time.LocalDate;
@@ -16,11 +16,11 @@ public class DailyRankStrategy implements DateStrategy {
   private final ProductRepository productRepository;
 
   @Override
-  public List<ProductProjection> process(LocalDate date, int page, int size) {
+  public RankProjectionQuery process(LocalDate date, int page, int size) {
     int totalSize = rankingRepository.total(date);
     List<Long> rankingIds = rankingRepository.range(date, page, size);
-    return productRepository.getProductInfos(rankingIds);
-}
+    return new RankProjectionQuery(productRepository.getProductInfos(rankingIds), totalSize);
+  }
 
   @Override
   public DateType getType() {

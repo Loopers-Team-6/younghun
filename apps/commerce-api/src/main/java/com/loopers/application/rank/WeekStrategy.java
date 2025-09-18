@@ -1,7 +1,7 @@
 package com.loopers.application.rank;
 
-import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.domain.catalog.product.RankProjectionQuery;
 import com.loopers.domain.mv.RankId;
 import com.loopers.domain.mv.WeeklyProductRank;
 import com.loopers.domain.mv.WeeklyProductRankRepository;
@@ -19,10 +19,12 @@ public class WeekStrategy implements DateStrategy{
 
 
   @Override
-  public List<ProductProjection> process(LocalDate date, int page, int size) {
+  public RankProjectionQuery process(LocalDate date, int page, int size) {
+    int total = weeklyProductRankRepository.total(date);
+
     List<Long> rakingIds = weeklyProductRankRepository.get(date, page, size).stream().map(WeeklyProductRank::getRankId)
         .map(RankId::getProductId).toList();
-    return productRepository.getProductInfos(rakingIds);
+    return new RankProjectionQuery(productRepository.getProductInfos(rakingIds),total) ;
   }
 
   @Override

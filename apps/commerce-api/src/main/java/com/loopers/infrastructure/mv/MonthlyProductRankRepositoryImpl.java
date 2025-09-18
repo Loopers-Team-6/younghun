@@ -19,4 +19,9 @@ public class MonthlyProductRankRepositoryImpl implements MonthlyProductRankRepos
     Pageable pageable = PageRequest.of(page, size);
     return repository.findByDate(date, pageable);
   }
+
+  @Override
+  public int total(LocalDate date) {
+    return repository.total(date);
+  }
 }

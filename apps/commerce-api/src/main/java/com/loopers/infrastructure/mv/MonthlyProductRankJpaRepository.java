@@ -15,4 +15,11 @@ public interface MonthlyProductRankJpaRepository extends JpaRepository<MonthlyPr
       order by m.ranking ASC
       """)
   List<MonthlyProductRank> findByDate(LocalDate date, Pageable pageable);
+
+  @Query("""
+        SELECT count(m)
+        FROM MonthlyProductRank m
+        WHERE m.rankId.criteriaData = :date
+        """)
+  int total(LocalDate date);
 }
