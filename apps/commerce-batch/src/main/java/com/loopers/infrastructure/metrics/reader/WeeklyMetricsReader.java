@@ -1,6 +1,6 @@
 package com.loopers.infrastructure.metrics.reader;
 
-import com.loopers.domain.metrics.ProductMetrics;
+import com.loopers.domain.metrics.WeeklyProductAggregate;
 import com.loopers.infrastructure.metrics.ProductMetricsJpaRepository;
 import java.time.LocalDate;
 import java.util.Map;
@@ -10,7 +10,7 @@ import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 
 @Configuration
@@ -23,18 +23,19 @@ public class WeeklyMetricsReader {
 
   @Bean
   @StepScope
-  public ItemReader<ProductMetrics> weaklyAggregateReader(@Value("#{jobParameters['date']}") String date) {
+  public ItemReader<WeeklyProductAggregate> weaklyAggregateReader(@Value("#{jobParameters['date']}") String date) {
 
     LocalDate endDate = LocalDate.parse(date);                       // 선택한 날짜
     LocalDate startDate = endDate.minusDays(7);        // 7일 전
 
-    return new RepositoryItemReaderBuilder<ProductMetrics>()
+    return new RepositoryItemReaderBuilder<WeeklyProductAggregate>()
         .name("weaklyAggregateReader")
         .repository(productMetricsRepository)
         .methodName("findByDateRange")
-        .arguments(startDate,endDate)
-        .pageSize(1000)
-        .sorts(Map.of("id", Sort.Direction.ASC))
+        .arguments(startDate, endDate)
+        .pageSize(100)
+        .maxItemCount(100)
+        .sorts(Map.of("productId", Direction.DESC))
         .build();
   }
 }
