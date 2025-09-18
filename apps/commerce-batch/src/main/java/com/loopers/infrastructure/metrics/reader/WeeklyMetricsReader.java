@@ -3,7 +3,6 @@ package com.loopers.infrastructure.metrics.reader;
 import com.loopers.domain.metrics.ProductMetrics;
 import com.loopers.infrastructure.metrics.ProductMetricsJpaRepository;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
@@ -25,11 +24,15 @@ public class WeeklyMetricsReader {
   @Bean
   @StepScope
   public ItemReader<ProductMetrics> weaklyAggregateReader(@Value("#{jobParameters['date']}") String date) {
+
+    LocalDate endDate = LocalDate.parse(date);                       // 선택한 날짜
+    LocalDate startDate = endDate.minusDays(7);        // 7일 전
+
     return new RepositoryItemReaderBuilder<ProductMetrics>()
         .name("weaklyAggregateReader")
         .repository(productMetricsRepository)
-        .methodName("findByDate")
-        .arguments(List.of(LocalDate.parse(date)))
+        .methodName("findByDateRange")
+        .arguments(startDate,endDate)
         .pageSize(1000)
         .sorts(Map.of("id", Sort.Direction.ASC))
         .build();
