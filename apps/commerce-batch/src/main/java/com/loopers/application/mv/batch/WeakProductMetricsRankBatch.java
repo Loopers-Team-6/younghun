@@ -2,6 +2,7 @@ package com.loopers.application.mv.batch;
 
 
 import com.loopers.domain.metrics.WeeklyProductAggregate;
+import com.loopers.domain.mv.WeeklyProductMetricsRank;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -19,11 +20,11 @@ public class WeakProductMetricsRankBatch {
   private final PlatformTransactionManager transactionManager;
   private final JobRepository jobRepository;
   private final ItemReader<WeeklyProductAggregate> metricsReader;
-  private final ItemProcessor<WeeklyProductAggregate, String> weaklyAggregateProcessor;
+  private final ItemProcessor<WeeklyProductAggregate, WeeklyProductMetricsRank> weaklyAggregateProcessor;
 
   public WeakProductMetricsRankBatch(PlatformTransactionManager transactionManager, JobRepository jobRepository,
                                      ItemReader<WeeklyProductAggregate> metricsReader,
-                                     ItemProcessor<WeeklyProductAggregate, String> weaklyAggregateProcessor) {
+                                     ItemProcessor<WeeklyProductAggregate, WeeklyProductMetricsRank> weaklyAggregateProcessor) {
     this.transactionManager = transactionManager;
     this.jobRepository = jobRepository;
     this.metricsReader = metricsReader;
@@ -39,9 +40,9 @@ public class WeakProductMetricsRankBatch {
   }
 
   @Bean
-  public Step aggregateStep(ItemWriter<String> writer) {
+  public Step aggregateStep(ItemWriter<WeeklyProductMetricsRank> writer) {
     return new StepBuilder("step1", jobRepository)
-        .<WeeklyProductAggregate, String>chunk(1000, transactionManager)
+        .<WeeklyProductAggregate, WeeklyProductMetricsRank>chunk(1000, transactionManager)
         .reader(metricsReader)
         .processor(weaklyAggregateProcessor)
         .writer(writer)
@@ -51,7 +52,7 @@ public class WeakProductMetricsRankBatch {
 
 
   @Bean
-  public ItemWriter<String> writer() {
+  public ItemWriter<WeeklyProductMetricsRank> writer() {
     return items -> items.forEach(System.out::println);
   }
 
