@@ -31,7 +31,7 @@ public class MetricsSalesStrategy extends MetricsStrategy {
         .collect(groupingBy(StockMetricsMessage::productId, Collectors.summingLong(StockMetricsMessage::quantity)));
 
     increment(map, weight().getSales());
-    publisher.sales(map);
+    publisher.sales(map,weight().getSales());
   }
 
 

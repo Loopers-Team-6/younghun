@@ -12,30 +12,34 @@ public class MetricsModel extends BaseEntity {
   private Long views;
   private Long likes;
   private Long sales;
+  private Double score;
   private LocalDate date;
 
   protected MetricsModel() {
   }
 
-  public MetricsModel(Long productId, Long views, Long likes, Long sales, LocalDate date) {
+  public MetricsModel(Long productId, Long views, Long likes, Long sales, Double score, LocalDate date) {
     this.productId = productId;
     this.views = views;
     this.likes = likes;
     this.sales = sales;
+    this.score = score;
     this.date = date;
   }
 
-  public void updateViews() {
+  public void updateViews(double weight) {
     this.views++;
+    this.score += (1 * weight);
   }
 
-  public void updateLikes(long like) {
+  public void updateLikes(long like, double weight) {
     this.likes += like;
-
+    this.score += (like * weight);
   }
 
-  public void updateSales(Long sales) {
+  public void updateSales(Long sales, double weight) {
     this.sales += sales;
+    this.score += (sales * weight);
   }
 
 
@@ -77,5 +81,9 @@ public class MetricsModel extends BaseEntity {
 
   public void setDate(LocalDate date) {
     this.date = date;
+  }
+
+  public Double getScore() {
+    return score;
   }
 }

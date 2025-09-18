@@ -13,6 +13,7 @@ public class ProductMetrics extends BaseEntity {
   private Long views;
   private Long sales;
   private Long likes;
+  private Double score;
 
   public Long getProductId() {
     return productId;
@@ -52,5 +53,25 @@ public class ProductMetrics extends BaseEntity {
 
   public void setLikes(Long likes) {
     this.likes = likes;
+  }
+
+  public void setScore(Double score) {
+    this.score = score;
+  }
+
+  public Double getScore() {
+    return score;
+  }
+
+  @Override
+  public String toString() {
+    return "ProductMetrics{" +
+        "productId=" + productId +
+        ", date=" + date +
+        ", views=" + views +
+        ", sales=" + sales +
+        ", likes=" + likes +
+        ", score=" + score +
+        '}';
   }
 }
