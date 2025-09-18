@@ -1,18 +1,19 @@
 package com.loopers.domain.mv;
 
-import com.loopers.domain.BaseEntity;
 import com.loopers.domain.metrics.WeeklyProductAggregate;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "mv_weekly_product_rank")
-public class WeeklyProductRank extends BaseEntity {
-  private Long productId;
+public class WeeklyProductRank{
+
+  @EmbeddedId
+  private RankId rankId;
   private int ranking;
   private Double score;
-  private LocalDate criteriaData;
   private Long sales;
   private Long views;
   private Long likes;
@@ -21,21 +22,14 @@ public class WeeklyProductRank extends BaseEntity {
   }
 
   public WeeklyProductRank(WeeklyProductAggregate item, String date, int rank) {
-    this.productId = item.getProductId();
+
+
     this.ranking = rank;
+    this.rankId = new RankId(item.getProductId(), LocalDate.parse(date));
     this.score = item.getTotalScore() == null ? 0.0 : item.getTotalScore(); // null인 경우 0.0으로 하게 만든다.
-    this.criteriaData = LocalDate.parse(date);
     this.sales = item.getTotalSales();
     this.views = item.getTotalViews();
     this.likes = item.getTotalLikes();
-  }
-
-  public Long getProductId() {
-    return productId;
-  }
-
-  public void setProductId(Long productId) {
-    this.productId = productId;
   }
 
   public int getRank() {
@@ -54,13 +48,6 @@ public class WeeklyProductRank extends BaseEntity {
     this.score = score;
   }
 
-  public LocalDate getCriteriaData() {
-    return criteriaData;
-  }
-
-  public void setCriteriaData(LocalDate criteriaData) {
-    this.criteriaData = criteriaData;
-  }
 
   public Long getSales() {
     return sales;
