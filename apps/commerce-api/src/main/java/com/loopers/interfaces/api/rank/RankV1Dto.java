@@ -40,7 +40,7 @@ public class RankV1Dto {
     public static RankResponse from(ProductInfo info) {
       return new RankResponse(
           info.contents().stream().map(
-              a -> new Contents(a.todayRank(), a.brandId(), a.brandName(), a.productId(), a.productName())
+              a -> new Contents(a.brandId(), a.brandName(), a.productId(), a.productName())
           ).toList(),
           info.page(), info.size(), info.total());
     }
@@ -52,7 +52,6 @@ public class RankV1Dto {
   }
 
   public record Contents(
-      Integer rank,
       Long brandId,
       String brandName,
       Long productId,
