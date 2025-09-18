@@ -2,7 +2,6 @@ package com.loopers.application.mv.processor;
 
 import com.loopers.domain.metrics.ProductAggregate;
 import com.loopers.domain.mv.MonthlyProductRank;
-import com.loopers.domain.mv.WeeklyProductRank;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;

@@ -3,7 +3,6 @@ package com.loopers.application.mv.batch;
 
 import com.loopers.domain.metrics.ProductAggregate;
 import com.loopers.domain.mv.MonthlyProductRank;
-import com.loopers.domain.mv.WeeklyProductRank;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import org.springframework.batch.core.Job;
