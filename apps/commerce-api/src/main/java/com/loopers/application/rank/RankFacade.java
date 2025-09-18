@@ -2,6 +2,7 @@ package com.loopers.application.rank;
 
 import com.loopers.domain.catalog.product.ProductProjection;
 import com.loopers.domain.catalog.product.ProductRepository;
+import com.loopers.domain.mv.WeeklyProductRankRepository;
 import com.loopers.domain.rank.ProductTrendService;
 import com.loopers.domain.rank.ProductWithTrend;
 import com.loopers.domain.rank.RankingRepository;
@@ -18,6 +19,7 @@ public class RankFacade {
   private final RankingRepository rankingRepository;
   private final ProductRepository productRepository;
 
+  private final WeeklyProductRankRepository weeklyProductRankRepository;
 
   public ProductInfo rank(RankCondition condition) {
     int totalSize = rankingRepository.total(condition.date());
