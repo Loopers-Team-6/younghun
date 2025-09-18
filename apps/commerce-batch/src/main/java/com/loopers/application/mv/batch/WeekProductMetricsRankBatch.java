@@ -13,6 +13,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.CannotAcquireLockException;
@@ -23,13 +24,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
 @Configuration
-public class WeakProductMetricsRankBatch {
+public class WeekProductMetricsRankBatch {
   private final PlatformTransactionManager transactionManager;
   private final JobRepository jobRepository;
   private final ItemReader<ProductAggregate> weaklyAggregateReader;
   private final ItemProcessor<ProductAggregate, WeeklyProductRank> weaklyAggregateProcessor;
   private final ItemWriter<WeeklyProductRank> WeeklyProductRankWriter;
-  public WeakProductMetricsRankBatch(PlatformTransactionManager transactionManager, JobRepository jobRepository,
+  public WeekProductMetricsRankBatch(PlatformTransactionManager transactionManager, JobRepository jobRepository,
                                      ItemReader<ProductAggregate> weaklyAggregateReader,
                                      ItemProcessor<ProductAggregate, WeeklyProductRank> weaklyAggregateProcessor,
                                      ItemWriter<WeeklyProductRank> weeklyProductRankWriter) {
@@ -41,8 +42,9 @@ public class WeakProductMetricsRankBatch {
   }
 
 
+  @Qualifier("weekJob")
   @Bean
-  public Job weakJob(Step weeklyAggregateStep) {
+  public Job weekJob(Step weeklyAggregateStep) {
     return new JobBuilder("weeklyAggregateJob", jobRepository)
         .start(weeklyAggregateStep)
         .build();
