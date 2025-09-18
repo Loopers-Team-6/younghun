@@ -2,6 +2,7 @@ package com.loopers.application.mv.batch;
 
 
 import com.loopers.domain.metrics.ProductAggregate;
+import com.loopers.domain.mv.MonthlyProductRank;
 import com.loopers.domain.mv.WeeklyProductRank;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -23,38 +24,41 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
 @Configuration
-public class WeakProductMetricsRankBatch {
+public class MonthProductMetricsRankBatch {
   private final PlatformTransactionManager transactionManager;
   private final JobRepository jobRepository;
-  private final ItemReader<ProductAggregate> weaklyAggregateReader;
-  private final ItemProcessor<ProductAggregate, WeeklyProductRank> weaklyAggregateProcessor;
-  private final ItemWriter<WeeklyProductRank> WeeklyProductRankWriter;
-  public WeakProductMetricsRankBatch(PlatformTransactionManager transactionManager, JobRepository jobRepository,
-                                     ItemReader<ProductAggregate> weaklyAggregateReader,
-                                     ItemProcessor<ProductAggregate, WeeklyProductRank> weaklyAggregateProcessor,
-                                     ItemWriter<WeeklyProductRank> weeklyProductRankWriter) {
+
+  private final ItemReader<ProductAggregate> monthlyAggregateReader;
+  private final ItemProcessor<ProductAggregate, MonthlyProductRank> monthProductMetricsProcessor;
+  private final ItemWriter<MonthlyProductRank> monthlyProductRankWriter;
+
+
+  public MonthProductMetricsRankBatch(PlatformTransactionManager transactionManager, JobRepository jobRepository,
+                                      ItemReader<ProductAggregate> monthlyAggregateReader,
+                                      ItemProcessor<ProductAggregate, MonthlyProductRank> monthProductMetricsProcessor,
+                                      ItemWriter<MonthlyProductRank> monthlyProductRankWriter) {
     this.transactionManager = transactionManager;
     this.jobRepository = jobRepository;
-    this.weaklyAggregateReader = weaklyAggregateReader;
-    this.weaklyAggregateProcessor = weaklyAggregateProcessor;
-    WeeklyProductRankWriter = weeklyProductRankWriter;
+    this.monthlyAggregateReader = monthlyAggregateReader;
+    this.monthProductMetricsProcessor = monthProductMetricsProcessor;
+    this.monthlyProductRankWriter = monthlyProductRankWriter;
   }
 
 
   @Bean
-  public Job weakJob(Step weeklyAggregateStep) {
-    return new JobBuilder("weeklyAggregateJob", jobRepository)
-        .start(weeklyAggregateStep)
+  public Job monthJob(Step montlyggregateStep) {
+    return new JobBuilder("monthlyAggregateJob", jobRepository)
+        .start(montlyggregateStep)
         .build();
   }
 
   @Bean
-  public Step weeklyAggregateStep() {
-    return new StepBuilder("weeklyAggregateStep", jobRepository)
-        .<ProductAggregate, WeeklyProductRank>chunk(100, transactionManager)
-        .reader(weaklyAggregateReader)
-        .processor(weaklyAggregateProcessor)
-        .writer(WeeklyProductRankWriter)
+  public Step montlyggregateStep() {
+    return new StepBuilder("monthlyAggregateStep", jobRepository)
+        .<ProductAggregate, MonthlyProductRank>chunk(100, transactionManager)
+        .reader(monthlyAggregateReader)
+        .processor(monthProductMetricsProcessor)
+        .writer(monthlyProductRankWriter)
         .faultTolerant()
         .skip(HttpClientErrorException.class)
         .skip(DataIntegrityViolationException.class)
