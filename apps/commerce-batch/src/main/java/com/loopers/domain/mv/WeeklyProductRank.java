@@ -7,22 +7,22 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "mv_weekly_product_metrics_rank")
-public class WeeklyProductMetricsRank extends BaseEntity {
+@Table(name = "mv_weekly_product_rank")
+public class WeeklyProductRank extends BaseEntity {
   private Long productId;
-  private int rank;
+  private int ranking;
   private Double score;
   private LocalDate criteriaData;
   private Long sales;
   private Long views;
   private Long likes;
 
-  protected WeeklyProductMetricsRank() {
+  protected WeeklyProductRank() {
   }
 
-  public WeeklyProductMetricsRank(WeeklyProductAggregate item, String date, int rank) {
+  public WeeklyProductRank(WeeklyProductAggregate item, String date, int rank) {
     this.productId = item.getProductId();
-    this.rank = rank;
+    this.ranking = rank;
     this.score = item.getTotalScore() == null ? 0.0 : item.getTotalScore(); // null인 경우 0.0으로 하게 만든다.
     this.criteriaData = LocalDate.parse(date);
     this.sales = item.getTotalSales();
@@ -39,11 +39,11 @@ public class WeeklyProductMetricsRank extends BaseEntity {
   }
 
   public int getRank() {
-    return rank;
+    return ranking;
   }
 
-  public void setRank(int rank) {
-    this.rank = rank;
+  public void setRank(int ranking) {
+    this.ranking = ranking;
   }
 
   public Double getScore() {
@@ -86,16 +86,4 @@ public class WeeklyProductMetricsRank extends BaseEntity {
     this.likes = likes;
   }
 
-  @Override
-  public String toString() {
-    return "WeeklyProductMetricsRank{" +
-        "productId=" + productId +
-        ", rank=" + rank +
-        ", score=" + score +
-        ", criteriaData=" + criteriaData +
-        ", sales=" + sales +
-        ", views=" + views +
-        ", likes=" + likes +
-        '}';
-  }
 }

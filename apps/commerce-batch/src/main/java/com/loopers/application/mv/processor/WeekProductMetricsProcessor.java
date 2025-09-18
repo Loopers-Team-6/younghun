@@ -1,7 +1,7 @@
 package com.loopers.application.mv.processor;
 
 import com.loopers.domain.metrics.WeeklyProductAggregate;
-import com.loopers.domain.mv.WeeklyProductMetricsRank;
+import com.loopers.domain.mv.WeeklyProductRank;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @StepScope
-public class WeekProductMetricsProcessor implements ItemProcessor<WeeklyProductAggregate, WeeklyProductMetricsRank>{
+public class WeekProductMetricsProcessor implements ItemProcessor<WeeklyProductAggregate, WeeklyProductRank>{
 
 
   private final AtomicInteger rank = new AtomicInteger(1);
@@ -21,7 +21,7 @@ public class WeekProductMetricsProcessor implements ItemProcessor<WeeklyProductA
   }
 
   @Override
-  public WeeklyProductMetricsRank process(WeeklyProductAggregate item) {
-    return new WeeklyProductMetricsRank(item, date, rank.getAndIncrement());
+  public WeeklyProductRank process(WeeklyProductAggregate item) {
+    return new WeeklyProductRank(item, date, rank.getAndIncrement());
   }
 }
