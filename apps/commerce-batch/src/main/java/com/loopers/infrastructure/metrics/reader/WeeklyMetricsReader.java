@@ -1,6 +1,6 @@
 package com.loopers.infrastructure.metrics.reader;
 
-import com.loopers.domain.metrics.WeeklyProductAggregate;
+import com.loopers.domain.metrics.ProductAggregate;
 import com.loopers.infrastructure.metrics.ProductMetricsJpaRepository;
 import java.time.LocalDate;
 import java.util.Map;
@@ -23,12 +23,12 @@ public class WeeklyMetricsReader {
 
   @Bean
   @StepScope
-  public ItemReader<WeeklyProductAggregate> weaklyAggregateReader(@Value("#{jobParameters['date']}") String date) {
+  public ItemReader<ProductAggregate> weaklyAggregateReader(@Value("#{jobParameters['date']}") String date) {
 
     LocalDate endDate = LocalDate.parse(date);                       // 선택한 날짜
     LocalDate startDate = endDate.minusDays(7);        // 7일 전
 
-    return new RepositoryItemReaderBuilder<WeeklyProductAggregate>()
+    return new RepositoryItemReaderBuilder<ProductAggregate>()
         .name("weaklyAggregateReader")
         .repository(productMetricsRepository)
         .methodName("findByDateRange")

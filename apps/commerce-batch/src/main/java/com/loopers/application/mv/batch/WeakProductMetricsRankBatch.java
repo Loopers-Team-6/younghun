@@ -1,7 +1,7 @@
 package com.loopers.application.mv.batch;
 
 
-import com.loopers.domain.metrics.WeeklyProductAggregate;
+import com.loopers.domain.metrics.ProductAggregate;
 import com.loopers.domain.mv.WeeklyProductRank;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -26,12 +26,12 @@ import org.springframework.web.client.HttpServerErrorException;
 public class WeakProductMetricsRankBatch {
   private final PlatformTransactionManager transactionManager;
   private final JobRepository jobRepository;
-  private final ItemReader<WeeklyProductAggregate> metricsReader;
-  private final ItemProcessor<WeeklyProductAggregate, WeeklyProductRank> weaklyAggregateProcessor;
+  private final ItemReader<ProductAggregate> metricsReader;
+  private final ItemProcessor<ProductAggregate, WeeklyProductRank> weaklyAggregateProcessor;
   private final ItemWriter<WeeklyProductRank> WeeklyProductRankWriter;
   public WeakProductMetricsRankBatch(PlatformTransactionManager transactionManager, JobRepository jobRepository,
-                                     ItemReader<WeeklyProductAggregate> metricsReader,
-                                     ItemProcessor<WeeklyProductAggregate, WeeklyProductRank> weaklyAggregateProcessor,
+                                     ItemReader<ProductAggregate> metricsReader,
+                                     ItemProcessor<ProductAggregate, WeeklyProductRank> weaklyAggregateProcessor,
                                      ItemWriter<WeeklyProductRank> weeklyProductRankWriter) {
     this.transactionManager = transactionManager;
     this.jobRepository = jobRepository;
@@ -51,7 +51,7 @@ public class WeakProductMetricsRankBatch {
   @Bean
   public Step aggregateStep() {
     return new StepBuilder("weeklyAggregateStep", jobRepository)
-        .<WeeklyProductAggregate, WeeklyProductRank>chunk(100, transactionManager)
+        .<ProductAggregate, WeeklyProductRank>chunk(100, transactionManager)
         .reader(metricsReader)
         .processor(weaklyAggregateProcessor)
         .writer(WeeklyProductRankWriter)

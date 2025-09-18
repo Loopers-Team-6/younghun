@@ -1,6 +1,6 @@
 package com.loopers.domain.mv;
 
-import com.loopers.domain.metrics.WeeklyProductAggregate;
+import com.loopers.domain.metrics.ProductAggregate;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -21,7 +21,7 @@ public class WeeklyProductRank{
   protected WeeklyProductRank() {
   }
 
-  public WeeklyProductRank(WeeklyProductAggregate item, String date, int rank) {
+  public WeeklyProductRank(ProductAggregate item, String date, int rank) {
 
 
     this.ranking = rank;
