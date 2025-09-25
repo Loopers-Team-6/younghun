@@ -16,48 +16,48 @@ public class MetricsRepositoryImpl implements MetricsRepository {
   }
 
   @Transactional
-  public void upsertLikes(Long productId, long value) {
+  public void upsertLikes(Long productId, long value, double weight) {
     LocalDate now = LocalDate.now();
     Optional<MetricsModel> metricsModel = metricsJpaRepository.findByProductId(productId)
         .stream().filter(p -> p.getDate().equals(now)).findFirst();
 
     if (metricsModel.isEmpty()) {
-      metricsJpaRepository.save(new MetricsModel(productId, 0L, value, 0L, now));
+      metricsJpaRepository.save(new MetricsModel(productId, 0L, value, 0L, value * weight, now));
       return;
     }
 
     MetricsModel metrics = metricsModel.get();
-    metrics.updateLikes(value);
+    metrics.updateLikes(value, weight);
 
   }
 
   @Transactional
-  public void upsertViews(Long productId, long value) {
+  public void upsertViews(Long productId, long value, double weight) {
     LocalDate now = LocalDate.now();
     Optional<MetricsModel> metricsModel = metricsJpaRepository.findByProductId(productId)
         .stream().filter(p -> p.getDate().equals(now)).findFirst();
 
     if (metricsModel.isEmpty()) {
-      metricsJpaRepository.save(new MetricsModel(productId, value, 0L, 0L, LocalDate.now()));
+      metricsJpaRepository.save(new MetricsModel(productId, value, 0L, 0L, value * weight, LocalDate.now()));
       return;
     }
 
     MetricsModel metrics = metricsModel.get();
-    metrics.updateViews();
+    metrics.updateViews(weight);
   }
 
   @Transactional
-  public void upsertSales(Long productId, long value) {
+  public void upsertSales(Long productId, long value, double weight) {
     LocalDate now = LocalDate.now();
     Optional<MetricsModel> metricsModel = metricsJpaRepository.findByProductId(productId)
         .stream().filter(p -> p.getDate().equals(now)).findFirst();
     if (metricsModel.isEmpty()) {
-      metricsJpaRepository.save(new MetricsModel(productId, 0L, 0L, value, LocalDate.now()));
+      metricsJpaRepository.save(new MetricsModel(productId, 0L, 0L, value, value * weight, LocalDate.now()));
       return;
     }
 
     MetricsModel metrics = metricsModel.get();
-    metrics.updateSales(value);
+    metrics.updateSales(value, weight);
 
   }
 
